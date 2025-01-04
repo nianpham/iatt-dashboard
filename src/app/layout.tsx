@@ -8,8 +8,8 @@ import NotFoundPage from "@/modules/not-found";
 const font = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "IN ẢNH TRƯC TUYẾN",
-  description: "IN ẢNH TRƯC TUYẾN"
+  title: "IN ẢNH TRỰC TUYẾN",
+  description: "IN ẢNH TRỰC TUYẾN"
 };
 
 export default function RootLayout({
