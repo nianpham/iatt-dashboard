@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8000/api/v1';
+const BASE_URL = 'https://iatt-server.onrender.com/api/v1';
 
 export const API = {
     // PRODUCT
