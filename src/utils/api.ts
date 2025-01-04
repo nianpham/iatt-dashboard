@@ -1,4 +1,5 @@
-const BASE_URL = 'https://iatt-server.onrender.com/api/v1';
+const BASE_URL = 'https://api.inanhtructuyen.com/api/v1';
+// const BASE_URL = 'http://localhost:8000/api/v1';
 
 export const API = {
     // PRODUCT
@@ -11,4 +12,9 @@ export const API = {
     CREATE_BLOG: `${BASE_URL}/blog/create`,
     UPDATE_BLOG: `${BASE_URL}/blog/update`,
     DELETE_BLOG: `${BASE_URL}/blog/delete`,
+    // ACCOUNT
+    GET_ALL_ACCOUNTS: `${BASE_URL}/account/get-all`,
+    // ORDER
+    GET_ALL_ORDERS: `${BASE_URL}/order/get-all`,
+    UPDATE_ORDER: `${BASE_URL}/order/update`,
 }

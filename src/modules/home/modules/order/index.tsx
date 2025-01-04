@@ -4,13 +4,15 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Loader } from "lucide-react"
+import { OrderService } from "@/services/order"
+import { ModalUpdateBlog } from "./modal.update"
 
 export default function Order() {
 
     const COUNT = 6
 
     const [data, setData] = useState([] as any)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [totalPage, setTotalPage] = useState<number>(0)
     const [currenPage, setCurrenPage] = useState<any>(1 as any)
     const [currenData, setCurrenData] = useState<any>([] as any)
@@ -30,11 +32,11 @@ export default function Order() {
     }
 
     const init = async () => {
-        // const res = await ProductService.getAll()
-        // if (res && res.data.length > 0) {
-        //     render(res.data)
-        //     setIsLoading(false)
-        // }
+        const res = await OrderService.getAll()
+        if (res && res.data.length > 0) {
+            render(res.data)
+            setIsLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -54,6 +56,55 @@ export default function Order() {
                     </div>
                 </div>
                 <div className="overflow-x-auto mt-4">
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead className="text-md text-gray-700 uppercase bg-gray-50 border dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="w-64 px-4 py-3">Sản phẩm</th>
+                                <th scope="col" className="w-40 px-4 py-3">Khách hàng</th>
+                                <th scope="col" className="w-40 px-4 py-3">Địa chỉ</th>
+                                <th scope="col" className="w-32 px-4 py-3">Trạng thái</th>
+                                <th scope="col" className="w-32 px-4 py-3">Tổng</th>
+                                <th scope="col" className="w-24 px-4 py-3">Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                currenData?.map((item: any, index: any) => {
+                                    return (
+                                        <tr key={index} className={`${item?.deleted_at ? 'hidden' : ''} border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}>
+                                            <td className="w-64 px-4 py-2 flex items-center">
+                                                <Image
+                                                    src="https://i.ebayimg.com/images/g/mb8AAOSw23Vm3p-a/s-l400.jpg"
+                                                    alt="img"
+                                                    className="w-auto h-20 mr-3"
+                                                    width={100}
+                                                    height={0}
+                                                />
+                                                <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    Khung ảnh HD 4k
+                                                </span>
+                                            </td>
+                                            <td className="w-40 px-4 py-2">
+                                                <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    Phạm Thanh Nghiêm
+                                                </span>
+                                            </td>
+                                            <td className="w-40 px-4 py-2">
+                                                <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    332/8 Phan Văn Trị, P11, Bình Thạnh, HCM
+                                                </span>
+                                            </td>
+                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">Đang giao hàng</td>
+                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">129.000</td>
+                                            <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                <ModalUpdateBlog data={item} />
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
                 {
                     isLoading
@@ -63,7 +114,7 @@ export default function Order() {
                         </div>
                         :
                         <nav className="flex flex-col items-start justify-center mt-4 p-4 space-y-3 md:flex-row md:items-center md:space-y-0" aria-label="Table navigation">
-                            {/* <ul className="inline-flex items-stretch -space-x-px">
+                            <ul className="inline-flex items-stretch -space-x-px">
                                 <li>
                                     <a href="#" className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                         <span className="sr-only">Previous</span>
@@ -91,7 +142,7 @@ export default function Order() {
                                         </svg>
                                     </a>
                                 </li>
-                            </ul> */}
+                            </ul>
                         </nav>
                 }
             </div>

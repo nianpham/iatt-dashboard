@@ -4,13 +4,16 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { Loader } from "lucide-react"
+import { OrderService } from "@/services/order"
+import { AccountService } from "@/services/account"
+import { Button } from "@/components/ui/button"
 
 export default function Customer() {
 
     const COUNT = 6
 
     const [data, setData] = useState([] as any)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const [totalPage, setTotalPage] = useState<number>(0)
     const [currenPage, setCurrenPage] = useState<any>(1 as any)
     const [currenData, setCurrenData] = useState<any>([] as any)
@@ -30,11 +33,11 @@ export default function Customer() {
     }
 
     const init = async () => {
-        // const res = await ProductService.getAll()
-        // if (res && res.data.length > 0) {
-        //     render(res.data)
-        //     setIsLoading(false)
-        // }
+        const res = await AccountService.getAll()
+        if (res && res.data.length > 0) {
+            render(res.data)
+            setIsLoading(false)
+        }
     }
 
     useEffect(() => {
@@ -54,6 +57,65 @@ export default function Customer() {
                     </div>
                 </div>
                 <div className="overflow-x-auto mt-4">
+                    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead className="text-md text-gray-700 uppercase bg-gray-50 border dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" className="w-64 px-4 py-3">Tên Khách Hàng</th>
+                                <th scope="col" className="w-28 px-4 py-3">Email</th>
+                                <th scope="col" className="w-60 px-4 py-3">Địa chỉ</th>
+                                <th scope="col" className="w-32 px-4 py-3">Số điện thoại</th>
+                                <th scope="col" className="w-32 px-4 py-3">Trạng thái</th>
+                                <th scope="col" className="w-24 px-4 py-3">Đơn hàng</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                currenData?.map((item: any, index: any) => {
+                                    return (
+                                        <tr key={index} className={`${item?.deleted_at ? 'hidden' : ''} border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}>
+                                            <td className="w-64 px-4 py-4 flex items-center">
+                                                <Image
+                                                    src={item?.avatar}
+                                                    alt="img"
+                                                    className="w-auto h-10 mr-3 rounded-md"
+                                                    width={100}
+                                                    height={0}
+                                                />
+                                                <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    {item?.name}
+                                                </span>
+                                            </td>
+                                            <td className="w-28 px-4 py-4">
+                                                <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    {item?.email}
+                                                </span>
+                                            </td>
+                                            <td className="w-60 px-4 py-4">
+                                                <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                                    {item?.address},{item?.ward},{item?.district},{item?.province}
+                                                </span>
+                                            </td>
+                                            <td className="w-32 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item?.phone}</td>
+                                            <td className="w-32 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                {
+                                                    item?.status
+                                                        ?
+                                                        <Button type="button" className="!px-10 !text-[16px] bg-green-600 hover:bg-green-600">
+                                                            Hoạt động
+                                                        </Button>
+                                                        :
+                                                        null
+                                                }
+                                            </td>
+                                            <td className="w-24 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                                20 đơn
+                                            </td>
+                                        </tr>
+                                    )
+                                })
+                            }
+                        </tbody>
+                    </table>
                 </div>
                 {
                     isLoading
@@ -63,7 +125,7 @@ export default function Customer() {
                         </div>
                         :
                         <nav className="flex flex-col items-start justify-center mt-4 p-4 space-y-3 md:flex-row md:items-center md:space-y-0" aria-label="Table navigation">
-                            {/* <ul className="inline-flex items-stretch -space-x-px">
+                            <ul className="inline-flex items-stretch -space-x-px">
                                 <li>
                                     <a href="#" className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                                         <span className="sr-only">Previous</span>
@@ -91,7 +153,7 @@ export default function Customer() {
                                         </svg>
                                     </a>
                                 </li>
-                            </ul> */}
+                            </ul>
                         </nav>
                 }
             </div>
