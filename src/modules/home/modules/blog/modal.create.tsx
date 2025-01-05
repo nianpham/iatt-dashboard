@@ -177,7 +177,7 @@ export function ModalCreateBlog() {
                         <div className="w-full grid items-center gap-4">
                             <textarea
                                 id="content"
-                                rows={10}
+                                rows={16}
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
                                 placeholder="Nội dung bài viết"

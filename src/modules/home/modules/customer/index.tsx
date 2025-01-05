@@ -92,7 +92,7 @@ export default function Customer() {
                                             </td>
                                             <td className="w-60 px-4 py-4">
                                                 <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                                    {item?.address},{item?.ward},{item?.district},{item?.province}
+                                                    {item?.address}, {item?.wardName}, {item?.districtName}, {item?.provinceName}
                                                 </span>
                                             </td>
                                             <td className="w-32 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item?.phone}</td>
@@ -108,7 +108,7 @@ export default function Customer() {
                                                 }
                                             </td>
                                             <td className="w-24 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                20 đơn
+                                                0 đơn
                                             </td>
                                         </tr>
                                     )

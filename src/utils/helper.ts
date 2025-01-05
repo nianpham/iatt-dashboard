@@ -32,13 +32,39 @@ const renderColor = (color: string) => {
             break;
         case "white":
             result = 'bg-white'
+            break;
         case "gold":
             result = 'bg-yellow-500'
             break;
         case "silver":
             result = 'bg-gray-200'
+            break;
         case "wood":
             result = 'bg-yellow-900'
+            break;
+        default:
+            break;
+    }
+    return result
+}
+
+const renderColorText = (color: string) => {
+    let result = ''
+    switch (color) {
+        case "black":
+            result = 'Đen'
+            break;
+        case "white":
+            result = 'Trắng'
+            break;
+        case "gold":
+            result = 'Vàng'
+            break;
+        case "silver":
+            result = 'Bạc'
+            break;
+        case "wood":
+            result = 'Gỗ'
             break;
         default:
             break;
@@ -61,9 +87,45 @@ const renderTag = (tag: string) => {
     return result
 }
 
+const renderStatus = (status: string) => {
+    let result = ''
+    switch (status) {
+        case "waiting":
+            result = 'Đợi phản hồi'
+            break;
+        case "delivering":
+            result = 'Đang giao hàng'
+            break;
+        case "completed":
+            result = 'Hoàn thành'
+            break;
+        default:
+            break;
+    }
+    return result
+}
+
+const renderPayment = (method: string) => {
+    let result = ''
+    switch (method) {
+        case "bank":
+            result = 'Ngân Hàng'
+            break;
+        case "cash":
+            result = 'Tiền Mặt'
+            break;
+        default:
+            break;
+    }
+    return result
+}
+
 export const HELPER = {
     formatVND,
     renderCategory,
     renderColor,
+    renderColorText,
     renderTag,
+    renderStatus,
+    renderPayment
 }

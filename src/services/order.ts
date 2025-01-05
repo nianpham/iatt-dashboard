@@ -19,7 +19,7 @@ const getAll = async () => {
     }
 };
 
-const updateBlog = async (id: any, payload: any) => {
+const updateOrder = async (id: any, payload: any) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -44,5 +44,5 @@ const updateBlog = async (id: any, payload: any) => {
 
 export const OrderService = {
     getAll,
-    updateBlog,
+    updateOrder,
 };

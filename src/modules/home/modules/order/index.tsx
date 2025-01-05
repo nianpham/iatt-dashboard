@@ -6,11 +6,16 @@ import { useEffect, useState } from "react"
 import { Loader } from "lucide-react"
 import { OrderService } from "@/services/order"
 import { ModalUpdateBlog } from "./modal.update"
+import { HELPER } from "@/utils/helper"
+import { AccountService } from "@/services/account"
+import { ProductService } from "@/services/product"
 
 export default function Order() {
 
     const COUNT = 6
 
+    const [products, setProducts] = useState([] as any)
+    const [accounts, setAccounts] = useState([] as any)
     const [data, setData] = useState([] as any)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [totalPage, setTotalPage] = useState<number>(0)
@@ -31,12 +36,34 @@ export default function Order() {
         setCurrenData(data.slice(0, COUNT))
     }
 
-    const init = async () => {
+    const renderAccount = async () => {
+        const res = await AccountService.getAll()
+        if (res && res.data.length > 0) {
+            setAccounts(res.data)
+            setIsLoading(false)
+        }
+    }
+
+    const renderProduct = async () => {
+        const res = await ProductService.getAll()
+        if (res && res.data.length > 0) {
+            setProducts(res.data)
+            setIsLoading(false)
+        }
+    }
+
+    const renderOrder = async () => {
         const res = await OrderService.getAll()
         if (res && res.data.length > 0) {
             render(res.data)
             setIsLoading(false)
         }
+    }
+
+    const init = async () => {
+        renderAccount()
+        renderProduct()
+        renderOrder()
     }
 
     useEffect(() => {
@@ -74,28 +101,32 @@ export default function Order() {
                                         <tr key={index} className={`${item?.deleted_at ? 'hidden' : ''} border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}>
                                             <td className="w-64 px-4 py-2 flex items-center">
                                                 <Image
-                                                    src="https://i.ebayimg.com/images/g/mb8AAOSw23Vm3p-a/s-l400.jpg"
+                                                    src={item?.image}
                                                     alt="img"
                                                     className="w-auto h-20 mr-3"
                                                     width={100}
                                                     height={0}
                                                 />
                                                 <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                                    Khung ảnh HD 4k
+                                                    {
+                                                        products?.find((pro: any) => pro._id.toString() === item?.product_id)?.name
+                                                    }
                                                 </span>
                                             </td>
                                             <td className="w-40 px-4 py-2">
                                                 <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                                    Phạm Thanh Nghiêm
+                                                    {
+                                                        accounts?.find((pro: any) => pro.email.toString() === item?.account_email)?.name
+                                                    }
                                                 </span>
                                             </td>
                                             <td className="w-40 px-4 py-2">
                                                 <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                                    332/8 Phan Văn Trị, P11, Bình Thạnh, HCM
+                                                    {item?.address}
                                                 </span>
                                             </td>
-                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">Đang giao hàng</td>
-                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">129.000</td>
+                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{HELPER.renderStatus(item?.status)}</td>
+                                            <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{HELPER.formatVND(item?.total)}</td>
                                             <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                 <ModalUpdateBlog data={item} />
                                             </td>
