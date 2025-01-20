@@ -35,6 +35,15 @@ export function ModalUpdateBlog({ data }: { data: any }) {
         window.location.href = '/?tab=order'
     }
 
+    const downloadImage = (imageUrl: string, filename: string) => {
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     const updateDOM = () => {
         if (data) {
             setCurrentData(data)
@@ -64,15 +73,20 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                     <div className="flex flex-col gap-6">
                         <div className="flex items-center">
                             <Image
-                                src="https://i.ebayimg.com/images/g/mb8AAOSw23Vm3p-a/s-l400.jpg"
+                                src={currentData?.image}
                                 alt="img"
-                                className="w-auto h-12 mr-3 rounded-md"
+                                className="w-auto h-16 mr-3 rounded-md"
                                 width={100}
                                 height={0}
                             />
-                            <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                {currentData?.product_id}
-                            </span>
+                            <div className="flex flex-col items-start">
+                                <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                    {currentData?.product_id}
+                                </span>
+                                <button onClick={() => downloadImage(currentData?.image, `${currentData?.product_id}.png`)} className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                                    Tải file về
+                                </button>
+                            </div>
                         </div>
                         <div className="flex flex-col gap-2">
                             <span><strong>Màu khung:</strong> {HELPER.renderColorText(currentData?.color)}</span>
@@ -123,6 +137,12 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                                     onClick={() => handleUpdateStatus("waiting")}
                                 >
                                     Đợi phản hồi
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    className="cursor-pointer"
+                                    onClick={() => handleUpdateStatus("waiting")}
+                                >
+                                    Đang chuẩn bị đơn hàng
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuCheckboxItem
                                     className="cursor-pointer"

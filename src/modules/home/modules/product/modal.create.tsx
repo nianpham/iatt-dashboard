@@ -18,6 +18,7 @@ import { UploadService } from "@/services/upload";
 import { Loader, Plus, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import ProductDescriptionEditor from "./quill";
 
 export function ModalCreateProduct() {
 
@@ -60,10 +61,10 @@ export function ModalCreateProduct() {
         if (!files || files.length === 0) return;
         const newPreviews: string[] = [];
         Array.from(files).forEach(file => {
-            if (file.size > 5 * 1024 * 1024) {
-                alert(`File ${file.name} quá lớn. Vui lòng chọn file nhỏ hơn 5MB.`);
-                return;
-            }
+            // if (file.size > 5 * 1024 * 1024) {
+            //     alert(`File ${file.name} quá lớn. Vui lòng chọn file nhỏ hơn 5MB.`);
+            //     return;
+            // }
             if (!file.type.startsWith('image/')) {
                 alert(`File ${file.name} không phải là hình ảnh.`);
                 return;
@@ -254,7 +255,7 @@ export function ModalCreateProduct() {
                                 <option value="album">Album</option>
                             </select>
                         </div>
-                        <div className="w-full grid items-center gap-4">
+                        {/* <div className="w-full grid items-center gap-4">
                             <textarea
                                 id="description"
                                 rows={8}
@@ -263,9 +264,12 @@ export function ModalCreateProduct() {
                                 placeholder="Mô tả sản phẩm"
                                 className="col-span-3 p-2 border rounded"
                             >
-
                             </textarea>
-                        </div>
+                        </div> */}
+                        <ProductDescriptionEditor
+                            value={description}
+                            onChange={setDescription}
+                        />
                         <div className="w-full grid items-center gap-4">
                             <input
                                 id="price"

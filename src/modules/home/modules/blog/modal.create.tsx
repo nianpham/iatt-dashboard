@@ -18,6 +18,7 @@ import { UploadService } from "@/services/upload";
 import { Loader, Plus } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import BlogDescriptionEditor from "./quill";
 
 export function ModalCreateBlog() {
 
@@ -174,7 +175,7 @@ export function ModalCreateBlog() {
                                 <option value="share">Chia Sẽ</option>
                             </select>
                         </div>
-                        <div className="w-full grid items-center gap-4">
+                        {/* <div className="w-full grid items-center gap-4">
                             <textarea
                                 id="content"
                                 rows={16}
@@ -184,7 +185,11 @@ export function ModalCreateBlog() {
                                 className="col-span-3 p-2 border rounded"
                             >
                             </textarea>
-                        </div>
+                        </div> */}
+                        <BlogDescriptionEditor
+                            value={content}
+                            onChange={setContent}
+                        />
                         <div className="w-full grid items-center gap-4">
                             <select
                                 id="author"
