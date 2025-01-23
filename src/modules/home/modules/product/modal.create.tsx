@@ -35,6 +35,7 @@ export function ModalCreateProduct() {
     const [name, setName] = useState<string>('')
     const [price, setPrice] = useState<string>('')
     const [description, setDescription] = useState<string>('')
+    const [introduction, setIntroduction] = useState<string>('')
     const [category, setCategory] = useState<string>('')
     const [color, setColor] = useState<string>('')
 
@@ -119,6 +120,7 @@ export function ModalCreateProduct() {
         const body = {
             "name": name,
             "description": description,
+            "introduction": introduction,
             "price": price,
             "category": category,
             "color": [color],
@@ -142,7 +144,7 @@ export function ModalCreateProduct() {
                 </button>
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[825px]"
+                className="sm:max-w-[1200px]"
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <DialogHeader>
@@ -231,7 +233,7 @@ export function ModalCreateProduct() {
                             ))}
                         </div>
                     </div>
-                    <div className="flex flex-col justify-start items-start gap-4 col-span-2">
+                    <div className="flex flex-col justify-start items-start gap-4 col-span-2 overflow-y-auto">
                         <div className="w-full grid items-center gap-4">
                             <textarea
                                 id="name"
@@ -255,20 +257,15 @@ export function ModalCreateProduct() {
                                 <option value="album">Album</option>
                             </select>
                         </div>
-                        {/* <div className="w-full grid items-center gap-4">
-                            <textarea
-                                id="description"
-                                rows={8}
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Mô tả sản phẩm"
-                                className="col-span-3 p-2 border rounded"
-                            >
-                            </textarea>
-                        </div> */}
                         <ProductDescriptionEditor
                             value={description}
                             onChange={setDescription}
+                            title="Mô tả sản phẩm"
+                        />
+                        <ProductDescriptionEditor
+                            value={introduction}
+                            onChange={setIntroduction}
+                            title="Giới thiệu sản phẩm"
                         />
                         <div className="w-full grid items-center gap-4">
                             <input

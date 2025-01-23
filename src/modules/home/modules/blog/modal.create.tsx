@@ -103,7 +103,7 @@ export function ModalCreateBlog() {
                 </button>
             </DialogTrigger>
             <DialogContent
-                className="sm:max-w-[825px]"
+                className="sm:max-w-[1200px]"
                 onOpenAutoFocus={(e) => e.preventDefault()}
             >
                 <DialogHeader>

@@ -12,10 +12,12 @@ const ReactQuill = dynamic(() => import('react-quill'), {
 
 const ProductDescriptionEditor = ({
     value,
-    onChange
+    onChange,
+    title,
 }: {
     value: string;
     onChange: (value: string) => void;
+    title: string;
 }) => {
     const modules = {
         toolbar: [
@@ -30,16 +32,16 @@ const ProductDescriptionEditor = ({
     };
     return (
         <div className="w-full space-y-2">
-            <Label htmlFor="description">Mô tả sản phẩm</Label>
-            <div className="min-h-[272px]">
+            <Label htmlFor="description">{title}</Label>
+            <div className="h-[140px]">
                 <ReactQuill
                     id="description"
                     theme="snow"
                     value={value}
                     onChange={onChange}
                     modules={modules}
-                    className="h-[200px]"
-                    placeholder="Nhập mô tả sản phẩm..."
+                    className="h-[100px]"
+                    placeholder="Nhập nội dung ..."
                 />
             </div>
         </div>
