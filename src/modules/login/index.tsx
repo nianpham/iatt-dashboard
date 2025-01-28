@@ -46,7 +46,7 @@ export default function LoginClient() {
       setIsLoading(false)
       toast({
         variant: "destructive",
-        title: "Vui lòng điền đầy đủ thông tin",
+        title: "Tài khoản hoặc mật khẩu chưa chính xác",
       })
     }
   }
@@ -80,7 +80,7 @@ export default function LoginClient() {
           </div>
         </div>
         <div className="">
-          <Button className="w-full !rounded-lg" onClick={handleSubmit}>
+          <Button className="w-full !rounded-lg bg-orange-700 hover:bg-orange-800" onClick={handleSubmit}>
             Đăng nhập
             {
               isLoading && (

@@ -56,9 +56,9 @@ export default function Blog() {
                             <span className="text-gray-800 text-[20px] font-bold">DANH SÁCH BÀI VIẾT ({data?.length})</span>
                         </h5>
                     </div>
-                    <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+                    {/* <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
                         <ModalCreateBlog />
-                    </div>
+                    </div> */}
                 </div>
                 <div className="overflow-x-auto mt-4">
                     <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -81,7 +81,7 @@ export default function Blog() {
                                                 <Image
                                                     src={item?.thumbnail}
                                                     alt="img"
-                                                    className="w-auto h-20 mr-3"
+                                                    className="w-auto h-20 mr-3 rounded-md"
                                                     width={100}
                                                     height={0}
                                                 />
@@ -96,13 +96,13 @@ export default function Blog() {
                                             </td>
                                             <td className="w-80 px-4 py-2">
                                                 <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                                                    {item?.content}
+                                                    <div dangerouslySetInnerHTML={{ __html: item?.content }} />
                                                 </span>
                                             </td>
                                             <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item?.author}</td>
                                             <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">{item?.date}</td>
                                             <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                <ModalUpdateBlog data={item} />
+                                                {/* <ModalUpdateBlog data={item} /> */}
                                             </td>
                                         </tr>
                                     )

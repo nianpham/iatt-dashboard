@@ -28,24 +28,24 @@ const data = {
             tab: "product",
             icon: PackageOpen,
         },
-        {
-            name: "Đơn Hàng",
-            url: "?tab=order",
-            tab: "order",
-            icon: FileText,
-        },
+        // {
+        //     name: "Đơn Hàng",
+        //     url: "?tab=order",
+        //     tab: "order",
+        //     icon: FileText,
+        // },
         {
             name: "Bài Viết",
             url: "?tab=blog",
             tab: "blog",
             icon: Newspaper,
         },
-        {
-            name: "Khách Hàng",
-            url: "?tab=customer",
-            tab: "customer",
-            icon: Users,
-        },
+        // {
+        //     name: "Khách Hàng",
+        //     url: "?tab=customer",
+        //     tab: "customer",
+        //     icon: Users,
+        // },
     ],
 }
 
