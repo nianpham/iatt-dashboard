@@ -33,14 +33,14 @@ const ProductDescriptionEditor = ({
     return (
         <div className="w-full space-y-2">
             <Label htmlFor="description">{title}</Label>
-            <div className="h-[140px]">
+            <div className="h-[250px]">
                 <ReactQuill
                     id="description"
                     theme="snow"
                     value={value}
                     onChange={onChange}
                     modules={modules}
-                    className="h-[100px]"
+                    className="h-[210px]"
                     placeholder="Nhập nội dung ..."
                 />
             </div>

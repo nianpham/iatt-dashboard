@@ -9,13 +9,13 @@ const formatVND = (money: string) => {
 const renderCategory = (category: string) => {
     let result = ''
     switch (category) {
-        case "plastic":
+        case "Plastic":
             result = 'Ép Plastic'
             break;
-        case "frame":
+        case "Frame":
             result = 'Khung Ảnh'
             break;
-        case "album":
+        case "Album":
             result = 'Album'
             break;
         default:
