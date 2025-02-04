@@ -94,12 +94,8 @@ export function ModalCreateProduct() {
     });
   };
 
-  const handleColorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOptions = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
-    setColor(selectedOptions);
+  const handleColorChange = (selectedOptions: any) => {
+    setColor(selectedOptions.map((option: any) => option.value));
   };
 
   const handleUpdateMainImage = () => {
@@ -115,22 +111,63 @@ export function ModalCreateProduct() {
   };
 
   const validateForm = () => {
-    if (
-      !mainPreview ||
-      secondaryPreviews.length === 0 ||
-      name === "" ||
-      description === "" ||
-      category === "" ||
-      color === color
-    ) {
+    if (!mainPreview) {
       toast({
         variant: "destructive",
-        title: "Vui lòng điền đầy đủ thông tin",
+        title: "Vui lòng chọn ảnh chính.",
       });
       return false;
-    } else {
-      return true;
     }
+
+    if (secondaryPreviews.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng thêm ít nhất một ảnh phụ.",
+      });
+      return false;
+    }
+
+    if (!name.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập tên.",
+      });
+      return false;
+    }
+
+    if (!description.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập mô tả.",
+      });
+      return false;
+    }
+
+    if (!introduction.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập phần giới thiệu.",
+      });
+      return false;
+    }
+
+    if (!category.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn danh mục.",
+      });
+      return false;
+    }
+
+    if (!color) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn màu sắc.",
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async () => {
@@ -148,7 +185,7 @@ export function ModalCreateProduct() {
       introduction: introduction,
       price: price,
       category: category,
-      color: [color],
+      color: color,
       sold: 0,
       thumbnail: uploadMainImage[0]?.url || "",
       images: uploadSecondaryImages?.map((image: any) => image.url),
@@ -287,7 +324,7 @@ export function ModalCreateProduct() {
                 >
                   <option value="">Chọn danh mục</option>
                   <option value="Plastic">Plastic</option>
-                  <option value="Frame">Khung</option>
+                  <option value="Frame">Khung Ảnh</option>
                   <option value="Album">Album</option>
                 </select>
               </div>
@@ -315,6 +352,10 @@ export function ModalCreateProduct() {
                   options={colorOpt}
                   isMulti={true}
                   placeholder="Chọn màu"
+                  onChange={handleColorChange}
+                  value={colorOpt.filter((option) =>
+                    color.includes(option.value)
+                  )}
                 />
               </div>
             </div>

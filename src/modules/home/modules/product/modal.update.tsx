@@ -33,9 +33,6 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   const selectedColors = colorOpt.filter((color) =>
     data?.color?.includes(color.value)
   );
-  const availableColors = colorOpt.filter(
-    (color) => !data?.color?.includes(color.value)
-  );
 
   const { toast } = useToast();
 
@@ -53,7 +50,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   const [description, setDescription] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
   const [category, setCategory] = useState<string>("");
-  const [color, setColor] = useState<string>("");
+  const [color, setColor] = useState<string[]>(data?.color ?? []);
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -113,24 +110,69 @@ export function ModalUpdateProduct({ data }: { data: any }) {
     setSecondaryPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleColorChange = (selectedOptions: any) => {
+    const selectedValues = selectedOptions.map((option: any) => option.value);
+    setColor(selectedValues);
+  };
+
   const validateForm = () => {
-    if (
-      !mainPreview ||
-      secondaryPreviews.length === 0 ||
-      name === "" ||
-      description === "" ||
-      introduction === "" ||
-      category === "" ||
-      color === ""
-    ) {
+    if (!mainPreview) {
       toast({
         variant: "destructive",
-        title: "Vui lòng điền đầy đủ thông tin",
+        title: "Vui lòng chọn ảnh chính.",
       });
       return false;
-    } else {
-      return true;
     }
+
+    if (secondaryPreviews.length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng thêm ít nhất một ảnh phụ.",
+      });
+      return false;
+    }
+
+    if (!name.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập tên.",
+      });
+      return false;
+    }
+
+    if (!description.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập mô tả.",
+      });
+      return false;
+    }
+
+    if (!introduction.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập phần giới thiệu.",
+      });
+      return false;
+    }
+
+    if (!category.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn danh mục.",
+      });
+      return false;
+    }
+
+    if (!color) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn màu sắc.",
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const handleSubmit = async () => {
@@ -142,7 +184,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       introduction: introduction,
       price: price,
       category: category,
-      color: [color],
+      color: color,
       sold: 0,
       thumbnail: mainPreview,
       images: secondaryPreviews,
@@ -306,14 +348,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   <option value="Album">Album</option>
                 </select>
               </div>
-              <div className="mb-7">
+              <div className="mb-7 w-full">
                 <ProductDescriptionEditor
                   value={description}
                   onChange={setDescription}
                   title="Mô tả sản phẩm"
                 />
               </div>
-              <div className="mb-7">
+              <div className="mb-7 w-full">
                 <ProductDescriptionEditor
                   value={introduction}
                   onChange={setIntroduction}
@@ -331,10 +373,13 @@ export function ModalUpdateProduct({ data }: { data: any }) {
               </div>
               <div className="w-full grid items-center gap-4">
                 <Select
-                  options={availableColors}
-                  value={selectedColors}
+                  options={colorOpt}
+                  value={colorOpt.filter((colorOptItem) =>
+                    color.includes(colorOptItem.value)
+                  )}
                   isMulti={true}
                   placeholder="Chọn màu"
+                  onChange={handleColorChange}
                 />
               </div>
             </div>

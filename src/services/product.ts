@@ -46,6 +46,8 @@ const updateProduct = async (id: any, payload: any) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        console.log("check update: " + JSON.stringify(payload));
+        
         const response = await fetch(
             `${API.UPDATE_PRODUCT}/${id}`,
             {
@@ -56,8 +58,11 @@ const updateProduct = async (id: any, payload: any) => {
             },
         );
         if (!response.ok) {
+            console.log("check create: failed", response.status);
+            
             throw new Error(`Failed - Status: ${response.status}`);
         }
+        console.log("check create: success", response.status);
         return true;
     } catch (error: any) {
         console.error('========= Error Update Product:', error);

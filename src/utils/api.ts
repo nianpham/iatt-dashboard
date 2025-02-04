@@ -4,9 +4,9 @@ const BASE_URL = 'https://api.farmcode.io.vn/v1';
 export const API = {
     // PRODUCT
     GET_ALL_PRODUCTS: `${BASE_URL}/inanhtructuyen/product/`,
-    CREATE_PRODUCT: `${BASE_URL}/product/create`,
-    UPDATE_PRODUCT: `${BASE_URL}/product/update`,
-    DELETE_PRODUCT: `${BASE_URL}/product/delete`,
+    CREATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product/`,
+    UPDATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
+    DELETE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
     // BLOG
     GET_ALL_BLOGS: `${BASE_URL}/inanhtructuyen/blog/get-all`,
     CREATE_BLOG: `${BASE_URL}/blog/create`,
