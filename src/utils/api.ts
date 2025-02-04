@@ -3,7 +3,7 @@ const BASE_URL = 'https://api.farmcode.io.vn/v1';
 
 export const API = {
     // PRODUCT
-    GET_ALL_PRODUCTS: `${BASE_URL}/inanhtructuyen/product/get-all`,
+    GET_ALL_PRODUCTS: `${BASE_URL}/inanhtructuyen/product/`,
     CREATE_PRODUCT: `${BASE_URL}/product/create`,
     UPDATE_PRODUCT: `${BASE_URL}/product/update`,
     DELETE_PRODUCT: `${BASE_URL}/product/delete`,
