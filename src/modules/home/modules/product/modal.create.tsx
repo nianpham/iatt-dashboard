@@ -21,8 +21,17 @@ import { useRef, useState } from "react";
 import ProductDescriptionEditor from "./quill";
 import Select from "react-select";
 import "@/styles/scroll-hiding.css";
+import "@/styles/placeholder.css";
 
 export function ModalCreateProduct() {
+  const colorMap: { [key: string]: string } = {
+    white: "#FFFFFF",
+    black: "#000000",
+    gold: "#FFD700",
+    silver: "#C0C0C0",
+    wood: "#8B5A2B",
+  };
+
   const colorOpt = [
     { value: "white", label: "Trắng" },
     { value: "black", label: "Đen" },
@@ -30,6 +39,41 @@ export function ModalCreateProduct() {
     { value: "silver", label: "Bạc" },
     { value: "wood", label: "Gỗ" },
   ];
+
+  const customStyles = {
+    option: (provided: any, state: { isFocused: boolean }) => ({
+      ...provided,
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      backgroundColor: state.isFocused ? "#E5E7EB" : "white", // Gray-200 on hover
+      color: "black",
+    }),
+    control: (provided: any) => ({
+      ...provided,
+      borderColor: "#CFCFCF",
+      boxShadow: "none",
+      "&:hover": {
+        borderColor: "#CFCFCF",
+      },
+    }),
+  };
+
+  const formatOptionLabel = ({
+    value,
+    label,
+  }: {
+    value: string;
+    label: string;
+  }) => (
+    <div className="flex items-center gap-2">
+      <span
+        className="w-4 h-4 rounded-full border border-gray-300"
+        style={{ backgroundColor: colorMap[value] }}
+      ></span>
+      {label}
+    </div>
+  );
 
   const { toast } = useToast();
 
@@ -310,7 +354,7 @@ export function ModalCreateProduct() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Tên sản phẩm"
-                  className="col-span-3 p-2 border rounded"
+                  className="col-span-3 p-2 border border-[#CFCFCF] placeholder-custom rounded"
                 ></textarea>
               </div>
               <div className="w-full grid items-center gap-4">
@@ -320,13 +364,36 @@ export function ModalCreateProduct() {
                   onChange={(e) => {
                     setCategory(e.target.value);
                   }}
-                  className="col-span-3 p-2 border rounded"
+                  className="col-span-3 p-2 border border-[#CFCFCF] rounded"
                 >
                   <option value="">Chọn danh mục</option>
                   <option value="Plastic">Plastic</option>
                   <option value="Frame">Khung Ảnh</option>
                   <option value="Album">Album</option>
                 </select>
+              </div>
+              <div className="w-full grid items-center gap-4">
+                <input
+                  id="price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="Giá"
+                  className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
+                ></input>
+              </div>
+              <div className="w-full grid items-center gap-4">
+                <Select
+                  className="cursor-pointer pl-[0.5px]"
+                  options={colorOpt}
+                  isMulti={true}
+                  placeholder="Chọn màu"
+                  onChange={handleColorChange}
+                  value={colorOpt.filter((option) =>
+                    color.includes(option.value)
+                  )}
+                  styles={customStyles}
+                  formatOptionLabel={formatOptionLabel}
+                />
               </div>
               <ProductDescriptionEditor
                 value={description}
@@ -338,26 +405,6 @@ export function ModalCreateProduct() {
                 onChange={setIntroduction}
                 title="Giới thiệu sản phẩm"
               />
-              <div className="w-full grid items-center gap-4">
-                <input
-                  id="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder="Giá"
-                  className="col-span-3 p-2 border rounded"
-                ></input>
-              </div>
-              <div className="w-full grid items-center gap-4 mb-5">
-                <Select
-                  options={colorOpt}
-                  isMulti={true}
-                  placeholder="Chọn màu"
-                  onChange={handleColorChange}
-                  value={colorOpt.filter((option) =>
-                    color.includes(option.value)
-                  )}
-                />
-              </div>
             </div>
           </div>
         </div>
