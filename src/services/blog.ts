@@ -23,6 +23,8 @@ const createBlog = async (payload: any) => {
     try {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        console.log("Check blog create: " + JSON.stringify(payload));
+        
         const response = await fetch(
             API.CREATE_BLOG,
             {

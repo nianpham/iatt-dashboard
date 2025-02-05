@@ -9,12 +9,12 @@ export const API = {
     DELETE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
     // BLOG
     GET_ALL_BLOGS: `${BASE_URL}/inanhtructuyen/blog/`,
-    CREATE_BLOG: `${BASE_URL}/blog/create`,
-    UPDATE_BLOG: `${BASE_URL}/blog/update`,
-    DELETE_BLOG: `${BASE_URL}/blog/delete`,
+    CREATE_BLOG: `${BASE_URL}/inanhtructuyen/blog/`,
+    UPDATE_BLOG: `${BASE_URL}/inanhtructuyen/blog`,
+    DELETE_BLOG: `${BASE_URL}/inanhtructuyen/blog`,
     // ACCOUNT
     GET_ALL_ACCOUNTS: `${BASE_URL}/account/get-all`,
     // ORDER
-    GET_ALL_ORDERS: `${BASE_URL}/order/get-all`,
-    UPDATE_ORDER: `${BASE_URL}/order/update`,
+    GET_ALL_ORDERS: `${BASE_URL}/inanhtructuyen/order/`,
+    UPDATE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
 }
