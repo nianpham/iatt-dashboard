@@ -8,7 +8,7 @@ export const API = {
     UPDATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
     DELETE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
     // BLOG
-    GET_ALL_BLOGS: `${BASE_URL}/inanhtructuyen/blog/get-all`,
+    GET_ALL_BLOGS: `${BASE_URL}/inanhtructuyen/blog/`,
     CREATE_BLOG: `${BASE_URL}/blog/create`,
     UPDATE_BLOG: `${BASE_URL}/blog/update`,
     DELETE_BLOG: `${BASE_URL}/blog/delete`,
