@@ -37,8 +37,10 @@ export default function Order() {
 
   const renderAccount = async () => {
     const res = await AccountService.getAll();
-    if (res && res.data.length > 0) {
-      setAccounts(res.data);
+    if (res && res.length > 0) {
+      console.log("check acc data 2 : " + JSON.stringify(res));
+
+      setAccounts(res);
       setIsLoading(false);
     }
   };
@@ -69,7 +71,10 @@ export default function Order() {
     init();
   }, []);
 
-  useEffect(() => {}, [totalPage, isLoading, currenData, currenPage]);
+  useEffect(() => {
+    console.log("check acc data:", JSON.stringify(accounts));
+    console.log("check pro data:", JSON.stringify(products));
+  }, [totalPage, isLoading, currenData, currenPage, accounts, products]);
 
   return (
     <section className="p-4">
@@ -126,10 +131,14 @@ export default function Order() {
                       />
                       <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         {
-                          products?.find(
-                            (pro: any) =>
-                              pro._id.toString() === item?.product_id
-                          )?.name
+                          products?.find((pro: any) => {
+                            console.log(
+                              "id 1: ",
+                              pro._id.toString() === item?._id
+                            );
+
+                            pro._id.toString() === item?._id;
+                          })?.name
                         }
                       </span>
                     </td>

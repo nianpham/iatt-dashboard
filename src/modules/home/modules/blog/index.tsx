@@ -9,10 +9,20 @@ import { Loader } from "lucide-react";
 import { BlogService } from "@/services/blog";
 import { HELPER } from "@/utils/helper";
 
+export interface Blog {
+  _id: string;
+  title: string;
+  content: string;
+  tag: string;
+  author: string;
+  thumbnail: string;
+  created_at: string;
+}
+
 export default function Blog() {
   const COUNT = 6;
 
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState<Blog[]>([] as any);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currenPage, setCurrenPage] = useState<any>(1 as any);
@@ -37,24 +47,28 @@ export default function Blog() {
     }
   };
 
-  const render = (data: any) => {
-    setData(data);
-    setTotalPage(Math.ceil(data.length / COUNT));
-    setCurrenPage(1);
-    setCurrenData(data.slice(0, COUNT));
-  };
-
   const init = async () => {
-    const res = await BlogService.getAll();
-    if (res && res.data.length > 0) {
-      render(res.data);
+    try {
+      const res = await BlogService.getAll();
+
+      if (Array.isArray(res) && res.length > 0) {
+        setData(res);
+        setTotalPage(Math.ceil(res.length / COUNT));
+        setCurrenPage(1);
+        setCurrenData(res.slice(0, COUNT));
+      } else {
+        setData([]);
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching blog data:", error);
+      setData([]);
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    console.log("check curent data: ", currenData);
-
     init();
   }, []);
 
@@ -136,7 +150,7 @@ export default function Blog() {
                       {item?.author}
                     </td>
                     <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      {item?.date}
+                      {HELPER.formatDate(item?.created_at)}
                     </td>
                     <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <ModalUpdateBlog data={item} />

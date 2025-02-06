@@ -21,6 +21,14 @@ import { useEffect, useRef, useState } from "react";
 import BlogDescriptionEditor from "./quill";
 
 export function ModalUpdateBlog({ data }: { data: any }) {
+  const tagOpt = [
+    { value: "frame", label: "Khung ảnh" },
+    { value: "printing", label: "In ấn" },
+    { value: "album", label: "Album" },
+    { value: "photo-care", label: "Chia Sẽ" },
+    { value: "digital-frame", label: "Khung digital" },
+  ];
+
   const { toast } = useToast();
 
   const mainImageInputRef = useRef<HTMLInputElement>(null);
@@ -88,7 +96,6 @@ export function ModalUpdateBlog({ data }: { data: any }) {
       content: content,
       tag: tag,
       author: author,
-      date: "04/01/2025",
       thumbnail: uploadMainImage[0]?.url || "",
     };
     await BlogService.updateBlog(data?._id, body);
@@ -113,7 +120,9 @@ export function ModalUpdateBlog({ data }: { data: any }) {
     }
   };
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    console.log("check tag: ", data?.tag);
+  }, [data]);
 
   return (
     <Dialog>
@@ -192,20 +201,14 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                 className="col-span-3 p-2 border rounded"
               >
                 <option value="">Chọn tag</option>
-                <option value="guide">Hướng Dẫn</option>
-                <option value="share">Chia Sẽ</option>
+                {tagOpt.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="w-full grid items-center gap-4">
-              {/* <textarea
-                    id="content"
-                    rows={16}
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    placeholder="Nội dung bài viết"
-                    className="col-span-3 p-2 border rounded"
-                    >
-                    /textarea> */}
               <BlogDescriptionEditor value={content} onChange={setContent} />
             </div>
             <div className="w-full grid items-center gap-4">

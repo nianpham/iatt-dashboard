@@ -124,12 +124,11 @@ export function ModalCreateBlog() {
       content: content,
       tag: tag,
       author: author,
-      date: "04/01/2025",
       thumbnail: uploadMainImage[0]?.url || "",
     };
     await BlogService.createBlog(body);
     setIsLoading(false);
-    // window.location.href = "/?tab=blog";
+    window.location.href = "/?tab=blog";
   };
 
   return (

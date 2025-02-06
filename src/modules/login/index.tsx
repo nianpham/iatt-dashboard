@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -8,48 +8,41 @@ import Cookies from "js-cookie";
 import { ROUTES } from "@/utils/route";
 
 export default function LoginClient() {
-
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const validateForm = () => {
-    if (
-      username === '' ||
-      password === ''
-    ) {
+    if (username === "" || password === "") {
       toast({
         variant: "destructive",
         title: "Vui lòng điền đầy đủ thông tin",
-      })
+      });
       return false;
     } else {
-      return true
+      return true;
     }
-  }
+  };
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-    setIsLoading(true)
-    if (
-      username === "inanhtructuyen" &&
-      password === "Iatt@6789"
-    ) {
+    setIsLoading(true);
+    if (username === "inanhtructuyen" && password === "Iatt@6789") {
       setTimeout(() => {
-        Cookies.set("isLogin", "true", { expires: 7 })
-        window.location.href = ROUTES.HOME
-        setIsLoading(false)
-      }, 2000)
+        Cookies.set("isLogin", "true", { expires: 7 });
+        window.location.href = ROUTES.HOME;
+        setIsLoading(false);
+      }, 2000);
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
       toast({
         variant: "destructive",
         title: "Tài khoản hoặc mật khẩu chưa chính xác",
-      })
+      });
     }
-  }
+  };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -65,7 +58,8 @@ export default function LoginClient() {
             <input
               type="text"
               className="w-full rounded-lg border border-stroke bg-transparent py-2 pl-4 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              onChange={(e) => setUsername(e.target.value)} />
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </div>
         </div>
         <div className="mb-6">
@@ -76,20 +70,20 @@ export default function LoginClient() {
             <input
               id="id_password"
               className="w-full rounded-lg border border-stroke bg-transparent py-2 pl-4 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              onChange={(e) => setPassword(e.target.value)} />
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
         </div>
         <div className="">
-          <Button className="w-full !rounded-lg bg-orange-700 hover:bg-orange-800" onClick={handleSubmit}>
+          <Button
+            className="w-full !rounded-lg bg-orange-700 hover:bg-orange-800"
+            onClick={handleSubmit}
+          >
             Đăng nhập
-            {
-              isLoading && (
-                <Loader className="animate-spin" size={48} />
-              )
-            }
+            {isLoading && <Loader className="animate-spin" size={48} />}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
