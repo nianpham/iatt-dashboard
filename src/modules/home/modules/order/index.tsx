@@ -28,6 +28,18 @@ export default function Order() {
     setCurrenData(data.slice(start, end));
   };
 
+  const prevPage = () => {
+    if (currenPage > 1) {
+      selectPage(currenPage - 1);
+    }
+  };
+
+  const nextPage = () => {
+    if (currenPage < totalPage) {
+      selectPage(currenPage + 1);
+    }
+  };
+
   const render = (data: any) => {
     setData(data);
     setTotalPage(Math.ceil(data.length / COUNT));
@@ -37,10 +49,9 @@ export default function Order() {
 
   const renderAccount = async () => {
     const res = await AccountService.getAll();
-    if (res && res.length > 0) {
-      console.log("check acc data 2 : " + JSON.stringify(res));
-
-      setAccounts(res);
+    if (res && res.data.length > 0) {
+      // console.log("check acc data 2 : " + JSON.stringify(res.data));
+      setAccounts(res.data);
       setIsLoading(false);
     }
   };
@@ -48,6 +59,8 @@ export default function Order() {
   const renderProduct = async () => {
     const res = await ProductService.getAll();
     if (res && res.data.length > 0) {
+      console.log("check product data kkk: " + JSON.stringify(res.data));
+
       setProducts(res.data);
       setIsLoading(false);
     }
@@ -71,10 +84,14 @@ export default function Order() {
     init();
   }, []);
 
-  useEffect(() => {
-    console.log("check acc data:", JSON.stringify(accounts));
-    console.log("check pro data:", JSON.stringify(products));
-  }, [totalPage, isLoading, currenData, currenPage, accounts, products]);
+  useEffect(() => {}, [
+    totalPage,
+    isLoading,
+    currenData,
+    currenPage,
+    accounts,
+    products,
+  ]);
 
   return (
     <section className="p-4">
@@ -132,12 +149,7 @@ export default function Order() {
                       <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         {
                           products?.find((pro: any) => {
-                            console.log(
-                              "id 1: ",
-                              pro._id.toString() === item?._id
-                            );
-
-                            pro._id.toString() === item?._id;
+                            return item?.product_id === pro._id;
                           })?.name
                         }
                       </span>
@@ -188,8 +200,9 @@ export default function Order() {
             ) : (
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>
-                  <a
-                    href="#"
+                  <button
+                    onClick={prevPage}
+                    disabled={currenPage === 1}
                     className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Previous</span>
@@ -206,7 +219,7 @@ export default function Order() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </li>
                 {Array.from({ length: totalPage }, (_, i) => i + 1)?.map(
                   (item: any, index: any) => {
@@ -225,8 +238,9 @@ export default function Order() {
                   }
                 )}
                 <li>
-                  <a
-                    href="#"
+                  <button
+                    onClick={nextPage}
+                    disabled={currenPage === totalPage}
                     className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Next</span>
@@ -243,7 +257,7 @@ export default function Order() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </li>
               </ul>
             )}

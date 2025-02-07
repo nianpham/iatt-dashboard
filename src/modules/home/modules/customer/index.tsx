@@ -23,6 +23,18 @@ export default function Customer() {
     setCurrenData(data.slice(start, end));
   };
 
+  const prevPage = () => {
+    if (currenPage > 1) {
+      selectPage(currenPage - 1);
+    }
+  };
+
+  const nextPage = () => {
+    if (currenPage < totalPage) {
+      selectPage(currenPage + 1);
+    }
+  };
+
   const render = (data: any) => {
     setData(data);
     setTotalPage(Math.ceil(data.length / COUNT));
@@ -154,8 +166,9 @@ export default function Customer() {
             ) : (
               <ul className="inline-flex items-stretch -space-x-px">
                 <li>
-                  <a
-                    href="#"
+                  <button
+                    onClick={prevPage}
+                    disabled={currenPage === 1}
                     className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Previous</span>
@@ -172,7 +185,7 @@ export default function Customer() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </li>
                 {Array.from({ length: totalPage }, (_, i) => i + 1)?.map(
                   (item: any, index: any) => {
@@ -191,8 +204,9 @@ export default function Customer() {
                   }
                 )}
                 <li>
-                  <a
-                    href="#"
+                  <button
+                    onClick={nextPage}
+                    disabled={currenPage === totalPage}
                     className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                   >
                     <span className="sr-only">Next</span>
@@ -209,7 +223,7 @@ export default function Customer() {
                         clipRule="evenodd"
                       />
                     </svg>
-                  </a>
+                  </button>
                 </li>
               </ul>
             )}
