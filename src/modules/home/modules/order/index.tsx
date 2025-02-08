@@ -50,7 +50,6 @@ export default function Order() {
   const renderAccount = async () => {
     const res = await AccountService.getAll();
     if (res && res.data.length > 0) {
-      // console.log("check acc data 2 : " + JSON.stringify(res.data));
       setAccounts(res.data);
       setIsLoading(false);
     }
@@ -59,8 +58,6 @@ export default function Order() {
   const renderProduct = async () => {
     const res = await ProductService.getAll();
     if (res && res.data.length > 0) {
-      console.log("check product data kkk: " + JSON.stringify(res.data));
-
       setProducts(res.data);
       setIsLoading(false);
     }
