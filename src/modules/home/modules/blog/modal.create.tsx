@@ -17,7 +17,7 @@ import { BlogService } from "@/services/blog";
 import { UploadService } from "@/services/upload";
 import { Loader, Plus } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import BlogDescriptionEditor from "./quill";
 
 export function ModalCreateBlog() {
@@ -109,10 +109,73 @@ export function ModalCreateBlog() {
     return true;
   };
 
+  const handleImageUpload = useCallback(async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const uploadResponse = await UploadService.uploadToCloudinary([file]);
+      if (
+        uploadResponse &&
+        Array.isArray(uploadResponse) &&
+        uploadResponse[0]
+      ) {
+        return uploadResponse[0]?.secure_url;
+      } else {
+        console.error("Upload failed or response is not as expected");
+        return "";
+      }
+    } catch (error) {
+      console.error("Image upload failed:", error);
+      return "";
+    }
+  }, []);
+
+  const extractBase64Images = (htmlContent: string) => {
+    const imgTagRegex =
+      /<img[^>]+src=["'](data:image\/[^;]+;base64[^"']+)["'][^>]*>/g;
+    const matches = [...htmlContent.matchAll(imgTagRegex)];
+    return matches.map((match) => match[1]);
+  };
+
+  const replaceBase64WithCloudUrls = async (
+    htmlContent: string,
+    uploadFunc: (file: File) => Promise<string>
+  ) => {
+    const imgTagRegex =
+      /<img[^>]+src=["'](data:image\/[^;]+;base64[^"']+)["'][^>]*>/g;
+    let updatedContent = htmlContent;
+
+    const matches = [...htmlContent.matchAll(imgTagRegex)];
+    for (const match of matches) {
+      const base64String = match[1];
+      const file = base64ToFile(base64String);
+      const uploadedUrl = await uploadFunc(file);
+      updatedContent = updatedContent.replace(base64String, uploadedUrl);
+    }
+
+    return updatedContent;
+  };
+
+  const base64ToFile = (base64String: string): File => {
+    const arr = base64String.split(",");
+    const mime = arr[0].match(/:(.*?);/)?.[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], "image.png", { type: mime });
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
-    console.log("check pre pic");
+
+    const updatedContent = await replaceBase64WithCloudUrls(
+      content,
+      handleImageUpload
+    );
 
     const uploadMainImage: any = await UploadService.uploadToCloudinary([
       mainPreview,
@@ -121,7 +184,7 @@ export function ModalCreateBlog() {
 
     const body = {
       title: title,
-      content: content,
+      content: updatedContent,
       tag: tag,
       author: author,
       thumbnail: uploadMainImage[0]?.url || "",

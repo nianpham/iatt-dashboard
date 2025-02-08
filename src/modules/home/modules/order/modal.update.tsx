@@ -45,8 +45,6 @@ export function ModalUpdateBlog({ data }: { data: any }) {
 
   const updateDOM = () => {
     if (data) {
-      console.log("check order", data);
-
       setCurrentData(data);
     }
   };
@@ -169,7 +167,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("waiting")}
+                  onClick={() => handleUpdateStatus("pending")}
                 >
                   Đang chuẩn bị đơn hàng
                 </DropdownMenuCheckboxItem>

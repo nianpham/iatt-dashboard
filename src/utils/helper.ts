@@ -110,6 +110,9 @@ const renderStatus = (status: string) => {
     case "waiting":
       result = "Đợi phản hồi";
       break;
+    case "pending":
+      result = "Đang chuẩn bị đơn hàng";
+      break;
     case "delivering":
       result = "Đang giao hàng";
       break;
