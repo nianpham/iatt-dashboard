@@ -84,7 +84,7 @@ export default function Product() {
                   Danh mục
                 </th>
                 <th scope="col" className="w-80 px-4 py-3">
-                  Mô tả
+                  Hình phụ
                 </th>
                 <th scope="col" className="w-32 px-4 py-3">
                   Màu
@@ -109,15 +109,15 @@ export default function Product() {
                       item?.deleted_at ? "hidden" : ""
                     } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                   >
-                    <td className="w-64 px-4 py-2 flex items-center">
+                    <td className="w-64 px-4 py-2 grid grid-cols-12 gap-3 items-center">
                       <Image
                         src={item?.thumbnail}
                         alt="img"
-                        className="w-auto h-20 mr-3 rounded-md"
+                        className="w-auto h-20 mr-3 rounded-md object-contain col-span-6"
                         width={100}
                         height={0}
                       />
-                      <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                      <span className="col-span-6 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         {item?.name}
                       </span>
                     </td>
@@ -126,14 +126,27 @@ export default function Product() {
                         {HELPER.renderCategory(item?.category)}
                       </span>
                     </td>
-                    <td className="w-80 px-4 py-2">
-                      <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                    <td className="grid grid-cols-3 gap-4 px-4 py-2">
+                      {/* <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         <div
                           dangerouslySetInnerHTML={{
                             __html: item?.description,
                           }}
                         />
-                      </span>
+                      </span> */}
+                      {item?.images
+                        .slice(0, 3)
+                        .map((preview: any, index: any) => (
+                          <div key={index} className="relative">
+                            <Image
+                              src={preview}
+                              alt={`secondary-preview-${index}`}
+                              className="rounded-sm object-cover h-20"
+                              width={100}
+                              height={100}
+                            />
+                          </div>
+                        ))}
                     </td>
                     <td className="w-32 px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center">

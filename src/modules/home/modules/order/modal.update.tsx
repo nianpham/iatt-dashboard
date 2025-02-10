@@ -34,13 +34,75 @@ export function ModalUpdateBlog({ data }: { data: any }) {
     window.location.href = "/?tab=order";
   };
 
-  const downloadImage = (imageUrl: string, filename: string) => {
-    const link = document.createElement("a");
-    link.href = imageUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const downloadImage = async (imageUrl: string, filename: string) => {
+    // const link = document.createElement("a");
+    // link.href = imageUrl;
+    // link.download = filename;
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+
+    // const body = {
+    //   Image_URL: "https://www.inanhtructuyen.com/_next/image?url=" + imageUrl,
+    // };
+
+    // const response = await OrderService.downloadImage(body);
+
+    // console.log("download result: " + response);
+
+    if (!imageUrl) {
+      console.error("Invalid image URL");
+      return;
+    }
+
+    try {
+      const img = document.createElement("img");
+      img.crossOrigin = "Anonymous";
+      img.src = imageUrl;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const PPI = 300;
+      const originalWidth = img.naturalWidth;
+      const originalHeight = img.naturalHeight;
+      const scaleFactor = PPI / 96;
+
+      const newWidth = originalWidth * scaleFactor;
+      const newHeight = originalHeight * scaleFactor;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      const ctx = canvas.getContext("2d");
+
+      if (!ctx) {
+        throw new Error("Unable to get canvas context");
+      }
+
+      ctx.drawImage(img, 0, 0, newWidth, newHeight);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            throw new Error("Failed to generate image blob");
+          }
+
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = filename || "downloaded_image.png";
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        },
+        "image/jpeg",
+        1.0
+      );
+    } catch (error) {
+      console.error("Error processing image:", error);
+    }
   };
 
   const updateDOM = () => {
@@ -49,7 +111,11 @@ export function ModalUpdateBlog({ data }: { data: any }) {
     }
   };
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {
+    if (data) {
+      setCurrentData(data);
+    }
+  }, [data]);
 
   return (
     <Dialog>
@@ -74,11 +140,12 @@ export function ModalUpdateBlog({ data }: { data: any }) {
           <div className="flex flex-col gap-6">
             <div className="flex items-center">
               <Image
-                src={currentData?.image}
+                src={currentData?.image || "/fallback-image.jpg"}
                 alt="img"
                 className="w-auto h-16 mr-3 rounded-md"
                 width={100}
-                height={0}
+                height={100}
+                priority
               />
               <div className="flex flex-col items-start">
                 <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">

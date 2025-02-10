@@ -17,4 +17,5 @@ export const API = {
   // ORDER
   GET_ALL_ORDERS: `${BASE_URL}/inanhtructuyen/order/`,
   UPDATE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
+  DOWNLOAD_IMAGE: `${BASE_URL}/inanhtructuyen/download/`,
 };

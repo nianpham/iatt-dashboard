@@ -14,6 +14,10 @@ const formatDate = (isoDate: string) => {
   return `${day}/${month}/${year}`;
 };
 
+const sanitizeContent = (html: string) => {
+  return html.replace(/<img[^>]*>/g, "");
+};
+
 const renderCategory = (category: string) => {
   let result = "";
   switch (category) {
@@ -140,6 +144,13 @@ const renderPayment = (method: string) => {
   return result;
 };
 
+const truncateText = (text: string, limit: number) => {
+  if (text.length > limit) {
+    return text.substring(0, limit) + "...";
+  }
+  return text;
+};
+
 export const HELPER = {
   formatVND,
   renderCategory,
@@ -149,4 +160,6 @@ export const HELPER = {
   renderStatus,
   renderPayment,
   formatDate,
+  truncateText,
+  sanitizeContent,
 };

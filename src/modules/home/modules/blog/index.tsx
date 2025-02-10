@@ -122,15 +122,15 @@ export default function Blog() {
                       item?.deleted_at ? "hidden" : ""
                     } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                   >
-                    <td className="w-64 px-4 py-2 flex items-center">
+                    <td className="w-64 px-4 py-2 grid grid-cols-12 gap-3 items-center">
                       <Image
                         src={item?.thumbnail}
                         alt="img"
-                        className="w-auto h-20 mr-3 rounded-md"
+                        className="w-auto h-20 mr-3 rounded-md col-span-6"
                         width={100}
                         height={0}
                       />
-                      <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                      <span className="col-span-6 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         {item?.title}
                       </span>
                     </td>
@@ -142,7 +142,9 @@ export default function Blog() {
                     <td className="w-80 px-4 py-2">
                       <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                         <div
-                          dangerouslySetInnerHTML={{ __html: item?.content }}
+                          dangerouslySetInnerHTML={{
+                            __html: HELPER.sanitizeContent(item?.content),
+                          }}
                         />
                       </span>
                     </td>
