@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
+import axios from "axios";
 
 export function ModalUpdateBlog({ data }: { data: any }) {
   const [currentData, setCurrentData] = useState<any>(null as any);
@@ -55,6 +56,40 @@ export function ModalUpdateBlog({ data }: { data: any }) {
       return;
     }
 
+    // try {
+    //   console.log("start download");
+
+    //   const urlObj = new URL(imageUrl);
+    //   const queryParams = new URLSearchParams(urlObj.search);
+    //   const realImageUrl = queryParams.get("url") || imageUrl;
+
+    //   const response = await fetch(realImageUrl);
+    //   if (!response.ok) {
+    //     throw new Error(`Failed to fetch image: ${response.statusText}`);
+    //   }
+
+    //   const blob = await response.blob();
+    //   const contentType = blob.type || "application/octet-stream";
+    //   const realUrlObj = new URL(realImageUrl);
+    //   let fileName =
+    //     filename || realUrlObj.pathname.split("/").pop() || "downloaded-image";
+
+    //   if (!fileName.includes(".")) {
+    //     const ext = contentType.split("/")[1] || "jpg";
+    //     fileName += `.${ext}`;
+    //   }
+
+    //   const link = document.createElement("a");
+    //   link.href = URL.createObjectURL(blob);
+    //   link.download = fileName;
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+    // } catch (error) {
+    //   console.error("Error downloading image:", error);
+    //   throw error;
+    // }
+
     try {
       const img = document.createElement("img");
       img.crossOrigin = "Anonymous";
@@ -68,7 +103,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
       const PPI = 300;
       const originalWidth = img.naturalWidth;
       const originalHeight = img.naturalHeight;
-      const scaleFactor = PPI / 96;
+      const scaleFactor = PPI / 300;
 
       const newWidth = originalWidth * scaleFactor;
       const newHeight = originalHeight * scaleFactor;

@@ -299,7 +299,7 @@ export function ModalCreateProduct() {
       price: price,
       category: category,
       color: color,
-      sold: 0,
+      // sold: 0,
       thumbnail: uploadMainImage[0]?.url || "",
       images: uploadSecondaryImages?.map((image: any) => image.url),
     };
@@ -308,7 +308,7 @@ export function ModalCreateProduct() {
 
     await ProductService.createProduct(body);
     setIsLoading(false);
-    window.location.href = "/?tab=product";
+    // window.location.href = "/?tab=product";
   };
 
   return (
