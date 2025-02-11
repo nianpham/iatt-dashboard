@@ -308,7 +308,7 @@ export function ModalCreateProduct() {
 
     await ProductService.createProduct(body);
     setIsLoading(false);
-    // window.location.href = "/?tab=product";
+    window.location.href = "/?tab=product";
   };
 
   return (
