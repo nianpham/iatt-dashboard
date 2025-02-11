@@ -64,7 +64,7 @@ export function ModalUpdateBlog({
     }
 
     try {
-      console.log("strart");
+      console.log("start");
 
       // Fetch the image and convert it into a Blob
       const response = await fetch(imageUrl, { mode: "cors" });
@@ -75,19 +75,23 @@ export function ModalUpdateBlog({
 
       // Prepare FormData for API request
       const formData = new FormData();
-      formData.append("inputFile", file, "file");
+      formData.append("file", file);
+      formData.append("filename", filename || "image.jpg");
+      formData.append("toolId", "Change the DPI of my Image");
+      formData.append("O", "300");
+
+      const payload = {
+        file: file,
+        filename: filename || "image.jpg",
+        toolId: "Change the DPI of my Image",
+        O: 300,
+      };
 
       // Send request to the conversion API
-      const apiResponse = await fetch(
-        "https://api.cloudmersive.com/convert/image/set-dpi/300",
-        {
-          method: "POST",
-          headers: {
-            Apikey: "b8bd3f34-6d4c-4dde-8a25-f5940ec3603d",
-          },
-          body: formData,
-        }
-      );
+      const apiResponse = await fetch("https://convert.town/UploadFile", {
+        method: "POST",
+        body: formData,
+      });
       console.log("check api res", apiResponse);
 
       if (!apiResponse.ok) throw new Error("Failed to convert image");
