@@ -43,75 +43,84 @@ export function ModalUpdateBlog({
   };
 
   const downloadImage = async (imageUrl: string, filename: string) => {
-    // const link = document.createElement("a");
-    // link.href = imageUrl;
-    // link.download = filename;
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
-
-    // const body = {
-    //   Image_URL: "https://www.inanhtructuyen.com/_next/image?url=" + imageUrl,
-    // };
-
-    // const response = await OrderService.downloadImage(body);
-
-    // console.log("download result: " + response);
-
     if (!imageUrl) {
       console.error("Invalid image URL");
       return;
     }
 
     try {
-      console.log("start");
+      console.log("Starting download...");
 
-      // Fetch the image and convert it into a Blob
       const response = await fetch(imageUrl, { mode: "cors" });
       if (!response.ok) throw new Error("Failed to fetch image");
 
-      const arrayBuffer = await response.arrayBuffer();
-      const file = new File([arrayBuffer], "image.jpg", { type: "image/jpeg" });
+      const blob = await response.blob();
 
-      // Prepare FormData for API request
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("filename", filename || "image.jpg");
-      formData.append("toolId", "Change the DPI of my Image");
-      formData.append("O", "300");
+      const blobUrl = URL.createObjectURL(blob);
 
-      const payload = {
-        file: file,
-        filename: filename || "image.jpg",
-        toolId: "Change the DPI of my Image",
-        O: 300,
-      };
-
-      // Send request to the conversion API
-      const apiResponse = await fetch("https://convert.town/UploadFile", {
-        method: "POST",
-        body: formData,
-      });
-      console.log("check api res", apiResponse);
-
-      if (!apiResponse.ok) throw new Error("Failed to convert image");
-
-      // Convert response to Blob
-      const convertedBlob = await apiResponse.blob();
-      console.log("check converted blob", convertedBlob);
-
-      // Create a download link and trigger download
       const link = document.createElement("a");
-      link.href = URL.createObjectURL(convertedBlob);
-      link.download = filename || "converted_image.jpg";
+      link.href = blobUrl;
+      link.download = filename || "downloaded_image.jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
 
-      console.log("end");
+      URL.revokeObjectURL(blobUrl);
+
+      console.log("Download complete.");
     } catch (error) {
-      console.error("Error processing image:", error);
+      console.error("Error downloading image:", error);
     }
+
+    // try {
+    //   console.log("start");
+
+    //   // Fetch the image and convert it into a Blob
+    //   const response = await fetch(imageUrl, { mode: "cors" });
+    //   if (!response.ok) throw new Error("Failed to fetch image");
+
+    //   const arrayBuffer = await response.arrayBuffer();
+    //   const file = new File([arrayBuffer], "image.jpg", { type: "image/jpeg" });
+
+    //   // Prepare FormData for API request
+    //   const formData = new FormData();
+    //   formData.append("file", file);
+    //   formData.append("filename", filename || "image.jpg");
+    //   formData.append("toolId", "Change the DPI of my Image");
+    //   formData.append("O", "300");
+
+    //   const payload = {
+    //     file: file,
+    //     filename: filename || "image.jpg",
+    //     toolId: "Change the DPI of my Image",
+    //     O: 300,
+    //   };
+
+    //   // Send request to the conversion API
+    //   const apiResponse = await fetch("https://convert.town/UploadFile", {
+    //     method: "POST",
+    //     body: formData,
+    //   });
+    //   console.log("check api res", apiResponse);
+
+    //   if (!apiResponse.ok) throw new Error("Failed to convert image");
+
+    //   // Convert response to Blob
+    //   const convertedBlob = await apiResponse.blob();
+    //   console.log("check converted blob", convertedBlob);
+
+    //   // Create a download link and trigger download
+    //   const link = document.createElement("a");
+    //   link.href = URL.createObjectURL(convertedBlob);
+    //   link.download = filename || "converted_image.jpg";
+    //   document.body.appendChild(link);
+    //   link.click();
+    //   document.body.removeChild(link);
+
+    //   console.log("end");
+    // } catch (error) {
+    //   console.error("Error processing image:", error);
+    // }
   };
 
   const updateDOM = () => {
