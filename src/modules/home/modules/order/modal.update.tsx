@@ -24,13 +24,20 @@ import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
 import axios from "axios";
 
-export function ModalUpdateBlog({ data }: { data: any }) {
+export function ModalUpdateBlog({
+  data,
+  accounts,
+}: {
+  data: any;
+  accounts: any;
+}) {
   const [currentData, setCurrentData] = useState<any>(null as any);
 
   const handleUpdateStatus = async (status: any) => {
     const body = {
       status: status,
     };
+
     await OrderService.updateOrder(currentData?._id, body);
     window.location.href = "/?tab=order";
   };
@@ -56,85 +63,48 @@ export function ModalUpdateBlog({ data }: { data: any }) {
       return;
     }
 
-    // try {
-    //   console.log("start download");
-
-    //   const urlObj = new URL(imageUrl);
-    //   const queryParams = new URLSearchParams(urlObj.search);
-    //   const realImageUrl = queryParams.get("url") || imageUrl;
-
-    //   const response = await fetch(realImageUrl);
-    //   if (!response.ok) {
-    //     throw new Error(`Failed to fetch image: ${response.statusText}`);
-    //   }
-
-    //   const blob = await response.blob();
-    //   const contentType = blob.type || "application/octet-stream";
-    //   const realUrlObj = new URL(realImageUrl);
-    //   let fileName =
-    //     filename || realUrlObj.pathname.split("/").pop() || "downloaded-image";
-
-    //   if (!fileName.includes(".")) {
-    //     const ext = contentType.split("/")[1] || "jpg";
-    //     fileName += `.${ext}`;
-    //   }
-
-    //   const link = document.createElement("a");
-    //   link.href = URL.createObjectURL(blob);
-    //   link.download = fileName;
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   document.body.removeChild(link);
-    // } catch (error) {
-    //   console.error("Error downloading image:", error);
-    //   throw error;
-    // }
-
     try {
-      const img = document.createElement("img");
-      img.crossOrigin = "Anonymous";
-      img.src = imageUrl;
+      console.log("strart");
 
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-      });
+      // Fetch the image and convert it into a Blob
+      const response = await fetch(imageUrl, { mode: "cors" });
+      if (!response.ok) throw new Error("Failed to fetch image");
 
-      const PPI = 300;
-      const originalWidth = img.naturalWidth;
-      const originalHeight = img.naturalHeight;
-      const scaleFactor = PPI / 300;
+      const arrayBuffer = await response.arrayBuffer();
+      const file = new File([arrayBuffer], "image.jpg", { type: "image/jpeg" });
 
-      const newWidth = originalWidth * scaleFactor;
-      const newHeight = originalHeight * scaleFactor;
+      // Prepare FormData for API request
+      const formData = new FormData();
+      formData.append("inputFile", file, "file");
 
-      const canvas = document.createElement("canvas");
-      canvas.width = newWidth;
-      canvas.height = newHeight;
-      const ctx = canvas.getContext("2d");
-
-      if (!ctx) {
-        throw new Error("Unable to get canvas context");
-      }
-
-      ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) {
-            throw new Error("Failed to generate image blob");
-          }
-
-          const link = document.createElement("a");
-          link.href = URL.createObjectURL(blob);
-          link.download = filename || "downloaded_image.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        },
-        "image/jpeg",
-        1.0
+      // Send request to the conversion API
+      const apiResponse = await fetch(
+        "https://api.cloudmersive.com/convert/image/set-dpi/300",
+        {
+          method: "POST",
+          headers: {
+            Apikey: "b8bd3f34-6d4c-4dde-8a25-f5940ec3603d",
+          },
+          body: formData,
+        }
       );
+      console.log("check api res", apiResponse);
+
+      if (!apiResponse.ok) throw new Error("Failed to convert image");
+
+      // Convert response to Blob
+      const convertedBlob = await apiResponse.blob();
+      console.log("check converted blob", convertedBlob);
+
+      // Create a download link and trigger download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(convertedBlob);
+      link.download = filename || "converted_image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      console.log("end");
     } catch (error) {
       console.error("Error processing image:", error);
     }
@@ -242,10 +212,22 @@ export function ModalUpdateBlog({ data }: { data: any }) {
               />
               <div className="flex flex-col">
                 <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  <strong>{currentData?.account_email}</strong>
+                  <strong>
+                    {
+                      accounts?.find(
+                        (pro: any) =>
+                          pro._id.toString() === currentData?.account_id
+                      )?.name
+                    }
+                  </strong>
                 </span>
                 <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-600 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  {currentData?.account_email}
+                  {
+                    accounts?.find(
+                      (pro: any) =>
+                        pro._id.toString() === currentData?.account_id
+                    )?.email
+                  }
                 </span>
               </div>
             </div>

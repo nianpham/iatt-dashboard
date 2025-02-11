@@ -186,11 +186,21 @@ export default function Order() {
                             ? "bg-yellow-100 text-yellow-800"
                             : ""
                         }
-                            ${
-                              item.status === "pending"
-                                ? "bg-orange-400 text-white"
-                                : ""
-                            }`}
+                        ${
+                          item.status === "pending"
+                            ? "bg-orange-400 text-white"
+                            : ""
+                        }
+                        ${
+                          item.status === "paid pending"
+                            ? "bg-yellow-400 text-gray-700"
+                            : ""
+                        }
+                        ${
+                          item.status === "paid"
+                            ? "bg-green-500 text-gray-700"
+                            : ""
+                        }`}
                       >
                         {HELPER.renderStatus(item?.status)}
                       </span>
@@ -199,7 +209,7 @@ export default function Order() {
                       {HELPER.formatVND(item?.total)}
                     </td>
                     <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <ModalUpdateBlog data={item} />
+                      <ModalUpdateBlog data={item} accounts={accounts} />
                     </td>
                   </tr>
                 );

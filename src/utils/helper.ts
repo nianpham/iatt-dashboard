@@ -123,6 +123,12 @@ const renderStatus = (status: string) => {
     case "completed":
       result = "Hoàn thành";
       break;
+    case "paid pending":
+      result = "Đang chờ thanh toán";
+      break;
+    case "paid":
+      result = "Đã thanh toán";
+      break;
     default:
       break;
   }
@@ -134,6 +140,9 @@ const renderPayment = (method: string) => {
   switch (method) {
     case "bank":
       result = "Ngân Hàng";
+      break;
+    case "momo":
+      result = "Momo";
       break;
     case "cash":
       result = "Tiền Mặt";
