@@ -22,7 +22,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
+import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
+import { Loader } from "lucide-react";
 
 export function ModalUpdateBlog({
   data,
@@ -31,6 +33,10 @@ export function ModalUpdateBlog({
   data: any;
   accounts: any;
 }) {
+  const { toast } = useToast();
+
+  const [downloadLoading, setDownloadLoading] = useState(false);
+
   const [currentData, setCurrentData] = useState<any>(null as any);
 
   const handleUpdateStatus = async (status: any) => {
@@ -42,6 +48,37 @@ export function ModalUpdateBlog({
     window.location.href = "/?tab=order";
   };
 
+  // const downloadImage = async (imageUrl: string, filename: string) => {
+  //   if (!imageUrl) {
+  //     console.error("Invalid image URL");
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log("Starting download...");
+
+  //     const response = await fetch(imageUrl, { mode: "cors" });
+  //     if (!response.ok) throw new Error("Failed to fetch image");
+
+  //     const blob = await response.blob();
+
+  //     const blobUrl = URL.createObjectURL(blob);
+
+  //     const link = document.createElement("a");
+  //     link.href = blobUrl;
+  //     link.download = filename || "downloaded_image.jpg";
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+
+  //     URL.revokeObjectURL(blobUrl);
+
+  //     console.log("Download complete.");
+  //   } catch (error) {
+  //     console.error("Error downloading image:", error);
+  //   }
+  // };
+
   const downloadImage = async (imageUrl: string, filename: string) => {
     if (!imageUrl) {
       console.error("Invalid image URL");
@@ -49,97 +86,120 @@ export function ModalUpdateBlog({
     }
 
     try {
-      console.log("Starting download...");
+      console.log("Fetching image...");
+      setDownloadLoading(true);
 
+      // Fetch the image as a blob
       const response = await fetch(imageUrl, { mode: "cors" });
-      if (!response.ok) throw new Error("Failed to fetch image");
+      if (!response.ok) {
+        throw new Error("Failed to fetch image");
+      }
 
       const blob = await response.blob();
+      const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
 
-      const blobUrl = URL.createObjectURL(blob);
+      console.log("Image converted to file");
 
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = filename || "downloaded_image.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Prepare API request
+      const myHeaders = new Headers();
+      myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
 
-      URL.revokeObjectURL(blobUrl);
+      const formdata = new FormData();
+      formdata.append("inputFile", file, "wallpaper-2.jpg");
 
-      console.log("Download complete.");
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow" as RequestRedirect,
+      };
+
+      console.log("Starting API request...");
+      // const result = await fetch(
+      //   "https://api.cloudmersive.com/convert/image/set-dpi/300",
+      //   requestOptions
+      // )
+      //   .then((response) => response.text())
+      //   .then((result) => console.log("API Response:", result))
+      //   .catch((error) => console.error("API Error:", error));
+
+      const result = await fetch(
+        "https://api.cloudmersive.com/convert/image/set-dpi/300",
+        requestOptions
+      );
+      const resultBlob = await result.blob();
+
+      console.log("Process complete.");
+
+      // // Convert result to base64
+      // const reader = new FileReader();
+      // reader.readAsDataURL(resultBlob);
+      // reader.onloadend = () => {
+      //   const base64data = reader.result;
+      //   console.log("Base64 Encoded Response:", base64data);
+
+      //   // Convert base64 to a file and trigger download
+      //   const link = document.createElement("a");
+      //   link.href = base64data;
+      //   link.download = "processed-image.jpg";
+      //   document.body.appendChild(link);
+      //   link.click();
+      //   document.body.removeChild(link);
+      // };
+
+      if (result.ok === true) {
+        // Convert result to base64
+        const reader = new FileReader();
+        reader.readAsDataURL(resultBlob);
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          if (typeof base64data === "string") {
+            // console.log("Base64 Encoded Response:", base64data);
+
+            // Convert base64 to a file and trigger download
+            const link = document.createElement("a");
+            link.href = base64data;
+            link.download = "processed-image.jpg";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            setDownloadLoading(false);
+          } else {
+            console.error("Failed to convert image to base64 format.");
+          }
+        };
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Chuyển đổi hình ảnh thất bại.",
+        });
+        console.log("Lấy ảnh gốc.");
+
+        const response = await fetch(imageUrl, { mode: "cors" });
+        if (!response.ok) throw new Error("Failed to fetch image");
+
+        const blob = await response.blob();
+
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = filename || "downloaded_image.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(blobUrl);
+
+        setDownloadLoading(true);
+
+        console.log("Tải ảnh gốc hoàn tất.");
+      }
     } catch (error) {
-      console.error("Error downloading image:", error);
+      console.error("Error processing image:", error);
     }
   };
-
-  // const downloadImage = async (imageUrl: string) => {
-  //   if (!imageUrl) {
-  //     console.error("Invalid image URL");
-  //     return;
-  //   }
-
-  //   try {
-  //     console.log("Fetching image...");
-
-  //     // Fetch the image as a blob
-  //     const response = await fetch(imageUrl, { mode: "cors" });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch image");
-  //     }
-
-  //     const blob = await response.blob();
-  //     const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
-
-  //     console.log("Image converted to file");
-
-  //     // Prepare API request
-  //     const myHeaders = new Headers();
-  //     myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
-
-  //     const formdata = new FormData();
-  //     formdata.append("inputFile", file, "wallpaper-2.jpg");
-
-  //     const requestOptions = {
-  //       method: "POST",
-  //       headers: myHeaders,
-  //       body: formdata,
-  //       redirect: "follow" as RequestRedirect,
-  //     };
-
-  //     console.log("Starting API request...");
-  //     const result = await fetch(
-  //       "https://api.cloudmersive.com/convert/image/set-dpi/300",
-  //       requestOptions
-  //     )
-  //       .then((response) => response.text())
-  //       .then((result) => console.log("API Response:", result))
-  //       .catch((error) => console.error("API Error:", error));
-
-  //     console.log("Process complete.", result);
-
-  //     // Prepare API request
-  //     //  const formData = new FormData();
-  //     //  formData.append("inputFile", file, "uploaded-image.jpg");
-
-  //     //  const headers = new Headers();
-  //     //  headers.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
-
-  //     //  const requestOptions = {
-  //     //      method: "POST",
-  //     //      headers: headers,
-  //     //      body: formData,
-  //     //      redirect: "follow"
-  //     //  };
-
-  //     //  console.log("Sending API request...");
-  //     //  const apiResponse = await fetch("https://api.cloudmersive.com/convert/image/set-dpi/300", requestOptions);
-  //     //  const result = await apiResponse.text();
-  //     //  console.log("API Response:", result);
-  //   } catch (error) {
-  //     console.error("Error processing image:", error);
-  //   }
-  // };
 
   const updateDOM = () => {
     if (data) {
@@ -196,7 +256,14 @@ export function ModalUpdateBlog({
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
                 >
-                  Tải file về
+                  {!downloadLoading ? (
+                    <div>Tải file về</div>
+                  ) : (
+                    <div className="flex flex-row justify-center items-center gap-3">
+                      Đang tải ảnh...
+                      <Loader className="animate-spin" size={15} />
+                    </div>
+                  )}
                 </button>
               </div>
             </div>
