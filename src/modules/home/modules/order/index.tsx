@@ -139,7 +139,7 @@ export default function Order() {
                       <Image
                         src={item?.image}
                         alt="img"
-                        className="col-span-6 w-auto h-20 mr-3"
+                        className="col-span-6 w-auto h-20 mr-3 rounded-md"
                         width={100}
                         height={0}
                       />
@@ -173,33 +173,31 @@ export default function Order() {
                         className={`rounded-md px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white
                        ${
                          item.status === "completed"
-                           ? "bg-green-100 text-green-800"
+                           ? "bg-green-700 text-white"
                            : ""
                        }
                         ${
                           item.status === "delivering"
-                            ? "bg-blue-100 text-blue-800"
+                            ? "bg-yellow-800 text-white"
                             : ""
                         }
                         ${
                           item.status === "waiting"
-                            ? "bg-yellow-100 text-yellow-800"
+                            ? "bg-blue-700 text-white"
                             : ""
                         }
                         ${
                           item.status === "pending"
-                            ? "bg-orange-400 text-white"
+                            ? "bg-orange-600 text-white"
                             : ""
                         }
                         ${
                           item.status === "paid pending"
-                            ? "bg-yellow-400 text-gray-700"
+                            ? "bg-yellow-400 text-white"
                             : ""
                         }
                         ${
-                          item.status === "paid"
-                            ? "bg-green-500 text-gray-700"
-                            : ""
+                          item.status === "paid" ? "bg-pink-200 text-white" : ""
                         }`}
                       >
                         {HELPER.renderStatus(item?.status)}
@@ -209,7 +207,11 @@ export default function Order() {
                       {HELPER.formatVND(item?.total)}
                     </td>
                     <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <ModalUpdateBlog data={item} accounts={accounts} />
+                      <ModalUpdateBlog
+                        data={item}
+                        accounts={accounts}
+                        products={products}
+                      />
                     </td>
                   </tr>
                 );

@@ -29,9 +29,11 @@ import { Loader } from "lucide-react";
 export function ModalUpdateBlog({
   data,
   accounts,
+  products,
 }: {
   data: any;
   accounts: any;
+  products: any;
 }) {
   const { toast } = useToast();
 
@@ -245,7 +247,13 @@ export function ModalUpdateBlog({
               />
               <div className="flex flex-col items-start">
                 <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  {currentData?.product_id}
+                  {/* {currentData?.product_id} */}
+                  {
+                    products?.find(
+                      (pro: any) =>
+                        pro._id.toString() === currentData?.product_id
+                    )?.name
+                  }
                 </span>
                 <button
                   onClick={() =>
