@@ -42,6 +42,37 @@ export function ModalUpdateBlog({
     window.location.href = "/?tab=order";
   };
 
+  const downloadImage = async (imageUrl: string, filename: string) => {
+    if (!imageUrl) {
+      console.error("Invalid image URL");
+      return;
+    }
+
+    try {
+      console.log("Starting download...");
+
+      const response = await fetch(imageUrl, { mode: "cors" });
+      if (!response.ok) throw new Error("Failed to fetch image");
+
+      const blob = await response.blob();
+
+      const blobUrl = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename || "downloaded_image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(blobUrl);
+
+      console.log("Download complete.");
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
+
   // const downloadImage = async (imageUrl: string) => {
   //   if (!imageUrl) {
   //     console.error("Invalid image URL");
@@ -49,97 +80,61 @@ export function ModalUpdateBlog({
   //   }
 
   //   try {
-  //     console.log("Starting download...");
+  //     console.log("Fetching image...");
 
+  //     // Fetch the image as a blob
+  //     const response = await fetch(imageUrl);
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch image");
+  //     }
+
+  //     const blob = await response.blob();
+  //     const file = new File([blob], "wallpaper-2.jpg", { type: blob.type });
+
+  //     // Get the file input element
+  //     const fileInput = document.getElementById(
+  //       "fileInput"
+  //     ) as HTMLInputElement;
+  //     if (!fileInput) {
+  //       console.error("File input element not found");
+  //       return;
+  //     }
+
+  //     // Use DataTransfer to assign the file to fileInput.files
+  //     const dataTransfer = new DataTransfer();
+  //     dataTransfer.items.add(file);
+  //     fileInput.files = dataTransfer.files;
+
+  //     console.log("Image converted to file and set to fileInput.files[0]");
+
+  //     // Prepare API request
   //     const myHeaders = new Headers();
   //     myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
 
   //     const formdata = new FormData();
-  //     formdata.append("inputFile", fileInput.files[0], "wallpaper-2.jpg");
+  //     formdata.append("inputFile", file, "wallpaper-2.jpg");
 
   //     const requestOptions = {
   //       method: "POST",
   //       headers: myHeaders,
   //       body: formdata,
-  //       redirect: "follow",
+  //       redirect: "follow" as RequestRedirect,
   //     };
 
+  //     console.log("Starting API request...");
   //     fetch(
   //       "https://api.cloudmersive.com/convert/image/set-dpi/300",
   //       requestOptions
   //     )
   //       .then((response) => response.text())
-  //       .then((result) => console.log(result))
-  //       .catch((error) => console.error(error));
+  //       .then((result) => console.log("API Response:", result))
+  //       .catch((error) => console.error("API Error:", error));
 
-  //     console.log("Download complete.");
+  //     console.log("Process complete.");
   //   } catch (error) {
-  //     console.error("Error downloading image:", error);
+  //     console.error("Error processing image:", error);
   //   }
   // };
-
-  const downloadImage = async (imageUrl: string) => {
-    if (!imageUrl) {
-      console.error("Invalid image URL");
-      return;
-    }
-
-    try {
-      console.log("Fetching image...");
-
-      // Fetch the image as a blob
-      const response = await fetch(imageUrl);
-      if (!response.ok) {
-        throw new Error("Failed to fetch image");
-      }
-
-      const blob = await response.blob();
-      const file = new File([blob], "wallpaper-2.jpg", { type: blob.type });
-
-      // Get the file input element
-      const fileInput = document.getElementById(
-        "fileInput"
-      ) as HTMLInputElement;
-      if (!fileInput) {
-        console.error("File input element not found");
-        return;
-      }
-
-      // Use DataTransfer to assign the file to fileInput.files
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-      fileInput.files = dataTransfer.files;
-
-      console.log("Image converted to file and set to fileInput.files[0]");
-
-      // Prepare API request
-      const myHeaders = new Headers();
-      myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
-
-      const formdata = new FormData();
-      formdata.append("inputFile", file, "wallpaper-2.jpg");
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-        redirect: "follow" as RequestRedirect,
-      };
-
-      console.log("Starting API request...");
-      fetch(
-        "https://api.cloudmersive.com/convert/image/set-dpi/300",
-        requestOptions
-      )
-        .then((response) => response.text())
-        .then((result) => console.log("API Response:", result))
-        .catch((error) => console.error("API Error:", error));
-
-      console.log("Process complete.");
-    } catch (error) {
-      console.error("Error processing image:", error);
-    }
-  };
 
   const updateDOM = () => {
     if (data) {
@@ -190,8 +185,8 @@ export function ModalUpdateBlog({
                 <button
                   onClick={() =>
                     downloadImage(
-                      currentData?.image
-                      // `${currentData?.product_id}.png`
+                      currentData?.image,
+                      `${currentData?.product_id}.png`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
