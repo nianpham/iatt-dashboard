@@ -342,7 +342,35 @@ export function ModalUpdateBlog({
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="w-56 bg-yellow-100 hover:bg-yellow-200 text-gray-800">
+                <Button
+                  className={`w-56
+                  ${
+                    data.status === "completed" ? "bg-green-700 text-white" : ""
+                  }
+                        ${
+                          data.status === "delivering"
+                            ? "bg-yellow-800 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "waiting"
+                            ? "bg-blue-700 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "pending"
+                            ? "bg-orange-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid pending"
+                            ? "bg-yellow-400 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid" ? "bg-pink-200 text-white" : ""
+                        }`}
+                >
                   {HELPER.renderStatus(data?.status)}
                 </Button>
               </DropdownMenuTrigger>
