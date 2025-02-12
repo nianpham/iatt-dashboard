@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { AppSidebar } from "./components/app-sidebar"
+import { AppSidebar } from "./components/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,52 +8,51 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/breadcrumb";
+import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar"
-import { useSearchParams } from "next/navigation"
-import Product from "./modules/product"
-import Order from "./modules/order"
-import Blog from "./modules/blog"
-import Customer from "./modules/customer"
+} from "@/components/ui/sidebar";
+import { useSearchParams } from "next/navigation";
+import Product from "./modules/product";
+import Order from "./modules/order";
+import Blog from "./modules/blog";
+import Customer from "./modules/customer";
 
 export default function HomeClient() {
-
-  const param = useSearchParams()
+  const param = useSearchParams();
 
   const renderTab = (tab: string) => {
     switch (tab) {
       case "product":
-        return <Product />
+        return <Product />;
       case "order":
-        return <Order />
+        return <Order />;
       case "blog":
-        return <Blog />
+        return <Blog />;
       case "customer":
-        return <Customer />
+        return <Customer />;
       default:
-        return <Product />
+        return <Product />;
     }
-  }
+  };
 
   const renderBreadcrumb = (tab: string) => {
     switch (tab) {
       case "product":
-        return "Sản Phẩm"
+        return "Sản Phẩm";
       case "order":
-        return 'Đơn Hàng'
+        return "Đơn Hàng";
       case "blog":
-        return "Bài Viết"
+        return "Bài Viết";
       case "customer":
-        return "Khách Hàng"
+        return "Khách Hàng";
       default:
-        return "Sản Phẩm"
+        return "Sản Phẩm";
     }
-  }
+  };
 
   return (
     <SidebarProvider>
@@ -73,7 +72,9 @@ export default function HomeClient() {
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>
-                    <span className="text-[16px]">{renderBreadcrumb(param.get('tab') || 'product')}</span>
+                    <span className="text-[16px]">
+                      {renderBreadcrumb(param.get("tab") || "product")}
+                    </span>
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
@@ -82,9 +83,9 @@ export default function HomeClient() {
         </header>
         <div className="w-full h-[1.5px] bg-black opacity-10"></div>
         <div className="flex flex-1 flex-col">
-          {renderTab(param.get('tab') || 'product')}
+          {renderTab(param.get("tab") || "product")}
         </div>
       </SidebarInset>
     </SidebarProvider>
-  )
+  );
 }

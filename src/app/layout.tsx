@@ -9,7 +9,7 @@ const font = Nunito({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "QUẢN TRỊ HỆ THỐNG",
-  description: "IN ẢNH TRỰC TUYẾN"
+  description: "IN ẢNH TRỰC TUYẾN",
 };
 
 export default function RootLayout({
@@ -21,12 +21,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={font.className} suppressHydrationWarning={true}>
         <ToastProvider>
-          <div className="hidden md:hidden lg:hidden xl:flex">
+          <div className="flex">
+            {/* hidden md:hidden lg:hidden xl: */}
             {children}
           </div>
-          <div className="flex md:flex lg:flex xl:hidden">
+          {/* <div className="flex md:flex lg:flex xl:hidden">
             <NotFoundPage />
-          </div>
+          </div> */}
         </ToastProvider>
         <Toaster />
       </body>

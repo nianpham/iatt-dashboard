@@ -42,85 +42,103 @@ export function ModalUpdateBlog({
     window.location.href = "/?tab=order";
   };
 
-  const downloadImage = async (imageUrl: string, filename: string) => {
+  // const downloadImage = async (imageUrl: string) => {
+  //   if (!imageUrl) {
+  //     console.error("Invalid image URL");
+  //     return;
+  //   }
+
+  //   try {
+  //     console.log("Starting download...");
+
+  //     const myHeaders = new Headers();
+  //     myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
+
+  //     const formdata = new FormData();
+  //     formdata.append("inputFile", fileInput.files[0], "wallpaper-2.jpg");
+
+  //     const requestOptions = {
+  //       method: "POST",
+  //       headers: myHeaders,
+  //       body: formdata,
+  //       redirect: "follow",
+  //     };
+
+  //     fetch(
+  //       "https://api.cloudmersive.com/convert/image/set-dpi/300",
+  //       requestOptions
+  //     )
+  //       .then((response) => response.text())
+  //       .then((result) => console.log(result))
+  //       .catch((error) => console.error(error));
+
+  //     console.log("Download complete.");
+  //   } catch (error) {
+  //     console.error("Error downloading image:", error);
+  //   }
+  // };
+
+  const downloadImage = async (imageUrl: string) => {
     if (!imageUrl) {
       console.error("Invalid image URL");
       return;
     }
 
     try {
-      console.log("Starting download...");
+      console.log("Fetching image...");
 
-      const response = await fetch(imageUrl, { mode: "cors" });
-      if (!response.ok) throw new Error("Failed to fetch image");
+      // Fetch the image as a blob
+      const response = await fetch(imageUrl);
+      if (!response.ok) {
+        throw new Error("Failed to fetch image");
+      }
 
       const blob = await response.blob();
+      const file = new File([blob], "wallpaper-2.jpg", { type: blob.type });
 
-      const blobUrl = URL.createObjectURL(blob);
+      // Get the file input element
+      const fileInput = document.getElementById(
+        "fileInput"
+      ) as HTMLInputElement;
+      if (!fileInput) {
+        console.error("File input element not found");
+        return;
+      }
 
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = filename || "downloaded_image.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      // Use DataTransfer to assign the file to fileInput.files
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+      fileInput.files = dataTransfer.files;
 
-      URL.revokeObjectURL(blobUrl);
+      console.log("Image converted to file and set to fileInput.files[0]");
 
-      console.log("Download complete.");
+      // Prepare API request
+      const myHeaders = new Headers();
+      myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
+
+      const formdata = new FormData();
+      formdata.append("inputFile", file, "wallpaper-2.jpg");
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: formdata,
+        redirect: "follow" as RequestRedirect,
+      };
+
+      console.log("Starting API request...");
+      fetch(
+        "https://api.cloudmersive.com/convert/image/set-dpi/300",
+        requestOptions
+      )
+        .then((response) => response.text())
+        .then((result) => console.log("API Response:", result))
+        .catch((error) => console.error("API Error:", error));
+
+      console.log("Process complete.");
     } catch (error) {
-      console.error("Error downloading image:", error);
+      console.error("Error processing image:", error);
     }
-
-    // try {
-    //   console.log("start");
-
-    //   // Fetch the image and convert it into a Blob
-    //   const response = await fetch(imageUrl, { mode: "cors" });
-    //   if (!response.ok) throw new Error("Failed to fetch image");
-
-    //   const arrayBuffer = await response.arrayBuffer();
-    //   const file = new File([arrayBuffer], "image.jpg", { type: "image/jpeg" });
-
-    //   // Prepare FormData for API request
-    //   const formData = new FormData();
-    //   formData.append("file", file);
-    //   formData.append("filename", filename || "image.jpg");
-    //   formData.append("toolId", "Change the DPI of my Image");
-    //   formData.append("O", "300");
-
-    //   const payload = {
-    //     file: file,
-    //     filename: filename || "image.jpg",
-    //     toolId: "Change the DPI of my Image",
-    //     O: 300,
-    //   };
-
-    //   // Send request to the conversion API
-    //   const apiResponse = await fetch("https://convert.town/UploadFile", {
-    //     method: "POST",
-    //     body: formData,
-    //   });
-    //   console.log("check api res", apiResponse);
-
-    //   if (!apiResponse.ok) throw new Error("Failed to convert image");
-
-    //   // Convert response to Blob
-    //   const convertedBlob = await apiResponse.blob();
-    //   console.log("check converted blob", convertedBlob);
-
-    //   // Create a download link and trigger download
-    //   const link = document.createElement("a");
-    //   link.href = URL.createObjectURL(convertedBlob);
-    //   link.download = filename || "converted_image.jpg";
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   document.body.removeChild(link);
-
-    //   console.log("end");
-    // } catch (error) {
-    //   console.error("Error processing image:", error);
-    // }
   };
 
   const updateDOM = () => {
@@ -172,8 +190,8 @@ export function ModalUpdateBlog({
                 <button
                   onClick={() =>
                     downloadImage(
-                      currentData?.image,
-                      `${currentData?.product_id}.png`
+                      currentData?.image
+                      // `${currentData?.product_id}.png`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
