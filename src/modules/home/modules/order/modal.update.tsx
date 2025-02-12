@@ -170,6 +170,8 @@ export function ModalUpdateBlog({
           }
         };
       } else {
+        setDownloadLoading(true);
+
         toast({
           variant: "destructive",
           title: "Chuyển đổi hình ảnh thất bại.",
@@ -191,8 +193,6 @@ export function ModalUpdateBlog({
         document.body.removeChild(link);
 
         URL.revokeObjectURL(blobUrl);
-
-        setDownloadLoading(true);
 
         console.log("Tải ảnh gốc hoàn tất.");
       }
