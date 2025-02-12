@@ -49,6 +49,9 @@ export default function Product() {
     if (res && res.data.length > 0) {
       render(res.data);
       setIsLoading(false);
+    } else {
+      setData([]);
+      setIsLoading(false);
     }
   };
 
@@ -100,6 +103,7 @@ export default function Product() {
                 </th>
               </tr>
             </thead>
+
             <tbody>
               {currenData?.map((item: any, index: any) => {
                 return (
@@ -180,6 +184,12 @@ export default function Product() {
         {isLoading ? (
           <div className="w-full flex justify-center items-center pt-60">
             <Loader className="animate-spin" size={48} />
+          </div>
+        ) : currenData.length === 0 ? (
+          <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
+            <p className="text-gray-500 text-lg">
+              Không tìm thấy sản phẩm nào.
+            </p>
           </div>
         ) : (
           <nav

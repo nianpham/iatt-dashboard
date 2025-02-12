@@ -47,6 +47,9 @@ export default function Customer() {
     if (res && res.data.length > 0) {
       render(res.data);
       setIsLoading(false);
+    } else {
+      setData([]);
+      setIsLoading(false);
     }
   };
 
@@ -142,7 +145,7 @@ export default function Customer() {
                       ) : null}
                     </td>
                     <td className="w-24 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      0 đơn
+                      {item?.number_orders} đơn
                     </td>
                   </tr>
                 );
@@ -154,79 +157,79 @@ export default function Customer() {
           <div className="w-full flex justify-center items-center pt-60">
             <Loader className="animate-spin" size={48} />
           </div>
+        ) : currenData.length === 0 ? (
+          <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
+            <p className="text-gray-500 text-lg">
+              Không tìm thấy khách hàng nào.
+            </p>
+          </div>
         ) : (
           <nav
             className="flex flex-col items-start justify-center mt-4 p-4 space-y-3 md:flex-row md:items-center md:space-y-0"
             aria-label="Table navigation"
           >
-            {!currenData ? (
-              <div className="col-span-2 text-center w-full flex justify-center items-center py-40">
-                <p className="text-gray-500 text-lg">Order not found.</p>
-              </div>
-            ) : (
-              <ul className="inline-flex items-stretch -space-x-px">
-                <li>
-                  <button
-                    onClick={prevPage}
-                    disabled={currenPage === 1}
-                    className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+            <ul className="inline-flex items-stretch -space-x-px">
+              <li>
+                <button
+                  onClick={prevPage}
+                  disabled={currenPage === 1}
+                  className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span className="sr-only">Previous</span>
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <span className="sr-only">Previous</span>
-                    <svg
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </li>
-                {Array.from({ length: totalPage }, (_, i) => i + 1)?.map(
-                  (item: any, index: any) => {
-                    return (
-                      <li key={index} onClick={() => selectPage(item)}>
-                        <a
-                          href="#"
-                          className={`${
-                            item === currenPage ? "bg-orange-100" : "bg-white"
-                          } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    );
-                  }
-                )}
-                <li>
-                  <button
-                    onClick={nextPage}
-                    disabled={currenPage === totalPage}
-                    className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    <path
+                      fillRule="evenodd"
+                      d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </li>
+              {Array.from({ length: totalPage }, (_, i) => i + 1)?.map(
+                (item: any, index: any) => {
+                  return (
+                    <li key={index} onClick={() => selectPage(item)}>
+                      <a
+                        href="#"
+                        className={`${
+                          item === currenPage ? "bg-orange-100" : "bg-white"
+                        } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                      >
+                        {item}
+                      </a>
+                    </li>
+                  );
+                }
+              )}
+              <li>
+                <button
+                  onClick={nextPage}
+                  disabled={currenPage === totalPage}
+                  className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <span className="sr-only">Next</span>
+                  <svg
+                    className="w-5 h-5"
+                    aria-hidden="true"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <span className="sr-only">Next</span>
-                    <svg
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </button>
-                </li>
-              </ul>
-            )}
+                    <path
+                      fillRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+              </li>
+            </ul>
           </nav>
         )}
       </div>

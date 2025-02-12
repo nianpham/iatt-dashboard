@@ -23,7 +23,6 @@ import {
 import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
 import { useToast } from "@/hooks/use-toast";
-import axios from "axios";
 import { Loader } from "lucide-react";
 
 export function ModalUpdateBlog({
@@ -42,12 +41,20 @@ export function ModalUpdateBlog({
   const [currentData, setCurrentData] = useState<any>(null as any);
 
   const handleUpdateStatus = async (status: any) => {
-    const body = {
-      status: status,
-    };
+    if (currentData?.status === "completed") {
+      toast({
+        variant: "destructive",
+        title: "Không thể đổi trạng thái vì đơn hàng đã hoàn thành.",
+      });
+      return false;
+    } else {
+      const body = {
+        status: status,
+      };
 
-    await OrderService.updateOrder(currentData?._id, body);
-    window.location.href = "/?tab=order";
+      await OrderService.updateOrder(currentData?._id, body);
+      window.location.href = "/?tab=order";
+    }
   };
 
   // const downloadImage = async (imageUrl: string, filename: string) => {
@@ -117,13 +124,6 @@ export function ModalUpdateBlog({
       };
 
       console.log("Starting API request...");
-      // const result = await fetch(
-      //   "https://api.cloudmersive.com/convert/image/set-dpi/300",
-      //   requestOptions
-      // )
-      //   .then((response) => response.text())
-      //   .then((result) => console.log("API Response:", result))
-      //   .catch((error) => console.error("API Error:", error));
 
       const result = await fetch(
         "https://api.cloudmersive.com/convert/image/set-dpi/300",
@@ -132,22 +132,6 @@ export function ModalUpdateBlog({
       const resultBlob = await result.blob();
 
       console.log("Process complete.");
-
-      // // Convert result to base64
-      // const reader = new FileReader();
-      // reader.readAsDataURL(resultBlob);
-      // reader.onloadend = () => {
-      //   const base64data = reader.result;
-      //   console.log("Base64 Encoded Response:", base64data);
-
-      //   // Convert base64 to a file and trigger download
-      //   const link = document.createElement("a");
-      //   link.href = base64data;
-      //   link.download = "processed-image.jpg";
-      //   document.body.appendChild(link);
-      //   link.click();
-      //   document.body.removeChild(link);
-      // };
 
       if (result.ok === true) {
         // Convert result to base64
@@ -221,7 +205,7 @@ export function ModalUpdateBlog({
         <Button variant="outline">Xem chi tiết</Button>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[825px]"
+        className="sm:max-w-[850px]"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
@@ -290,8 +274,10 @@ export function ModalUpdateBlog({
                 {HELPER.formatDate(currentData?.created_at)}
               </span>
               <span>
-                <strong>Ngày hoàn tất đơn hàng:</strong>{" "}
-                {currentData?.date_complete}
+                <strong>Ngày hoàn tất đơn hàng:</strong>
+                {!currentData?.date_completed
+                  ? " Đơn hàng đang được xử lí."
+                  : HELPER.formatDate(currentData?.date_completed)}
               </span>
             </div>
             <div className="flex flex-col gap-2">

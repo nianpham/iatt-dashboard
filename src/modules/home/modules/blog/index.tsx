@@ -56,11 +56,11 @@ export default function Blog() {
         setTotalPage(Math.ceil(res.length / COUNT));
         setCurrenPage(1);
         setCurrenData(res.slice(0, COUNT));
+        setIsLoading(false);
       } else {
         setData([]);
+        setIsLoading(false);
       }
-
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching blog data:", error);
       setData([]);
@@ -166,6 +166,12 @@ export default function Blog() {
         {isLoading ? (
           <div className="w-full flex justify-center items-center pt-60">
             <Loader className="animate-spin" size={48} />
+          </div>
+        ) : currenData.length === 0 ? (
+          <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
+            <p className="text-gray-500 text-lg">
+              Không tìm thấy bài viết nào.
+            </p>
           </div>
         ) : (
           <nav
