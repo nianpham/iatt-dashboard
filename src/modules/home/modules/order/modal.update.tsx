@@ -83,29 +83,15 @@ export function ModalUpdateBlog({
   //     console.log("Fetching image...");
 
   //     // Fetch the image as a blob
-  //     const response = await fetch(imageUrl);
+  //     const response = await fetch(imageUrl, { mode: "cors" });
   //     if (!response.ok) {
   //       throw new Error("Failed to fetch image");
   //     }
 
   //     const blob = await response.blob();
-  //     const file = new File([blob], "wallpaper-2.jpg", { type: blob.type });
+  //     const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
 
-  //     // Get the file input element
-  //     const fileInput = document.getElementById(
-  //       "fileInput"
-  //     ) as HTMLInputElement;
-  //     if (!fileInput) {
-  //       console.error("File input element not found");
-  //       return;
-  //     }
-
-  //     // Use DataTransfer to assign the file to fileInput.files
-  //     const dataTransfer = new DataTransfer();
-  //     dataTransfer.items.add(file);
-  //     fileInput.files = dataTransfer.files;
-
-  //     console.log("Image converted to file and set to fileInput.files[0]");
+  //     console.log("Image converted to file");
 
   //     // Prepare API request
   //     const myHeaders = new Headers();
@@ -122,7 +108,7 @@ export function ModalUpdateBlog({
   //     };
 
   //     console.log("Starting API request...");
-  //     fetch(
+  //     const result = await fetch(
   //       "https://api.cloudmersive.com/convert/image/set-dpi/300",
   //       requestOptions
   //     )
@@ -130,7 +116,26 @@ export function ModalUpdateBlog({
   //       .then((result) => console.log("API Response:", result))
   //       .catch((error) => console.error("API Error:", error));
 
-  //     console.log("Process complete.");
+  //     console.log("Process complete.", result);
+
+  //     // Prepare API request
+  //     //  const formData = new FormData();
+  //     //  formData.append("inputFile", file, "uploaded-image.jpg");
+
+  //     //  const headers = new Headers();
+  //     //  headers.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
+
+  //     //  const requestOptions = {
+  //     //      method: "POST",
+  //     //      headers: headers,
+  //     //      body: formData,
+  //     //      redirect: "follow"
+  //     //  };
+
+  //     //  console.log("Sending API request...");
+  //     //  const apiResponse = await fetch("https://api.cloudmersive.com/convert/image/set-dpi/300", requestOptions);
+  //     //  const result = await apiResponse.text();
+  //     //  console.log("API Response:", result);
   //   } catch (error) {
   //     console.error("Error processing image:", error);
   //   }
@@ -186,7 +191,7 @@ export function ModalUpdateBlog({
                   onClick={() =>
                     downloadImage(
                       currentData?.image,
-                      `${currentData?.product_id}.png`
+                      `${currentData?.product_id}.jpg`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
