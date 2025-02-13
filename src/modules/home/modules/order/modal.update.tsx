@@ -57,37 +57,6 @@ export function ModalUpdateBlog({
     }
   };
 
-  // const downloadImage = async (imageUrl: string, filename: string) => {
-  //   if (!imageUrl) {
-  //     console.error("Invalid image URL");
-  //     return;
-  //   }
-
-  //   try {
-  //     console.log("Starting download...");
-
-  //     const response = await fetch(imageUrl, { mode: "cors" });
-  //     if (!response.ok) throw new Error("Failed to fetch image");
-
-  //     const blob = await response.blob();
-
-  //     const blobUrl = URL.createObjectURL(blob);
-
-  //     const link = document.createElement("a");
-  //     link.href = blobUrl;
-  //     link.download = filename || "downloaded_image.jpg";
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
-
-  //     URL.revokeObjectURL(blobUrl);
-
-  //     console.log("Download complete.");
-  //   } catch (error) {
-  //     console.error("Error downloading image:", error);
-  //   }
-  // };
-
   const downloadImage = async (imageUrl: string, filename: string) => {
     if (!imageUrl) {
       console.error("Invalid image URL");
@@ -95,93 +64,74 @@ export function ModalUpdateBlog({
     }
 
     try {
-      console.log("Fetching image...");
       setDownloadLoading(true);
+      const img = document.createElement("img");
+      img.crossOrigin = "Anonymous";
+      img.src = imageUrl;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
 
-      // Fetch the image as a blob
-      const response = await fetch(imageUrl, { mode: "cors" });
-      if (!response.ok) {
-        throw new Error("Failed to fetch image");
-      }
+      const validSizes = [
+        { width: 20, height: 30 },
+        { width: 15, height: 21 },
+        { width: 40, height: 20 },
+      ];
 
-      const blob = await response.blob();
-      const file = new File([blob], "uploaded-image.jpg", { type: blob.type });
+      const originalWidth = img.naturalWidth;
+      const originalHeight = img.naturalHeight;
 
-      console.log("Image converted to file");
+      // const isValidSize = validSizes.some(
+      //   (size) =>
+      //     (originalWidth === size.width && originalHeight === size.height) ||
+      //     (originalWidth === size.height && originalHeight === size.width)
+      // );
 
-      // Prepare API request
-      const myHeaders = new Headers();
-      myHeaders.append("Apikey", "651cb124-2137-42c6-825d-3e1ada596fbe");
+      // if (!isValidSize) {
+      //   console.error("Image does not match required dimensions");
+      //   return;
+      // }
 
-      const formdata = new FormData();
-      formdata.append("inputFile", file, "wallpaper-2.jpg");
+      let scaleFactor = 1;
+      let blob: Blob | null = null;
+      let minFileSize =
+        // (originalWidth === 40 && originalHeight === 20) ||
+        // (originalWidth === 20 && originalHeight === 40)
+        currentData.size === "40x20" ? 3 * 1024 * 1024 : 1 * 1024 * 1024;
 
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: formdata,
-        redirect: "follow" as RequestRedirect,
-      };
+      do {
+        const canvas = document.createElement("canvas");
+        canvas.width = originalWidth * scaleFactor;
+        canvas.height = originalHeight * scaleFactor;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          throw new Error("Unable to get canvas context");
+        }
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      console.log("Starting API request...");
-
-      const result = await fetch(
-        "https://api.cloudmersive.com/convert/image/set-dpi/300",
-        requestOptions
-      );
-      const resultBlob = await result.blob();
-
-      console.log("Process complete.");
-
-      if (result.ok === true) {
-        // Convert result to base64
-        const reader = new FileReader();
-        reader.readAsDataURL(resultBlob);
-        reader.onloadend = () => {
-          const base64data = reader.result;
-          if (typeof base64data === "string") {
-            // console.log("Base64 Encoded Response:", base64data);
-
-            // Convert base64 to a file and trigger download
-            const link = document.createElement("a");
-            link.href = base64data;
-            link.download = "processed-image.jpg";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-
-            setDownloadLoading(false);
-          } else {
-            console.error("Failed to convert image to base64 format.");
-          }
-        };
-      } else {
-        setDownloadLoading(true);
-
-        toast({
-          variant: "destructive",
-          title: "Chuyển đổi hình ảnh thất bại.",
+        blob = await new Promise<Blob | null>((resolve) => {
+          canvas.toBlob(resolve, "image/jpeg", 1.0);
         });
-        console.log("Lấy ảnh gốc.");
 
-        const response = await fetch(imageUrl, { mode: "cors" });
-        if (!response.ok) throw new Error("Failed to fetch image");
+        if (!blob) {
+          throw new Error("Failed to generate image blob");
+        }
 
-        const blob = await response.blob();
+        if (blob.size < minFileSize) {
+          scaleFactor *= 1.1;
+        }
+      } while (blob && blob.size < minFileSize);
 
-        const blobUrl = URL.createObjectURL(blob);
-
+      if (blob) {
         const link = document.createElement("a");
-        link.href = blobUrl;
+        link.href = URL.createObjectURL(blob);
         link.download = filename || "downloaded_image.jpg";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
-        URL.revokeObjectURL(blobUrl);
-
-        console.log("Tải ảnh gốc hoàn tất.");
       }
+      setDownloadLoading(false);
     } catch (error) {
       console.error("Error processing image:", error);
     }
@@ -243,7 +193,7 @@ export function ModalUpdateBlog({
                   onClick={() =>
                     downloadImage(
                       currentData?.image,
-                      `${currentData?.product_id}.jpg`
+                      `${currentData?.product_id}_${currentData?.size}.jpg`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
