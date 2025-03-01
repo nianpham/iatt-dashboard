@@ -74,7 +74,6 @@ export function ModalCreateBlog() {
       });
       return false;
     }
-
     if (!title.trim()) {
       toast({
         variant: "destructive",
@@ -82,7 +81,6 @@ export function ModalCreateBlog() {
       });
       return false;
     }
-
     if (!content.trim()) {
       toast({
         variant: "destructive",
@@ -90,7 +88,6 @@ export function ModalCreateBlog() {
       });
       return false;
     }
-
     if (!tag.trim()) {
       toast({
         variant: "destructive",
@@ -98,7 +95,6 @@ export function ModalCreateBlog() {
       });
       return false;
     }
-
     if (!author.trim()) {
       toast({
         variant: "destructive",
@@ -171,17 +167,13 @@ export function ModalCreateBlog() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
-
     const updatedContent = await replaceBase64WithCloudUrls(
       content,
       handleImageUpload
     );
-
     const uploadMainImage: any = await UploadService.uploadToCloudinary([
       mainPreview,
     ]);
-    console.log("check after pic");
-
     const body = {
       title: title,
       content: updatedContent,
@@ -226,16 +218,8 @@ export function ModalCreateBlog() {
               <Label htmlFor="thumbnail" className="text-right !text-[16px]">
                 Hình chính
               </Label>
-              {mainPreview ? (
-                <Image
-                  src={mainPreview}
-                  alt="main-preview"
-                  className="w-full rounded-md mt-2"
-                  width={200}
-                  height={0}
-                />
-              ) : (
-                <div className="col-span-3 mt-2">
+              <div className="mt-2">
+                {!mainPreview && (
                   <div
                     onClick={handleUpdateMainImage}
                     className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white px-5 py-16 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer"
@@ -247,15 +231,36 @@ export function ModalCreateBlog() {
                       </span>
                     </div>
                   </div>
-                  <input
-                    type="file"
-                    ref={mainImageInputRef}
-                    onChange={handleMainImageChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
-                </div>
-              )}
+                )}
+                <input
+                  type="file"
+                  ref={mainImageInputRef}
+                  onChange={handleMainImageChange}
+                  accept="image/*"
+                  className="hidden"
+                />
+                {mainPreview && (
+                  <div className="mt-2">
+                    <Image
+                      src={mainPreview}
+                      alt="main-preview"
+                      className="w-full rounded-md mt-2"
+                      width={1000}
+                      height={1000}
+                    />
+                    <div
+                      onClick={handleUpdateMainImage}
+                      className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white px-5 py-3 mt-5 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer"
+                    >
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-gray-500">
+                          Thay đổi hình ảnh
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex flex-col justify-start items-start gap-4 col-span-2">
