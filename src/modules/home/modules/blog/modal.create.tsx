@@ -263,7 +263,10 @@ export function ModalCreateBlog() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-start items-start gap-4 col-span-2">
+          <div className="flex flex-col justify-start items-start gap-2 col-span-2">
+            <Label htmlFor="description" className="text-[14.5px]">
+              Tiêu đề bài viết
+            </Label>
             <div className="w-full grid items-center gap-4">
               <textarea
                 id="title"
@@ -273,6 +276,9 @@ export function ModalCreateBlog() {
                 className="col-span-3 p-2 border rounded"
               ></textarea>
             </div>
+            <Label htmlFor="description" className="text-[14.5px] mt-2">
+              Chọn tag
+            </Label>
             <div className="w-full grid items-center gap-4">
               <select
                 id="tag"
@@ -299,7 +305,12 @@ export function ModalCreateBlog() {
                             >
                             </textarea>
                         </div> */}
-            <BlogDescriptionEditor value={content} onChange={setContent} />
+            <div className="w-full mt-2">
+              <BlogDescriptionEditor value={content} onChange={setContent} />
+            </div>
+            <Label htmlFor="description" className="text-[14.5px] mt-2">
+              Chọn tác giả
+            </Label>
             <div className="w-full grid items-center gap-4">
               <select
                 id="author"

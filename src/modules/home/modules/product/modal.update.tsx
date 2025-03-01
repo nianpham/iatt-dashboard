@@ -445,9 +445,11 @@ export function ModalUpdateProduct({ data }: { data: any }) {
               </div>
             </div>
           </div>
-
           <div className="col-span-2">
-            <div className="flex flex-col justify-start items-start gap-4 overflow-y-auto max-h-[80vh] pr-4 scroll-bar-style">
+            <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto max-h-[80vh] pr-4 scroll-bar-style">
+              <Label htmlFor="description" className="text-[14.5px]">
+                Tên sản phẩm
+              </Label>
               <div className="w-full grid items-center gap-4">
                 <textarea
                   id="name"
@@ -457,13 +459,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
                 ></textarea>
               </div>
+              <Label htmlFor="description" className="text-[14.5px] mt-2">
+                Chọn danh mục
+              </Label>
               <div className="w-full grid items-center gap-4">
                 <select
                   id="category"
                   value={category}
                   onChange={(e) => {
-                    console.log("check cate: ", data?.category);
-
                     setCategory(e.target.value);
                   }}
                   className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
@@ -474,6 +477,9 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   <option value="Album">Album</option>
                 </select>
               </div>
+              <Label htmlFor="description" className="text-[14.5px] mt-2">
+                Giá sản phẩm
+              </Label>
               <div className="w-full grid items-center gap-4">
                 <input
                   id="price"
@@ -483,6 +489,9 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   className="col-span-3 p-2 border rounded border-[#CFCFCF] placeholder-custom focus:border-gray-500"
                 ></input>
               </div>
+              <Label htmlFor="description" className="text-[14.5px] mt-2">
+                Chọn màu sắc
+              </Label>
               <div className="w-full grid items-center gap-4">
                 <Select
                   className="pl-[0.5px]"
@@ -497,14 +506,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   formatOptionLabel={formatOptionLabel}
                 />
               </div>
-              <div className="w-full">
+              <div className="w-full mt-2">
                 <ProductDescriptionEditor
                   value={description}
                   onChange={setDescription}
                   title="Mô tả sản phẩm"
                 />
               </div>
-              <div className="w-full">
+              <div className="w-full mt-2">
                 <ProductDescriptionEditor
                   value={introduction}
                   onChange={setIntroduction}
