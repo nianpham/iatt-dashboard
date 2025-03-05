@@ -35,6 +35,7 @@ const updateOrder = async (id: any, payload: any) => {
     return false;
   }
 };
+
 const downloadImage = async (payload: any) => {
   try {
     const myHeaders = new Headers();

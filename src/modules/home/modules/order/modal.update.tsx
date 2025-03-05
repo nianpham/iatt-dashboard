@@ -59,9 +59,25 @@ export function ModalUpdateBlog({
       return false;
     }
 
+    if (currentData?.status === status) {
+      toast({
+        variant: "destructive",
+        title: "Đây là trạng thái hiện tại. Vui lòng chọn trạng thái tiếp theo",
+      });
+      return false;
+    }
+
     const currentStatusValue =
       statusOrder[currentData?.status as keyof typeof statusOrder];
     const newStatusValue = statusOrder[status as keyof typeof statusOrder];
+
+    if (status !== "cancelled" && newStatusValue !== currentStatusValue + 1) {
+      toast({
+        variant: "destructive",
+        title: "Chỉ có thể chuyển sang trạng thái tiếp theo trong quy trình.",
+      });
+      return false;
+    }
 
     if (currentStatusValue > newStatusValue) {
       toast({
