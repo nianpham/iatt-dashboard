@@ -174,11 +174,11 @@ export default function Order() {
                     >
                       <span
                         className={`rounded-md px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white
-                       ${
-                         item.status === "completed"
-                           ? "bg-green-700 text-white"
-                           : ""
-                       }
+                        ${
+                          item.status === "completed"
+                            ? "bg-green-700 text-white"
+                            : ""
+                        }
                         ${
                           item.status === "delivering"
                             ? "bg-yellow-800 text-white"
@@ -201,6 +201,11 @@ export default function Order() {
                         }
                         ${
                           item.status === "paid" ? "bg-pink-200 text-white" : ""
+                        }
+                        ${
+                          item.status === "cancelled"
+                            ? "bg-red-500 text-white"
+                            : ""
                         }`}
                       >
                         {HELPER.renderStatus(item?.status)}

@@ -40,22 +40,46 @@ export function ModalUpdateBlog({
 
   const [currentData, setCurrentData] = useState<any>(null as any);
 
-  const handleUpdateStatus = async (status: any) => {
+  const statusOrder = {
+    waiting: 1,
+    "paid pending": 2,
+    paid: 3,
+    pending: 4,
+    delivering: 5,
+    completed: 6,
+    cancelled: 7,
+  };
+
+  const handleUpdateStatus = async (status: string) => {
     if (currentData?.status === "completed") {
       toast({
         variant: "destructive",
         title: "Không thể đổi trạng thái vì đơn hàng đã hoàn thành.",
       });
       return false;
-    } else {
-      const body = {
-        status: status,
-      };
-
-      await OrderService.updateOrder(currentData?._id, body);
-      window.location.href = "/?tab=order";
     }
+
+    const currentStatusValue =
+      statusOrder[currentData?.status as keyof typeof statusOrder];
+    const newStatusValue = statusOrder[status as keyof typeof statusOrder];
+
+    if (currentStatusValue > newStatusValue) {
+      toast({
+        variant: "destructive",
+        title: "Không thể chuyển về trạng thái trước đó.",
+      });
+      return false;
+    }
+
+    const body = {
+      status: status,
+    };
+
+    await OrderService.updateOrder(currentData?._id, body);
+    window.location.href = "/?tab=order";
   };
+
+  const isCashPayment = currentData?.payment_method === "cash";
 
   const downloadImage = async (imageUrl: string, filename: string) => {
     if (!imageUrl) {
@@ -280,9 +304,11 @@ export function ModalUpdateBlog({
               <DropdownMenuTrigger asChild>
                 <Button
                   className={`w-56
-                  ${
-                    data.status === "completed" ? "bg-green-700 text-white" : ""
-                  }
+                        ${
+                          data.status === "completed"
+                            ? "bg-green-700 text-white"
+                            : ""
+                        }
                         ${
                           data.status === "delivering"
                             ? "bg-yellow-800 text-white"
@@ -305,6 +331,11 @@ export function ModalUpdateBlog({
                         }
                         ${
                           data.status === "paid" ? "bg-pink-200 text-white" : ""
+                        }
+                        ${
+                          data.status === "cancelled"
+                            ? "bg-red-500 text-white"
+                            : ""
                         }`}
                 >
                   {HELPER.renderStatus(data?.status)}
@@ -316,26 +347,76 @@ export function ModalUpdateBlog({
                 <DropdownMenuCheckboxItem
                   className="cursor-pointer"
                   onClick={() => handleUpdateStatus("waiting")}
+                  disabled={
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 1
+                  }
                 >
-                  Đợi phản hồi
+                  1. Đợi phản hồi
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  className="cursor-pointer"
+                  onClick={() => handleUpdateStatus("paid pending")}
+                  disabled={
+                    isCashPayment ||
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 2
+                  }
+                >
+                  2. Đang chờ thanh toán
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  className="cursor-pointer"
+                  onClick={() => handleUpdateStatus("paid")}
+                  disabled={
+                    isCashPayment ||
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 3
+                  }
+                >
+                  3. Đã thanh toán
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   className="cursor-pointer"
                   onClick={() => handleUpdateStatus("pending")}
+                  disabled={
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 4
+                  }
                 >
-                  Đang chuẩn bị đơn hàng
+                  4. Đang chuẩn bị đơn hàng
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   className="cursor-pointer"
                   onClick={() => handleUpdateStatus("delivering")}
+                  disabled={
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 5
+                  }
                 >
-                  Đang giao hàng
+                  5. Đang giao hàng
                 </DropdownMenuCheckboxItem>
                 <DropdownMenuCheckboxItem
                   className="cursor-pointer"
                   onClick={() => handleUpdateStatus("completed")}
+                  disabled={
+                    statusOrder[
+                      currentData?.status as keyof typeof statusOrder
+                    ] > 6
+                  }
                 >
-                  Đã hoàn tất
+                  6. Đã hoàn tất
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem
+                  className="cursor-pointer"
+                  onClick={() => handleUpdateStatus("cancelled")}
+                >
+                  7. Đã hủy đơn hàng
                 </DropdownMenuCheckboxItem>
               </DropdownMenuContent>
             </DropdownMenu>

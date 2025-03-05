@@ -129,6 +129,9 @@ const renderStatus = (status: string) => {
     case "paid":
       result = "Đã thanh toán";
       break;
+    case "cancelled":
+      result = "Đã hủy đơn hàng";
+      break;
     default:
       break;
   }
