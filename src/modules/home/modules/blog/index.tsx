@@ -126,7 +126,7 @@ export default function Blog() {
                       <Image
                         src={item?.thumbnail}
                         alt="img"
-                        className="w-auto h-20 mr-3 rounded-md col-span-6"
+                        className="w-20 h-20 mr-3 object-cover rounded-md col-span-6 border border-gray-300"
                         width={100}
                         height={0}
                       />

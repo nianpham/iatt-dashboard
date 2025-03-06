@@ -117,7 +117,7 @@ export default function Product() {
                       <Image
                         src={item?.thumbnail}
                         alt="img"
-                        className="w-auto h-20 mr-3 rounded-md object-contain col-span-6"
+                        className="w-20 h-20 mr-3 rounded-md object-cover col-span-6 border border-gray-300"
                         width={100}
                         height={0}
                       />
@@ -131,13 +131,6 @@ export default function Product() {
                       </span>
                     </td>
                     <td className="grid grid-cols-3 gap-4 px-4 py-2">
-                      {/* <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: item?.description,
-                          }}
-                        />
-                      </span> */}
                       {item?.images
                         .slice(0, 3)
                         .map((preview: any, index: any) => (
@@ -145,7 +138,7 @@ export default function Product() {
                             <Image
                               src={preview}
                               alt={`secondary-preview-${index}`}
-                              className="rounded-sm object-cover h-20"
+                              className="rounded-sm object-cover border border-gray-300 h-20"
                               width={100}
                               height={100}
                             />

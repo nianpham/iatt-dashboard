@@ -142,7 +142,7 @@ export default function Order() {
                       <Image
                         src={item?.image}
                         alt="img"
-                        className="col-span-6 w-auto h-20 mr-3 rounded-md"
+                        className="col-span-6 w-20 h-20 object-contain mr-3 rounded-md border border-gray-300"
                         width={100}
                         height={0}
                       />

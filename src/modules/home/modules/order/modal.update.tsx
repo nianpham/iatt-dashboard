@@ -214,7 +214,7 @@ export function ModalUpdateBlog({
               <Image
                 src={currentData?.image || "/fallback-image.jpg"}
                 alt="img"
-                className="w-auto h-16 mr-3 rounded-md"
+                className="w-20 h-20 mr-3 object-contain rounded-md border border-gray-300"
                 width={100}
                 height={100}
                 priority

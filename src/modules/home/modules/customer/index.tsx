@@ -108,7 +108,7 @@ export default function Customer() {
                       <Image
                         src={item?.avatar}
                         alt="img"
-                        className="w-auto h-10 mr-3 rounded-md"
+                        className="w-10 h-10 mr-3 object-cover rounded-md border border-gray-300"
                         width={100}
                         height={0}
                       />
