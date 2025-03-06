@@ -298,7 +298,6 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       price: price,
       category: category,
       color: color,
-      // sold: 0,
       thumbnail: mainPreview,
       images: secondaryPreviews,
     };

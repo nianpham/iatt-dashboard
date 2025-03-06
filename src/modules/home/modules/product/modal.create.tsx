@@ -299,7 +299,6 @@ export function ModalCreateProduct() {
       price: price,
       category: category,
       color: color,
-      // sold: 0,
       thumbnail: uploadMainImage[0]?.url || "",
       images: uploadSecondaryImages?.map((image: any) => image.url),
     };

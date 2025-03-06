@@ -294,17 +294,6 @@ export function ModalCreateBlog() {
                 ))}
               </select>
             </div>
-            {/* <div className="w-full grid items-center gap-4">
-                            <textarea
-                                id="content"
-                                rows={16}
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                placeholder="Nội dung bài viết"
-                                className="col-span-3 p-2 border rounded"
-                            >
-                            </textarea>
-                        </div> */}
             <div className="w-full mt-2">
               <BlogDescriptionEditor value={content} onChange={setContent} />
             </div>

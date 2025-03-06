@@ -122,22 +122,9 @@ export function ModalUpdateBlog({
       const originalWidth = img.naturalWidth;
       const originalHeight = img.naturalHeight;
 
-      // const isValidSize = validSizes.some(
-      //   (size) =>
-      //     (originalWidth === size.width && originalHeight === size.height) ||
-      //     (originalWidth === size.height && originalHeight === size.width)
-      // );
-
-      // if (!isValidSize) {
-      //   console.error("Image does not match required dimensions");
-      //   return;
-      // }
-
       let scaleFactor = 1;
       let blob: Blob | null = null;
       let minFileSize =
-        // (originalWidth === 40 && originalHeight === 20) ||
-        // (originalWidth === 20 && originalHeight === 40)
         currentData.size === "40x20" ? 3 * 1024 * 1024 : 1 * 1024 * 1024;
 
       do {
@@ -221,7 +208,6 @@ export function ModalUpdateBlog({
               />
               <div className="flex flex-col items-start">
                 <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  {/* {currentData?.product_id} */}
                   {
                     products?.find(
                       (pro: any) =>
