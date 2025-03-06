@@ -219,7 +219,9 @@ export function ModalUpdateBlog({
                   onClick={() =>
                     downloadImage(
                       currentData?.image,
-                      `${currentData?.product_id}_${currentData?.size}.jpg`
+                      `${currentData?.product_id?.slice(-4)}_${
+                        currentData?.size
+                      }.jpg`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
