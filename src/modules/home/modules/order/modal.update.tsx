@@ -191,7 +191,7 @@ export function ModalUpdateBlog({
           </DialogTitle>
           <DialogDescription>
             <span className="!text-[16px]">
-              Mã đơn hàng: #{currentData?._id}
+              Mã đơn hàng: #{currentData?._id?.slice(-4)}
             </span>
           </DialogDescription>
         </DialogHeader>
