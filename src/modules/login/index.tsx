@@ -76,7 +76,7 @@ export default function LoginClient() {
         </div>
         <div className="">
           <Button
-            className="w-full !rounded-lg bg-orange-700 hover:bg-orange-800"
+            className="w-full !rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl"
             onClick={handleSubmit}
           >
             Đăng nhập
