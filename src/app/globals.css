@@ -1,11 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'react-quill/dist/quill.snow.css';
+@import "react-quill/dist/quill.snow.css";
 
 @layer base {
   :root {
-    --primary-rgb: 0, 0, 0;
+    --primary-rgb: 46, 154, 229;
     --secondary-rgb: 0, 0, 0;
     --tertiary-rgb: 0, 0, 0;
     --quaternary-rgb: 0, 0, 0;

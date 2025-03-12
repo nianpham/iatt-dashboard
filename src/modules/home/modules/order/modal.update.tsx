@@ -23,7 +23,8 @@ import {
 import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
 import { useToast } from "@/hooks/use-toast";
-import { Loader } from "lucide-react";
+import { Info, Loader } from "lucide-react";
+import { IMAGES } from "@/utils/image";
 
 export function ModalUpdateBlog({
   data,
@@ -70,6 +71,15 @@ export function ModalUpdateBlog({
     const currentStatusValue =
       statusOrder[currentData?.status as keyof typeof statusOrder];
     const newStatusValue = statusOrder[status as keyof typeof statusOrder];
+
+    if (currentData?.status === "waiting" && status === "pending") {
+      const body = {
+        status: status,
+      };
+      await OrderService.updateOrder(currentData?._id, body);
+      window.location.href = "/?tab=order";
+      return true;
+    }
 
     if (status !== "cancelled" && newStatusValue !== currentStatusValue + 1) {
       toast({
@@ -179,7 +189,11 @@ export function ModalUpdateBlog({
   return (
     <Dialog>
       <DialogTrigger asChild onClick={updateDOM}>
-        <Button variant="outline">Xem chi tiết</Button>
+        <div className="flex">
+          <div className="mx-2 p-2 cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 rounded-full group">
+            <Info size={23} className="text-gray-900 group-hover:text-white" />
+          </div>
+        </div>
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[850px]"
@@ -197,7 +211,7 @@ export function ModalUpdateBlog({
         </DialogHeader>
         <div className="w-full grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-6">
-            <div className="flex items-center">
+            <div className="flex items-start">
               <Image
                 src={currentData?.image || "/fallback-image.jpg"}
                 alt="img"
@@ -207,7 +221,7 @@ export function ModalUpdateBlog({
                 priority
               />
               <div className="flex flex-col items-start">
-                <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium pb-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                   {
                     products?.find(
                       (pro: any) =>
@@ -219,9 +233,7 @@ export function ModalUpdateBlog({
                   onClick={() =>
                     downloadImage(
                       currentData?.image,
-                      `${currentData?.product_id?.slice(-4)}_${
-                        currentData?.size
-                      }.jpg`
+                      `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
                     )
                   }
                   className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
@@ -252,16 +264,94 @@ export function ModalUpdateBlog({
                 {HELPER.formatDate(currentData?.created_at)}
               </span>
               <span>
-                <strong>Ngày hoàn tất đơn hàng:</strong>
-                {!currentData?.date_completed
-                  ? " Đơn hàng đang được xử lí."
-                  : HELPER.formatDate(currentData?.date_completed)}
+                {currentData?.status === "cancelled" ? (
+                  <strong>Đơn hàng đã bị hủy</strong>
+                ) : (
+                  <>
+                    <strong>Ngày hoàn tất đơn hàng:</strong>
+                    {!currentData?.date_completed
+                      ? " Đơn hàng đang được xử lí."
+                      : HELPER.formatDate(currentData?.date_completed)}
+                  </>
+                )}
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <span>
+              <span className="flex flex-row items-center gap-2">
                 <strong>Phương thức thanh toán:</strong>{" "}
-                {HELPER.renderPayment(currentData?.payment_method)}
+                <div
+                  className={`
+                      ${
+                        currentData?.payment_method === "cash"
+                          ? "bg-green-700 text-white text-sm lg:text-base px-2"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "bank"
+                          ? "bg-orange-600 text-white text-sm lg:text-base px-2"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "momo"
+                          ? "bg-pink-500 text-white text-sm lg:text-base px-2"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "vnpay"
+                          ? "bg-blue-600 text-white text-sm lg:text-base px-2"
+                          : ""
+                      }
+                       rounded-md py-1 text-center lg:w-[34.5%]`}
+                >
+                  {currentData?.payment_method === "cash" && (
+                    <div className="flex flex-row items-center justify-center gap-3">
+                      <Image
+                        src={IMAGES.COD}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-5 h-5 object-cover rounded-lg"
+                      />
+                      <div>COD</div>
+                    </div>
+                  )}
+                  {currentData?.payment_method === "bank" && (
+                    <div className="flex flex-row items-center justify-center gap-3">
+                      <Image
+                        src={IMAGES.BANK}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-6 h-6 object-cover rounded-lg"
+                      />
+                      <div>Chuyển khoản</div>
+                    </div>
+                  )}
+                  {currentData?.payment_method === "momo" && (
+                    <div className="flex flex-row items-center justify-center gap-3">
+                      <Image
+                        src={IMAGES.MOMO}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-6 h-6 object-cover rounded-lg"
+                      />
+                      <div>MOMO</div>
+                    </div>
+                  )}
+                  {currentData?.payment_method === "vnpay" && (
+                    <div className="flex flex-row items-center justify-center gap-3">
+                      <Image
+                        src={IMAGES.VNPAY}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-6 h-6 object-cover rounded-lg"
+                      />
+                      <div>VNPay</div>
+                    </div>
+                  )}
+                </div>
               </span>
             </div>
             <div className="flex flex-col gap-2">
@@ -274,9 +364,14 @@ export function ModalUpdateBlog({
           <div className="flex flex-col gap-6">
             <div className="flex items-center">
               <Image
-                src="https://cdn-icons-png.flaticon.com/128/4333/4333609.png"
+                src={
+                  accounts?.find(
+                    (pro: any) => pro._id.toString() === currentData?.account_id
+                  )?.avatar ||
+                  "https://cdn-icons-png.flaticon.com/128/4333/4333609.png"
+                }
                 alt="img"
-                className="w-auto h-12 mr-3 rounded-md"
+                className="w-auto h-12 mr-3 rounded-full"
                 width={100}
                 height={0}
               />
@@ -304,10 +399,42 @@ export function ModalUpdateBlog({
             <div>
               <strong>Địa chỉ giao hàng:</strong> {currentData?.address}
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  className={`w-56
+            {currentData?.status === "cancelled" ? (
+              <Button
+                className={`w-56 cursor-default hover:bg-[rgb(var(--primary-rgb))]
+                    ${
+                      data.status === "completed"
+                        ? "bg-green-700 text-white"
+                        : ""
+                    }
+                    ${
+                      data.status === "delivering"
+                        ? "bg-yellow-800 text-white"
+                        : ""
+                    }
+                    ${data.status === "waiting" ? "bg-blue-700 text-white" : ""}
+                    ${
+                      data.status === "pending"
+                        ? "bg-orange-600 text-white"
+                        : ""
+                    }
+                    ${
+                      data.status === "paid pending"
+                        ? "bg-yellow-400 text-white"
+                        : ""
+                    }
+                    ${data.status === "paid" ? "bg-pink-200 text-white" : ""}
+                    ${
+                      data.status === "cancelled" ? "bg-red-500 text-white" : ""
+                    }`}
+              >
+                {HELPER.renderStatus(data?.status)}
+              </Button>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    className={`w-56 hover:bg-[rgb(var(--primary-rgb))]
                         ${
                           data.status === "completed"
                             ? "bg-green-700 text-white"
@@ -341,89 +468,94 @@ export function ModalUpdateBlog({
                             ? "bg-red-500 text-white"
                             : ""
                         }`}
-                >
-                  {HELPER.renderStatus(data?.status)}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>Trạng thái</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("waiting")}
-                  disabled={
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 1
-                  }
-                >
-                  1. Đợi phản hồi
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("paid pending")}
-                  disabled={
-                    isCashPayment ||
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 2
-                  }
-                >
-                  2. Đang chờ thanh toán
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("paid")}
-                  disabled={
-                    isCashPayment ||
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 3
-                  }
-                >
-                  3. Đã thanh toán
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("pending")}
-                  disabled={
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 4
-                  }
-                >
-                  4. Đang chuẩn bị đơn hàng
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("delivering")}
-                  disabled={
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 5
-                  }
-                >
-                  5. Đang giao hàng
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("completed")}
-                  disabled={
-                    statusOrder[
-                      currentData?.status as keyof typeof statusOrder
-                    ] > 6
-                  }
-                >
-                  6. Đã hoàn tất
-                </DropdownMenuCheckboxItem>
-                <DropdownMenuCheckboxItem
-                  className="cursor-pointer"
-                  onClick={() => handleUpdateStatus("cancelled")}
-                >
-                  7. Đã hủy đơn hàng
-                </DropdownMenuCheckboxItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  >
+                    {HELPER.renderStatus(data?.status)}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>Trạng thái</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("waiting")}
+                    disabled={
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 1
+                    }
+                  >
+                    1. Đợi phản hồi
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("paid pending")}
+                    disabled={
+                      isCashPayment ||
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 2
+                    }
+                  >
+                    2. Đang chờ thanh toán
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("paid")}
+                    disabled={
+                      isCashPayment ||
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 3
+                    }
+                  >
+                    3. Đã thanh toán
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("pending")}
+                    disabled={
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 4 ||
+                      (statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] < 4 &&
+                        currentData?.status !== "waiting")
+                    }
+                  >
+                    4. Đang chuẩn bị đơn hàng
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("delivering")}
+                    disabled={
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 5
+                    }
+                  >
+                    5. Đang giao hàng
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("completed")}
+                    disabled={
+                      statusOrder[
+                        currentData?.status as keyof typeof statusOrder
+                      ] > 6
+                    }
+                  >
+                    6. Đã hoàn tất
+                  </DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem
+                    className="cursor-pointer"
+                    onClick={() => handleUpdateStatus("cancelled")}
+                  >
+                    7. Đã hủy đơn hàng
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
         </div>
       </DialogContent>

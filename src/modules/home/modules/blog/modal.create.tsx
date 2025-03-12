@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { BlogService } from "@/services/blog";
 import { UploadService } from "@/services/upload";
-import { Loader, Plus } from "lucide-react";
+import { ImageUp, Loader, Plus } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import BlogDescriptionEditor from "./quill";
@@ -191,7 +191,7 @@ export function ModalCreateBlog() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-orange-700"
+          className="flex items-center justify-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Thêm bài viết
         </button>
@@ -241,22 +241,24 @@ export function ModalCreateBlog() {
                 />
                 {mainPreview && (
                   <div className="mt-2">
-                    <Image
-                      src={mainPreview}
-                      alt="main-preview"
-                      className="w-full rounded-md mt-2"
-                      width={1000}
-                      height={1000}
-                    />
-                    <div
-                      onClick={handleUpdateMainImage}
-                      className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white px-5 py-3 mt-5 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer"
-                    >
-                      <div className="flex flex-col items-center">
-                        <span className="text-xs text-gray-500">
-                          Thay đổi hình ảnh
-                        </span>
+                    <div className="relative group w-full h-80">
+                      <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
+                      <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
+                        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
+                          <ImageUp
+                            onClick={handleUpdateMainImage}
+                            color="white"
+                            size={30}
+                          />
+                        </div>
                       </div>
+                      <Image
+                        src={mainPreview}
+                        alt="main-preview"
+                        className="w-full h-full object-cover rounded-md mt-2 border border-gray-200"
+                        width={1000}
+                        height={1000}
+                      />
                     </div>
                   </div>
                 )}
@@ -323,14 +325,14 @@ export function ModalCreateBlog() {
               Huỷ
             </Button>
           </DialogClose>
-          <Button
+          <button
             type="submit"
             onClick={handleSubmit}
-            className="!px-10 !text-[16px]"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
-            {isLoading && <Loader className="animate-spin" size={48} />}
-          </Button>
+            {isLoading && <Loader className="animate-spin" size={17} />}
+          </button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

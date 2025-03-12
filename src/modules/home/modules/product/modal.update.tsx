@@ -16,7 +16,7 @@ import ProductDescriptionEditor from "./quill";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ProductService } from "@/services/product";
-import { Loader, Trash2, X } from "lucide-react";
+import { ImageUp, Loader, SquarePen, Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Select from "react-select";
@@ -26,9 +26,9 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   const colorMap: { [key: string]: string } = {
     white: "#FFFFFF",
     black: "#000000",
-    gold: "#FFD700",
+    gold: "#EBB305",
     silver: "#C0C0C0",
-    wood: "#8B5A2B",
+    wood: "#713F11",
   };
 
   const colorOpt = [
@@ -67,7 +67,17 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   }) => (
     <div className="flex items-center gap-2">
       <span
-        className="w-4 h-4 rounded-full border border-gray-300"
+        className={`w-4 h-4 rounded-sm border ${
+          value === "white"
+            ? "border-gray-500"
+            : value === "black"
+            ? "border-black"
+            : value === "gold"
+            ? "border-yellow-500"
+            : value === "silver"
+            ? "border-neutral-300"
+            : "border-amber-900"
+        } }`}
         style={{ backgroundColor: colorMap[value] }}
       ></span>
       {label}
@@ -326,14 +336,19 @@ export function ModalUpdateProduct({ data }: { data: any }) {
     }
   };
 
-  useEffect(() => {
-    console.log("check cate: " + data?.category);
-  }, [data]);
+  useEffect(() => {}, [data]);
 
   return (
     <Dialog>
-      <DialogTrigger asChild onClick={updateDOM}>
-        <Button variant="outline">Chỉnh sửa</Button>
+      <DialogTrigger onClick={updateDOM}>
+        <div className="flex">
+          <div className="mx-2 p-2 cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 rounded-full group">
+            <SquarePen
+              size={23}
+              className="text-gray-900 group-hover:text-white"
+            />
+          </div>
+        </div>
       </DialogTrigger>
       <DialogContent
         className="sm:max-w-[1200px] h-screen"
@@ -381,22 +396,24 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   />
                   {mainPreview && (
                     <div className="mt-2">
-                      <Image
-                        src={mainPreview}
-                        alt="main-preview"
-                        className="w-full rounded-md mt-2"
-                        width={1000}
-                        height={1000}
-                      />
-                      <div
-                        onClick={handleUpdateMainImage}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-gray-300 bg-white px-5 py-3 mt-5 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer"
-                      >
-                        <div className="flex flex-col items-center">
-                          <span className="text-xs text-gray-500">
-                            Thay đổi hình ảnh
-                          </span>
+                      <div className="relative group w-full h-80">
+                        <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
+                        <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
+                          <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
+                            <ImageUp
+                              onClick={handleUpdateMainImage}
+                              color="white"
+                              size={30}
+                            />
+                          </div>
                         </div>
+                        <Image
+                          src={mainPreview}
+                          alt="main-preview"
+                          className="w-full h-full object-cover rounded-md mt-2 border border-gray-200"
+                          width={1000}
+                          height={1000}
+                        />
                       </div>
                     </div>
                   )}
@@ -429,13 +446,13 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                     <Image
                       src={preview}
                       alt={`secondary-preview-${index}`}
-                      className="rounded-sm"
+                      className="rounded-sm border border-gray-200"
                       width={100}
                       height={100}
                     />
                     <button
                       onClick={() => handleRemoveSecondaryImage(index)}
-                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                      className="absolute -top-2 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
                     >
                       <X size={10} />
                     </button>
@@ -526,7 +543,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
           <Button
             onClick={handleDelete}
             type="submit"
-            className="!px-8 !text-[16px] bg-orange-700 hover:bg-orange-800"
+            className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-100"
           >
             <Trash2 />
             Xoá
@@ -544,14 +561,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                 Huỷ
               </Button>
             </DialogClose>
-            <Button
+            <button
               type="submit"
               onClick={handleSubmit}
-              className="!px-10 !text-[16px]"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
-              {isLoading && <Loader className="animate-spin" size={48} />}
-            </Button>
+              {isLoading && <Loader className="animate-spin" size={17} />}
+            </button>
           </div>
         </DialogFooter>
       </DialogContent>
