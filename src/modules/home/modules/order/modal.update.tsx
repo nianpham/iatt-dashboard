@@ -283,25 +283,25 @@ export function ModalUpdateBlog({
                   className={`
                       ${
                         currentData?.payment_method === "cash"
-                          ? "bg-green-700 text-white text-sm lg:text-base px-2"
+                          ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
                           : ""
                       }
                       ${
                         currentData?.payment_method === "bank"
-                          ? "bg-orange-600 text-white text-sm lg:text-base px-2"
+                          ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
                           : ""
                       }
                       ${
                         currentData?.payment_method === "momo"
-                          ? "bg-pink-500 text-white text-sm lg:text-base px-2"
+                          ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
                           : ""
                       }
                       ${
                         currentData?.payment_method === "vnpay"
-                          ? "bg-blue-600 text-white text-sm lg:text-base px-2"
+                          ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
                           : ""
                       }
-                       rounded-md py-1 text-center lg:w-[34.5%]`}
+                       rounded-md py-1 text-center`}
                 >
                   {currentData?.payment_method === "cash" && (
                     <div className="flex flex-row items-center justify-center gap-3">
