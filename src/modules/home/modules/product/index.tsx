@@ -69,7 +69,7 @@ export default function Product() {
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
                 DANH SÁCH SẢN PHẨM{" "}
-                <span className="text-[rgb(var(--primary-rgb))]">
+                <span className="text-indigo-600">
                   ({data?.length})
                 </span>
               </span>
@@ -81,8 +81,8 @@ export default function Product() {
         </div>
         <div className="h-[640px] flex flex-col justify-between">
           {isLoading ? (
-            <div className="w-full flex justify-center items-center pt-60">
-              <Loader className="animate-spin" size={48} />
+            <div className="w-full flex justify-center items-center pt-72">
+              <Loader className="animate-spin text-indigo-600" size={36} />
             </div>
           ) : currenData.length === 0 ? (
             <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
@@ -126,11 +126,11 @@ export default function Product() {
                             item?.deleted_at ? "hidden" : ""
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          <td className="w-full px-4 py-2 grid grid-cols-12 gap-3 items-center">
+                          <td className="w-full px-4 py-2 grid grid-cols-12 gap-0 items-center">
                             <Image
                               src={item?.thumbnail}
                               alt="img"
-                              className="w-20 h-20 mr-3 rounded-md object-cover col-span-4 border border-gray-300"
+                              className="w-20 h-20 rounded-md object-cover col-span-4 border border-gray-300"
                               width={100}
                               height={0}
                             />
@@ -191,7 +191,7 @@ export default function Product() {
                     <button
                       onClick={prevPage}
                       disabled={currenPage === 1}
-                      className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="cursor-pointer flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -217,9 +217,9 @@ export default function Product() {
                             href="#"
                             className={`${
                               item === currenPage
-                                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:text-white hover:bg-gradient-to-bl"
+                                ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
                                 : "bg-white"
-                            } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                            } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                           >
                             {item}
                           </a>

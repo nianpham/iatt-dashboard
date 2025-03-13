@@ -46,8 +46,9 @@ export function ModalCreateProduct() {
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      backgroundColor: state.isFocused ? "#E5E7EB" : "white",
+      backgroundColor: state.isFocused ? "#EEEEEE" : "white",
       color: "black",
+      cursor: "pointer",
     }),
     control: (provided: any) => ({
       ...provided,
@@ -323,7 +324,7 @@ export function ModalCreateProduct() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Thêm sản phẩm
         </button>
@@ -339,7 +340,7 @@ export function ModalCreateProduct() {
           <DialogDescription>
             <span className="!text-[16px]">
               Điền thông tin sản phẩm và nhấn{" "}
-              <strong className="text-orange-700">Lưu</strong> để tạo sản phẩm
+              <strong className="text-indigo-600">Lưu</strong> để tạo sản phẩm
               mới.
             </span>
           </DialogDescription>
@@ -530,7 +531,7 @@ export function ModalCreateProduct() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
             {isLoading && <Loader className="animate-spin" size={17} />}

@@ -5,7 +5,7 @@
 
 @layer base {
   :root {
-    --primary-rgb: 46, 154, 229;
+    --primary-rgb: 0, 0, 0;
     --secondary-rgb: 0, 0, 0;
     --tertiary-rgb: 0, 0, 0;
     --quaternary-rgb: 0, 0, 0;

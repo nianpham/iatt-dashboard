@@ -20,25 +20,25 @@ const data = {
       name: "Sản Phẩm",
       url: "?tab=product",
       tab: "product",
-      icon: PackageOpen,
+      icon: <PackageOpen />,
     },
     {
       name: "Đơn Hàng",
       url: "?tab=order",
       tab: "order",
-      icon: FileText,
+      icon: <FileText />,
     },
     {
       name: "Bài Viết",
       url: "?tab=blog",
       tab: "blog",
-      icon: Newspaper,
+      icon: <Newspaper />,
     },
     {
       name: "Khách Hàng",
       url: "?tab=customer",
       tab: "customer",
-      icon: Users,
+      icon: <Users />,
     },
   ],
 };
@@ -58,12 +58,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter
-        className="flex-row justify-center gap-3 text-[16px] cursor-pointer pb-10 text-red-600  font-semibold"
+        className="flex-row justify-center gap-3 text-[16px] cursor-pointer text-red-600  font-semibold"
         onClick={() => {
           handleLogOut();
         }}
       >
-        <div className="border-2 border-red-600 w-full text-center py-2 rounded-md flex flex-row justify-center items-center gap-4 hover:bg-red-100">
+        <div className="border-2 border-red-600 w-full text-center py-2 rounded-md flex flex-row justify-center items-center gap-4 hover:bg-red-600 hover:text-white">
           <LogOut /> Đăng xuất
         </div>
       </SidebarFooter>

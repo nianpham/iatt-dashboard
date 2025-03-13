@@ -1,6 +1,5 @@
 "use client";
 
-import { type LucideIcon } from "lucide-react";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -17,14 +16,14 @@ export function NavProjects({
     name: string;
     url: string;
     tab: string;
-    icon: LucideIcon;
+    icon: any;
   }[];
 }) {
   const param = useSearchParams();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>
-        <span className="text-[16px]">Dashboard</span>
+        <span className="text-[16px] mb-4">Dashboard</span>
       </SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
@@ -32,14 +31,14 @@ export function NavProjects({
             <SidebarMenuButton asChild>
               <a
                 href={item.url}
-                className={`space-x-2 relative inline-flex items-center justify-start !py-5 mb-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group group-hover:from-cyan-500 group-hover:to-blue-500 ${
+                className={`space-x-2 relative inline-flex items-center justify-start !py-5 mb-2 overflow-hidden text-sm font-medium text-gray-500 rounded-lg ${
                   (param.get("tab") || "product") === item.tab
-                    ? "bg-gradient-to-br from-cyan-500 to-blue-500 text-white hover:text-white"
+                    ? "bg-indigo-100 hover:bg-indigo-100 text-indigo-900 hover:text-indigo-900 font-semibold"
                     : ""
                 }`}
               >
-                <item.icon />
-                <span className="text-[15px] relative px-5 transition-all ease-in duration-75 dark:bg-gray-900 rounded-md">
+                {item.icon}
+                <span className="text-[15px] relative transition-all ease-in duration-75 dark:bg-gray-900 rounded-md">
                   {item.name}
                 </span>
               </a>

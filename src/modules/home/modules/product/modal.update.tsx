@@ -45,8 +45,9 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      backgroundColor: state.isFocused ? "#E5E7EB" : "white",
+      backgroundColor: state.isFocused ? "#EEEEEE" : "white",
       color: "black",
+      cursor: "pointer",
     }),
     control: (provided: any) => ({
       ...provided,
@@ -342,7 +343,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
     <Dialog>
       <DialogTrigger onClick={updateDOM}>
         <div className="flex">
-          <div className="mx-2 p-2 cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 rounded-full group">
+          <div className="mx-2 p-2 cursor-pointer hover:bg-indigo-600 rounded-full group">
             <SquarePen
               size={23}
               className="text-gray-900 group-hover:text-white"
@@ -361,7 +362,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
           <DialogDescription>
             <span className="!text-[16px]">
               Chỉnh sửa thông tin sản phẩm và nhấn{" "}
-              <strong className="text-orange-700">Cập nhật</strong> để lưu thông
+              <strong className="text-indigo-600">Cập nhật</strong> để lưu thông
               tin.
             </span>
           </DialogDescription>
@@ -543,7 +544,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
           <Button
             onClick={handleDelete}
             type="submit"
-            className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-100"
+            className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-600 hover:text-white"
           >
             <Trash2 />
             Xoá
@@ -564,7 +565,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}
