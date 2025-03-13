@@ -16,7 +16,7 @@ import ProductDescriptionEditor from "./quill";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ProductService } from "@/services/product";
-import { ImageUp, Loader, SquarePen, Trash2, X } from "lucide-react";
+import { ImageUp, Loader, SquarePen, Trash2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Select from "react-select";
@@ -352,7 +352,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
         </div>
       </DialogTrigger>
       <DialogContent
-        className="sm:max-w-[1200px] h-screen"
+        className="sm:max-w-[1200px] max-h-[90vh]"
         onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogHeader>
@@ -369,7 +369,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
         </DialogHeader>
         <div className="w-full grid grid-cols-3 gap-8">
           <div className="col-span-1">
-            <div className="overflow-y-auto max-h-[80vh] scroll-bar-style">
+            <div className="overflow-y-auto max-h-[70vh] scroll-bar-style">
               <div className="mb-6">
                 <Label htmlFor="thumbnail" className="text-right !text-[16px]">
                   Hình chính
@@ -401,10 +401,10 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                         <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
                         <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
                           <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
-                            <ImageUp
+                            <Upload
                               onClick={handleUpdateMainImage}
                               color="white"
-                              size={30}
+                              size={26}
                             />
                           </div>
                         </div>
@@ -441,21 +441,21 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   className="hidden"
                 />
               </div>
-              <div className="grid grid-cols-3 gap-4 mt-4">
+              <div className="grid grid-cols-3 gap-3 mt-4 pr-2">
                 {secondaryPreviews?.map((preview: any, index: any) => (
                   <div key={index} className="relative">
                     <Image
                       src={preview}
                       alt={`secondary-preview-${index}`}
-                      className="rounded-sm border border-gray-200"
-                      width={100}
-                      height={100}
+                      className="rounded-sm border border-gray-200 w-full h-28 object-cover"
+                      width={1000}
+                      height={1000}
                     />
                     <button
                       onClick={() => handleRemoveSecondaryImage(index)}
-                      className="absolute -top-2 right-0 bg-red-500 text-white p-1 rounded-full text-xs"
+                      className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full text-xs"
                     >
-                      <X size={10} />
+                      <X size={12} />
                     </button>
                   </div>
                 ))}
@@ -463,7 +463,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
             </div>
           </div>
           <div className="col-span-2">
-            <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto max-h-[80vh] pr-4 scroll-bar-style">
+            <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto max-h-[70vh] pr-0 scroll-bar-style">
               <Label htmlFor="description" className="text-[14.5px]">
                 Tên sản phẩm
               </Label>

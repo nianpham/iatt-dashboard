@@ -154,15 +154,15 @@ export default function Order() {
                             item?.deleted_at ? "hidden" : ""
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          <td className="w-64 px-4 py-2 grid grid-cols-12 gap-3 items-center">
+                          <td className="w-64 px-4 py-2 grid grid-cols-12 items-center">
                             <Image
                               src={item?.image}
                               alt="img"
-                              className="col-span-6 w-20 h-20 object-contain mr-3 rounded-md border border-gray-300"
+                              className="col-span-6 w-20 h-20 object-contain rounded-md border border-gray-300"
                               width={100}
                               height={0}
                             />
-                            <span className="col-span-6 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                            <span className="col-span-6 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
                               {
                                 products?.find((pro: any) => {
                                   return item?.product_id === pro._id;

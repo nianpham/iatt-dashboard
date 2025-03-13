@@ -69,9 +69,7 @@ export default function Product() {
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
                 DANH SÁCH SẢN PHẨM{" "}
-                <span className="text-indigo-600">
-                  ({data?.length})
-                </span>
+                <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
           </div>
@@ -126,15 +124,15 @@ export default function Product() {
                             item?.deleted_at ? "hidden" : ""
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          <td className="w-full px-4 py-2 grid grid-cols-12 gap-0 items-center">
+                          <td className="w-full px-4 py-2 grid grid-cols-12 gap-3 items-center">
                             <Image
                               src={item?.thumbnail}
                               alt="img"
-                              className="w-20 h-20 rounded-md object-cover col-span-4 border border-gray-300"
+                              className="w-20 h-20 rounded-md object-cover col-span-3 border border-gray-300"
                               width={100}
                               height={0}
                             />
-                            <span className="w-full col-span-8 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                            <span className="w-full col-span-9 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                               {item?.name}
                             </span>
                           </td>
