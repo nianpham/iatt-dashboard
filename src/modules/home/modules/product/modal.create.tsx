@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ProductService } from "@/services/product";
 import { UploadService } from "@/services/upload";
-import { ImageUp, Loader, Plus, X } from "lucide-react";
+import { ImageUp, Loader, Plus, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import ProductDescriptionEditor from "./quill";
@@ -379,7 +379,7 @@ export function ModalCreateProduct() {
                         <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
                         <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
                           <div className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full">
-                            <ImageUp
+                            <Upload
                               onClick={handleUpdateMainImage}
                               color="white"
                               size={30}
