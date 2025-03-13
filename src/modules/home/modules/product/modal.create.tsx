@@ -378,7 +378,7 @@ export function ModalCreateProduct() {
                       <div className="relative group w-full h-80">
                         <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
                         <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
-                          <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
+                          <div className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full">
                             <ImageUp
                               onClick={handleUpdateMainImage}
                               color="white"
