@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { ProductService } from "@/services/product";
 import { UploadService } from "@/services/upload";
-import { ImageUp, Loader, Plus, Upload, X } from "lucide-react";
+import { Loader, Plus, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import ProductDescriptionEditor from "./quill";
