@@ -101,9 +101,7 @@ export default function Order() {
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
                 DANH SÁCH ĐƠN HÀNG{" "}
-                <span className="text-[rgb(var(--primary-rgb))]">
-                  ({data?.length})
-                </span>
+                <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
           </div>
@@ -158,11 +156,11 @@ export default function Order() {
                             <Image
                               src={item?.image}
                               alt="img"
-                              className="col-span-6 w-20 h-20 object-contain rounded-md border border-gray-300"
+                              className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
                               width={100}
                               height={0}
                             />
-                            <span className="col-span-6 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
+                            <span className="w-44 col-span-7 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
                               {
                                 products?.find((pro: any) => {
                                   return item?.product_id === pro._id;
@@ -283,9 +281,9 @@ export default function Order() {
                               href="#"
                               className={`${
                                 item === currenPage
-                                  ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:text-white hover:bg-gradient-to-bl"
+                                  ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
                                   : "bg-white"
-                              } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                              } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                             >
                               {item}
                             </a>

@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { BlogService } from "@/services/blog";
 import { UploadService } from "@/services/upload";
-import { ImageUp, Loader, SquarePen, Trash2 } from "lucide-react";
+import { ImageUp, Loader, SquarePen, Trash2, Upload } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import BlogDescriptionEditor from "./quill";
@@ -191,7 +191,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
     <Dialog>
       <DialogTrigger onClick={updateDOM}>
         <div className="flex">
-          <div className="mx-2 p-2 cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 rounded-full group">
+          <div className="mx-2 p-2 cursor-pointer hover:bg-indigo-600 rounded-full group">
             <SquarePen
               size={23}
               className="text-gray-900 group-hover:text-white"
@@ -247,8 +247,8 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                     <div className="relative group w-full h-80">
                       <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
                       <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
-                        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
-                          <ImageUp
+                        <div className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full">
+                          <Upload
                             onClick={handleUpdateMainImage}
                             color="white"
                             size={30}
@@ -322,7 +322,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
           <Button
             onClick={handleDelete}
             type="submit"
-            className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-100"
+            className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-600 hover:text-white"
           >
             <Trash2 />
             Xoá
@@ -343,7 +343,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}

@@ -190,7 +190,7 @@ export function ModalUpdateBlog({
     <Dialog>
       <DialogTrigger asChild onClick={updateDOM}>
         <div className="flex">
-          <div className="mx-2 p-2 cursor-pointer hover:bg-gradient-to-r hover:from-cyan-500 hover:to-blue-500 rounded-full group">
+          <div className="mx-2 p-2 cursor-pointer hover:bg-indigo-600 rounded-full group">
             <Info size={23} className="text-gray-900 group-hover:text-white" />
           </div>
         </div>
@@ -236,7 +236,7 @@ export function ModalUpdateBlog({
                       `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
                     )
                   }
-                  className="text-[14px] line-clamp-2 bg-orange-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                  className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
                 >
                   {!downloadLoading ? (
                     <div>Tải file về</div>
@@ -277,7 +277,7 @@ export function ModalUpdateBlog({
               </span>
             </div>
             <div className="flex flex-col gap-2">
-              <span className="flex flex-row items-center gap-2">
+              <span className="flex flex-col items-start gap-2">
                 <strong>Phương thức thanh toán:</strong>{" "}
                 <div
                   className={`

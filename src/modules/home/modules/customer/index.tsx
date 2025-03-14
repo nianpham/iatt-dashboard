@@ -67,9 +67,7 @@ export default function Customer() {
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
                 DANH SÁCH KHÁCH HÀNG{" "}
-                <span className="text-[rgb(var(--primary-rgb))]">
-                  ({data?.length})
-                </span>
+                <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
           </div>
@@ -193,9 +191,9 @@ export default function Customer() {
                             href="#"
                             className={`${
                               item === currenPage
-                                ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:text-white hover:bg-gradient-to-bl"
+                                ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
                                 : "bg-white"
-                            } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                            } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                           >
                             {item}
                           </a>

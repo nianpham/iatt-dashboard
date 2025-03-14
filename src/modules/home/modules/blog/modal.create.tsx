@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { BlogService } from "@/services/blog";
 import { UploadService } from "@/services/upload";
-import { ImageUp, Loader, Plus } from "lucide-react";
+import { ImageUp, Loader, Plus, Upload } from "lucide-react";
 import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import BlogDescriptionEditor from "./quill";
@@ -191,7 +191,7 @@ export function ModalCreateBlog() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Thêm bài viết
         </button>
@@ -244,8 +244,8 @@ export function ModalCreateBlog() {
                     <div className="relative group w-full h-80">
                       <div className="absolute top-0 left-0 right-0 bottom-0 group-hover:bg-black rounded-md opacity-25 z-0 transform duration-200"></div>
                       <div className="cursor-pointer absolute top-[43%] left-[43%] hidden group-hover:flex z-10 transform duration-200">
-                        <div className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl p-2 rounded-full">
-                          <ImageUp
+                        <div className="bg-indigo-600 hover:bg-indigo-700 p-2 rounded-full">
+                          <Upload
                             onClick={handleUpdateMainImage}
                             color="white"
                             size={30}
@@ -328,7 +328,7 @@ export function ModalCreateBlog() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex flex-row justify-center items-center gap-2 text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
             {isLoading && <Loader className="animate-spin" size={17} />}
