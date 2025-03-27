@@ -176,7 +176,7 @@ export default function Order() {
                                 height={0}
                               />
                             )}
-                            <span className="w-44 col-span-7 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
+                            <span className="uppercase w-44 col-span-7 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
                               {item?.order_type === "album"
                                 ? "Album " +
                                   HELPER.renderAlbumCover(item?.album_cover) +
