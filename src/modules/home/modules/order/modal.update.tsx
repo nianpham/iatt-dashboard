@@ -25,6 +25,7 @@ import { OrderService } from "@/services/order";
 import { useToast } from "@/hooks/use-toast";
 import { Info, Loader } from "lucide-react";
 import { IMAGES } from "@/utils/image";
+import JSZip from "jszip";
 
 export function ModalUpdateBlog({
   data,
@@ -38,6 +39,7 @@ export function ModalUpdateBlog({
   const { toast } = useToast();
 
   const [downloadLoading, setDownloadLoading] = useState(false);
+  const [downloadLoadingAlbum, setDownloadLoadingAlbum] = useState(false);
 
   const [currentData, setCurrentData] = useState<any>(null as any);
 
@@ -107,7 +109,24 @@ export function ModalUpdateBlog({
 
   const isCashPayment = currentData?.payment_method === "cash";
 
-  const downloadImage = async (imageUrl: string, filename: string) => {
+  const downloadImage = async (imageUrl: string): Promise<Blob | null> => {
+    if (!imageUrl) {
+      console.error("Invalid image URL");
+      return null;
+    }
+
+    try {
+      const response = await fetch(imageUrl, { mode: "cors" });
+      if (!response.ok) throw new Error("Failed to fetch image");
+      const blob = await response.blob();
+      return blob;
+    } catch (error) {
+      console.error("Error downloading image:", error);
+      return null;
+    }
+  };
+
+  const downloadSingleImage = async (imageUrl: string, filename: string) => {
     if (!imageUrl) {
       console.error("Invalid image URL");
       return;
@@ -168,9 +187,58 @@ export function ModalUpdateBlog({
         link.click();
         document.body.removeChild(link);
       }
-      setDownloadLoading(false);
     } catch (error) {
       console.error("Error processing image:", error);
+      toast({
+        variant: "destructive",
+        title: "Lỗi khi tải ảnh.",
+      });
+    } finally {
+      setDownloadLoading(false);
+    }
+  };
+
+  const downloadAlbumFolder = async () => {
+    if (!currentData?.album_data || !Array.isArray(currentData.album_data)) {
+      toast({
+        variant: "destructive",
+        title: "Không có dữ liệu album để tải.",
+      });
+      return;
+    }
+
+    setDownloadLoadingAlbum(true);
+    const zip = new JSZip();
+
+    try {
+      const imagePromises = currentData.album_data.map(
+        async (imageUrl: string, index: number) => {
+          const blob = await downloadImage(imageUrl);
+          if (blob) {
+            const filename = `${currentData?._id?.slice(-4)}_page_${
+              index + 1
+            }.jpg`;
+            zip.file(filename, blob);
+          }
+        }
+      );
+
+      await Promise.all(imagePromises);
+      const content = await zip.generateAsync({ type: "blob" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = `${currentData?._id?.slice(-4)}_album.zip`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error creating ZIP file:", error);
+      toast({
+        variant: "destructive",
+        title: "Lỗi khi tạo file nén.",
+      });
+    } finally {
+      setDownloadLoadingAlbum(false);
     }
   };
 
@@ -245,7 +313,7 @@ export function ModalUpdateBlog({
                       </span>
                       <button
                         onClick={() =>
-                          downloadImage(
+                          downloadSingleImage(
                             currentData?.image,
                             `${currentData?._id?.slice(-4)}_${
                               currentData?.size
@@ -283,8 +351,8 @@ export function ModalUpdateBlog({
                         </span>
                         <button
                           onClick={() =>
-                            downloadImage(
-                              currentData?.image,
+                            downloadSingleImage(
+                              currentData?.cover_image,
                               `${currentData?._id?.slice(-4)}_${
                                 currentData?.size
                               }.jpg`
@@ -304,15 +372,10 @@ export function ModalUpdateBlog({
                         {currentData?.order_type === "album" && (
                           <div className="">
                             <button
-                              // onClick={() =>
-                              //   downloadImage(
-                              //     currentData?.image,
-                              //     `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
-                              //   )
-                              // }
+                              onClick={downloadAlbumFolder}
                               className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
                             >
-                              {!downloadLoading ? (
+                              {!downloadLoadingAlbum ? (
                                 <div>Tải folder album ảnh</div>
                               ) : (
                                 <div className="flex flex-row justify-center items-center gap-3">
@@ -331,15 +394,10 @@ export function ModalUpdateBlog({
                 currentData?.album_cover !== "bia-da" && (
                   <div className="">
                     <button
-                      // onClick={() =>
-                      //   downloadImage(
-                      //     currentData?.image,
-                      //     `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
-                      //   )
-                      // }
+                      onClick={downloadAlbumFolder}
                       className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
                     >
-                      {!downloadLoading ? (
+                      {!downloadLoadingAlbum ? (
                         <div>Tải folder album ảnh</div>
                       ) : (
                         <div className="flex flex-row justify-center items-center gap-3">

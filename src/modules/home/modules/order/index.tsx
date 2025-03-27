@@ -157,15 +157,16 @@ export default function Order() {
                         >
                           <td className="w-64 px-4 py-2 grid grid-cols-12 items-center">
                             {item?.order_type === "frame" && (
-                              <Image
-                                src={item?.image}
-                                alt="img"
-                                className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
-                                width={100}
-                                height={0}
-                              />
+                              <>
+                                <Image
+                                  src={item?.image}
+                                  alt="img"
+                                  className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
+                                  width={100}
+                                  height={0}
+                                />
+                              </>
                             )}
-
                             {item?.order_type === "album" && (
                               <Image
                                 src={item?.album_data[0]}
