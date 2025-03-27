@@ -201,7 +201,10 @@ export function ModalUpdateBlog({
       >
         <DialogHeader>
           <DialogTitle>
-            <span className="!text-[20px]">Chi tiết đơn hàng</span>
+            <span className="!text-[20px]">
+              Chi tiết đơn hàng{" "}
+              {currentData?.order_type === "album" ? "Album" : "Khung ảnh"}
+            </span>
           </DialogTitle>
           <DialogDescription>
             <span className="!text-[16px]">
@@ -211,52 +214,169 @@ export function ModalUpdateBlog({
         </DialogHeader>
         <div className="w-full grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-6">
-            <div className="flex items-start">
-              <Image
-                src={currentData?.image || "/fallback-image.jpg"}
-                alt="img"
-                className="w-20 h-20 mr-3 object-contain rounded-md border border-gray-300"
-                width={100}
-                height={100}
-                priority
-              />
-              <div className="flex flex-col items-start">
-                <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium pb-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  {
-                    products?.find(
-                      (pro: any) =>
-                        pro._id.toString() === currentData?.product_id
-                    )?.name
-                  }
-                </span>
-                <button
-                  onClick={() =>
-                    downloadImage(
-                      currentData?.image,
-                      `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
-                    )
-                  }
-                  className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
-                >
-                  {!downloadLoading ? (
-                    <div>Tải file về</div>
-                  ) : (
-                    <div className="flex flex-row justify-center items-center gap-3">
-                      Đang tải ảnh...
-                      <Loader className="animate-spin" size={15} />
+            <div
+              className={`flex flex-col ${
+                currentData?.order_type === "frame" ||
+                (currentData?.order_type === "album" &&
+                  currentData?.album_cover === "bia-da")
+                  ? "gap-4"
+                  : "gap-0"
+              }`}
+            >
+              <div className="flex items-start">
+                {currentData?.order_type === "frame" && (
+                  <>
+                    <Image
+                      src={currentData?.image || "/fallback-image.jpg"}
+                      alt="img"
+                      className="w-20 h-20 mr-3 object-contain rounded-md border border-gray-300"
+                      width={100}
+                      height={100}
+                      priority
+                    />
+                    <div className="flex flex-col items-start">
+                      <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium pb-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                        {
+                          products?.find(
+                            (pro: any) =>
+                              pro._id.toString() === currentData?.product_id
+                          )?.name
+                        }
+                      </span>
+                      <button
+                        onClick={() =>
+                          downloadImage(
+                            currentData?.image,
+                            `${currentData?._id?.slice(-4)}_${
+                              currentData?.size
+                            }.jpg`
+                          )
+                        }
+                        className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                      >
+                        {!downloadLoading ? (
+                          <div>Tải file ảnh</div>
+                        ) : (
+                          <div className="flex flex-row justify-center items-center gap-3">
+                            Đang tải ảnh...
+                            <Loader className="animate-spin" size={15} />
+                          </div>
+                        )}
+                      </button>
                     </div>
+                  </>
+                )}
+                {currentData?.order_type === "album" &&
+                  currentData?.album_cover === "bia-da" && (
+                    <>
+                      <Image
+                        src={currentData?.cover_image || "/fallback-image.jpg"}
+                        alt="img"
+                        className="w-20 h-20 mr-3 object-contain rounded-md border border-gray-300"
+                        width={100}
+                        height={100}
+                        priority
+                      />
+                      <div className="flex flex-col items-start">
+                        <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium pb-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                          ẢNH BÌA ALBUM BÌA DA
+                        </span>
+                        <button
+                          onClick={() =>
+                            downloadImage(
+                              currentData?.image,
+                              `${currentData?._id?.slice(-4)}_${
+                                currentData?.size
+                              }.jpg`
+                            )
+                          }
+                          className="mb-1 text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                        >
+                          {!downloadLoading ? (
+                            <div>Tải file ảnh</div>
+                          ) : (
+                            <div className="flex flex-row justify-center items-center gap-3">
+                              Đang tải ảnh...
+                              <Loader className="animate-spin" size={15} />
+                            </div>
+                          )}
+                        </button>
+                        {currentData?.order_type === "album" && (
+                          <div className="">
+                            <button
+                              // onClick={() =>
+                              //   downloadImage(
+                              //     currentData?.image,
+                              //     `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
+                              //   )
+                              // }
+                              className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                            >
+                              {!downloadLoading ? (
+                                <div>Tải folder album ảnh</div>
+                              ) : (
+                                <div className="flex flex-row justify-center items-center gap-3">
+                                  Đang tải folder...
+                                  <Loader className="animate-spin" size={15} />
+                                </div>
+                              )}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </>
                   )}
-                </button>
               </div>
+              {currentData?.order_type === "album" &&
+                currentData?.album_cover !== "bia-da" && (
+                  <div className="">
+                    <button
+                      // onClick={() =>
+                      //   downloadImage(
+                      //     currentData?.image,
+                      //     `${currentData?._id?.slice(-4)}_${currentData?.size}.jpg`
+                      //   )
+                      // }
+                      className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                    >
+                      {!downloadLoading ? (
+                        <div>Tải folder album ảnh</div>
+                      ) : (
+                        <div className="flex flex-row justify-center items-center gap-3">
+                          Đang tải folder...
+                          <Loader className="animate-spin" size={15} />
+                        </div>
+                      )}
+                    </button>
+                  </div>
+                )}
             </div>
+
             <div className="flex flex-col gap-2">
-              <span>
-                <strong>Màu khung:</strong>{" "}
-                {HELPER.renderColorText(currentData?.color)}
-              </span>
+              {currentData?.order_type === "frame" && (
+                <span>
+                  <strong>Màu khung:</strong>{" "}
+                  {HELPER.renderColorText(currentData?.color)}
+                </span>
+              )}
               <span>
                 <strong>Kích thước:</strong> {currentData?.size}
               </span>
+              {currentData?.order_type === "album" && (
+                <>
+                  <span>
+                    <strong>Số trang:</strong> {currentData?.pages}
+                  </span>
+                  <span>
+                    <strong>Loại bìa:</strong>{" "}
+                    {HELPER.renderAlbumCover(currentData?.album_cover)}
+                  </span>
+                  <span>
+                    <strong>Loại ruột:</strong>{" "}
+                    {HELPER.renderAlbumCore(currentData?.album_core)}
+                  </span>
+                </>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               <span>

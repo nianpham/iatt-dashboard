@@ -126,6 +126,9 @@ export default function Order() {
                       <th scope="col" className="w-64 px-4 py-3">
                         Sản phẩm
                       </th>
+                      <th scope="col" className="w-40 text-center px-4 py-3">
+                        Loại đơn
+                      </th>
                       <th scope="col" className="w-40 px-4 py-3">
                         Khách hàng
                       </th>
@@ -153,19 +156,41 @@ export default function Order() {
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
                           <td className="w-64 px-4 py-2 grid grid-cols-12 items-center">
-                            <Image
-                              src={item?.image}
-                              alt="img"
-                              className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
-                              width={100}
-                              height={0}
-                            />
+                            {item?.order_type === "frame" && (
+                              <Image
+                                src={item?.image}
+                                alt="img"
+                                className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
+                                width={100}
+                                height={0}
+                              />
+                            )}
+
+                            {item?.order_type === "album" && (
+                              <Image
+                                src={item?.album_data[0]}
+                                alt="img"
+                                className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
+                                width={100}
+                                height={0}
+                              />
+                            )}
                             <span className="w-44 col-span-7 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
-                              {
-                                products?.find((pro: any) => {
-                                  return item?.product_id === pro._id;
-                                })?.name
-                              }
+                              {item?.order_type === "album"
+                                ? "Album " +
+                                  HELPER.renderAlbumCover(item?.album_cover) +
+                                  ", " +
+                                  HELPER.renderAlbumCore(item?.album_core)
+                                : products?.find((pro: any) => {
+                                    return item?.product_id === pro._id;
+                                  })?.name}
+                            </span>
+                          </td>
+                          <td className="w-40 text-center px-4 py-2">
+                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {item?.order_type === "album"
+                                ? "Album"
+                                : "Khung ảnh"}
                             </span>
                           </td>
                           <td className="w-40 px-4 py-2">
