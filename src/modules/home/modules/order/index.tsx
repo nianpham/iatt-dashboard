@@ -66,7 +66,16 @@ export default function Order() {
   const renderOrder = async () => {
     const res = await OrderService.getAll();
     if (res && res.data.length > 0) {
-      render(res.data);
+      const ordersWithTotal = res.data.filter(
+        (order: { total: number | null | undefined }) =>
+          order.total !== undefined && order.total !== null && order.total > 0
+      );
+
+      if (ordersWithTotal.length > 0) {
+        render(ordersWithTotal);
+      } else {
+        setData([]);
+      }
       setIsLoading(false);
     } else {
       setData([]);
@@ -161,7 +170,7 @@ export default function Order() {
                                 <Image
                                   src={item?.image}
                                   alt="img"
-                                  className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
+                                  className="col-span-5 w-20 h-20 object-cover rounded-md border border-gray-300"
                                   width={100}
                                   height={0}
                                 />
@@ -171,7 +180,7 @@ export default function Order() {
                               <Image
                                 src={item?.album_data[0]}
                                 alt="img"
-                                className="col-span-5 w-20 h-20 object-contain rounded-md border border-gray-300"
+                                className="col-span-5 w-20 h-20 object-cover rounded-md border border-gray-300"
                                 width={100}
                                 height={0}
                               />
