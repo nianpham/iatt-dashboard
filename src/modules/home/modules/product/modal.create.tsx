@@ -97,11 +97,14 @@ export function ModalCreateProduct() {
   const [secondaryPreviews, setSecondaryPreviews] = useState<string[]>([]);
 
   const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  // const [price, setPrice] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [color, setColor] = useState<string[]>([]);
+  const [sizesAndPrices, setSizesAndPrices] = useState<
+    { size: string; price: string }[]
+  >([{ size: "", price: "" }]);
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -165,6 +168,26 @@ export function ModalCreateProduct() {
     setSecondaryPreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleAddSizePrice = () => {
+    setSizesAndPrices([...sizesAndPrices, { size: "", price: "" }]);
+  };
+
+  const handleSizePriceChange = (
+    index: number,
+    field: "size" | "price",
+    value: string
+  ) => {
+    const updatedSizesAndPrices = [...sizesAndPrices];
+    updatedSizesAndPrices[index][field] = value;
+    setSizesAndPrices(updatedSizesAndPrices);
+  };
+
+  const handleRemoveSizePrice = (index: number) => {
+    if (sizesAndPrices.length > 1) {
+      setSizesAndPrices(sizesAndPrices.filter((_, i) => i !== index));
+    }
+  };
+
   const validateForm = () => {
     if (!mainPreview) {
       toast({
@@ -218,6 +241,14 @@ export function ModalCreateProduct() {
       toast({
         variant: "destructive",
         title: "Vui lòng chọn màu sắc.",
+      });
+      return false;
+    }
+
+    if (sizesAndPrices.some((sp) => !sp.size.trim() || !sp.price.trim())) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập đầy đủ kích cỡ và giá.",
       });
       return false;
     }
@@ -307,7 +338,7 @@ export function ModalCreateProduct() {
       name: name,
       description: updatedDescription,
       introduction: updatedIntroduction,
-      price: price,
+      product_option: sizesAndPrices,
       category: category,
       color: color,
       thumbnail: uploadMainImage[0]?.url || "",
@@ -472,18 +503,75 @@ export function ModalCreateProduct() {
                   <option value="Album">Album</option>
                 </select>
               </div>
-              <Label htmlFor="description" className="text-[14.5px] mt-2">
-                Giá sản phẩm
-              </Label>
-              <div className="w-full grid items-center gap-4">
-                <input
-                  id="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  placeholder="Giá"
-                  className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
-                ></input>
+              <div className="flex flex-col gap-4 w-full">
+                {sizesAndPrices.map((sp, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-row justify-between items-center gap-4 w-full"
+                  >
+                    <div className="flex flex-col w-full">
+                      <Label
+                        htmlFor={`size-${index}`}
+                        className="text-[14.5px]"
+                      >
+                        Kích cỡ
+                      </Label>
+                      <div className="w-full grid items-center gap-4 mt-1">
+                        <input
+                          id={`size-${index}`}
+                          value={sp.size}
+                          onChange={(e) =>
+                            handleSizePriceChange(index, "size", e.target.value)
+                          }
+                          placeholder="Kích cỡ"
+                          className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-col w-full">
+                      <Label
+                        htmlFor={`price-${index}`}
+                        className="text-[14.5px]"
+                      >
+                        Giá sản phẩm
+                      </Label>
+                      <div className="w-full grid items-center gap-4 mt-1">
+                        <input
+                          id={`price-${index}`}
+                          value={sp.price}
+                          onChange={(e) =>
+                            handleSizePriceChange(
+                              index,
+                              "price",
+                              e.target.value
+                            )
+                          }
+                          placeholder="Giá"
+                          className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
+                        />
+                      </div>
+                    </div>
+                    {sizesAndPrices.length > 1 && (
+                      <button
+                        onClick={() => handleRemoveSizePrice(index)}
+                        className="mt-6 bg-red-500 text-white p-2 rounded-full"
+                      >
+                        <X size={16} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <div>
+                  <button
+                    type="button"
+                    onClick={handleAddSizePrice}
+                    className="p-2 flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-full text-sm !text-[16px] text-center"
+                  >
+                    <Plus />
+                  </button>
+                </div>
               </div>
+
               <Label htmlFor="description" className="text-[14.5px] mt-2">
                 Chọn màu sắc
               </Label>

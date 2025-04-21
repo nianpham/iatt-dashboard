@@ -166,7 +166,7 @@ export default function Product() {
                             </div>
                           </td>
                           <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {HELPER.formatVND(item?.price)}
+                            {HELPER.formatVND(item?.product_option[0]?.price)}
                           </td>
                           <td className="w-24 text-[14px] px-8 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {item?.sold}
