@@ -163,6 +163,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
       author: author,
       thumbnail: uploadMainImage[0]?.url || "",
     };
+
     await BlogService.updateBlog(data?._id, body);
     setIsLoading(false);
     window.location.href = "/?tab=blog";
