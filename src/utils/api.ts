@@ -13,7 +13,7 @@ export const API = {
   UPDATE_BLOG: `${BASE_URL}/inanhtructuyen/blog`,
   DELETE_BLOG: `${BASE_URL}/inanhtructuyen/blog`,
   // ACCOUNT
-  GET_ALL_ACCOUNTS: `${BASE_URL}/inanhtructuyen/account`,
+  GET_ALL_ACCOUNTS: `${BASE_URL}/inanhtructuyen/account/`,
   // ORDER
   GET_ALL_ORDERS: `${BASE_URL}/inanhtructuyen/order`,
   UPDATE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
