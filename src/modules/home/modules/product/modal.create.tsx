@@ -345,11 +345,9 @@ export function ModalCreateProduct() {
       images: uploadSecondaryImages?.map((image: any) => image.url),
     };
 
-    console.log("body", body);
-
-    // await ProductService.createProduct(body);
-    // setIsLoading(false);
-    // window.location.href = "/?tab=product";
+    await ProductService.createProduct(body);
+    setIsLoading(false);
+    window.location.href = "/?tab=product";
   };
 
   return (
