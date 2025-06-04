@@ -188,7 +188,6 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   ) => {
     const updatedSizesAndPrices = [...sizesAndPrices];
     if (field === "price") {
-      // Allow only numeric values for price
       if (value === "" || /^\d*$/.test(value)) {
         updatedSizesAndPrices[index][field] = value;
       }
@@ -282,6 +281,18 @@ export function ModalUpdateProduct({ data }: { data: any }) {
     //   });
     //   return false;
     // }
+    const sizeRegex = /^\d+x\d+$/;
+    if (
+      sizesAndPrices.some(
+        (sp) => !sp.size.trim() || !sp.price.trim() || !sizeRegex.test(sp.size)
+      )
+    ) {
+      toast({
+        variant: "destructive",
+        title: "Kích cỡ phải theo định dạng sốxsố (ví dụ: 15x21).",
+      });
+      return false;
+    }
 
     return true;
   };
