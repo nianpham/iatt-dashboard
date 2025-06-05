@@ -24,6 +24,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "iatt-dashboard": "file:",
     "ielts-viet-dashboard": "file:",
     "isomorphic-dompurify": "^2.21.0",
     "js-cookie": "^3.0.5",

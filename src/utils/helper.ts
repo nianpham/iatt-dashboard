@@ -115,22 +115,22 @@ const renderStatus = (status: string) => {
       result = "Đợi phản hồi";
       break;
     case "pending":
-      result = "Đang chuẩn bị đơn hàng";
+      result = "Chuẩn bị đơn";
       break;
     case "delivering":
-      result = "Đang giao hàng";
+      result = "Vận chuyển";
       break;
     case "completed":
       result = "Hoàn thành";
       break;
     case "paid pending":
-      result = "Đang chờ thanh toán";
+      result = "Chờ thanh toán";
       break;
     case "paid":
       result = "Đã thanh toán";
       break;
     case "cancelled":
-      result = "Đã hủy đơn hàng";
+      result = "Đã hủy đơn";
       break;
     default:
       break;

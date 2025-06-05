@@ -93,7 +93,7 @@ export default function Order() {
     init();
   }, []);
 
-  useEffect(() => {}, [
+  useEffect(() => { }, [
     totalPage,
     isLoading,
     currenData,
@@ -160,9 +160,8 @@ export default function Order() {
                       return (
                         <tr
                           key={index}
-                          className={`${
-                            item?.deleted_at ? "hidden" : ""
-                          } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
+                          className={`${item?.deleted_at ? "hidden" : ""
+                            } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
                           <td className="w-64 px-4 py-2 grid grid-cols-12 items-center">
                             {item?.order_type === "frame" && (
@@ -188,12 +187,12 @@ export default function Order() {
                             <span className="uppercase w-44 col-span-7 text-[14px] line-clamp-2 leading-[1.7] bg-primary-100 text-gray-900 font-medium rounded dark:bg-primary-900 dark:text-primary-300">
                               {item?.order_type === "album"
                                 ? "Album " +
-                                  HELPER.renderAlbumCover(item?.album_cover) +
-                                  ", " +
-                                  HELPER.renderAlbumCore(item?.album_core)
+                                HELPER.renderAlbumCover(item?.album_cover) +
+                                ", " +
+                                HELPER.renderAlbumCore(item?.album_core)
                                 : products?.find((pro: any) => {
-                                    return item?.product_id === pro._id;
-                                  })?.name}
+                                  return item?.product_id === pro._id;
+                                })?.name}
                             </span>
                           </td>
                           <td className="w-40 text-center px-4 py-2">
@@ -223,39 +222,32 @@ export default function Order() {
                           >
                             <span
                               className={`rounded-md px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white
-                        ${
-                          item.status === "completed"
-                            ? "bg-green-700 text-white"
-                            : ""
-                        }
-                        ${
-                          item.status === "delivering"
-                            ? "bg-yellow-800 text-white"
-                            : ""
-                        }
-                        ${
-                          item.status === "waiting"
-                            ? "bg-blue-700 text-white"
-                            : ""
-                        }
-                        ${
-                          item.status === "pending"
-                            ? "bg-orange-600 text-white"
-                            : ""
-                        }
-                        ${
-                          item.status === "paid pending"
-                            ? "bg-yellow-400 text-white"
-                            : ""
-                        }
-                        ${
-                          item.status === "paid" ? "bg-pink-200 text-white" : ""
-                        }
-                        ${
-                          item.status === "cancelled"
-                            ? "bg-red-500 text-white"
-                            : ""
-                        }`}
+                        ${item.status === "completed"
+                                  ? "bg-green-600 text-white"
+                                  : ""
+                                }
+                        ${item.status === "delivering"
+                                  ? "bg-blue-600 text-white"
+                                  : ""
+                                }
+                        ${item.status === "waiting"
+                                  ? "bg-yellow-600 text-white"
+                                  : ""
+                                }
+                        ${item.status === "pending"
+                                  ? "bg-yellow-600 text-white"
+                                  : ""
+                                }
+                        ${item.status === "paid pending"
+                                  ? "bg-gray-600 text-white"
+                                  : ""
+                                }
+                        ${item.status === "paid" ? "bg-purple-600 text-white" : ""
+                                }
+                        ${item.status === "cancelled"
+                                  ? "bg-red-600 text-white"
+                                  : ""
+                                }`}
                             >
                               {HELPER.renderStatus(item?.status)}
                             </span>
@@ -314,11 +306,10 @@ export default function Order() {
                           <li key={index} onClick={() => selectPage(item)}>
                             <a
                               href="#"
-                              className={`${
-                                item === currenPage
-                                  ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
-                                  : "bg-white"
-                              } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
+                              className={`${item === currenPage
+                                ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
+                                : "bg-white"
+                                } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                             >
                               {item}
                             </a>

@@ -215,9 +215,8 @@ export function ModalUpdateBlog({
         async (imageUrl: string, index: number) => {
           const blob = await downloadImage(imageUrl);
           if (blob) {
-            const filename = `${currentData?._id?.slice(-4)}_page_${
-              index + 1
-            }.jpg`;
+            const filename = `${currentData?._id?.slice(-4)}_page_${index + 1
+              }.jpg`;
             zip.file(filename, blob);
           }
         }
@@ -283,13 +282,12 @@ export function ModalUpdateBlog({
         <div className="w-full grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-6">
             <div
-              className={`flex flex-col ${
-                currentData?.order_type === "frame" ||
+              className={`flex flex-col ${currentData?.order_type === "frame" ||
                 (currentData?.order_type === "album" &&
                   currentData?.album_cover === "bia-da")
-                  ? "gap-4"
-                  : "gap-0"
-              }`}
+                ? "gap-4"
+                : "gap-0"
+                }`}
             >
               <div className="flex items-start">
                 {currentData?.order_type === "frame" && (
@@ -315,8 +313,7 @@ export function ModalUpdateBlog({
                         onClick={() =>
                           downloadSingleImage(
                             currentData?.image,
-                            `${currentData?._id?.slice(-4)}_${
-                              currentData?.size
+                            `${currentData?._id?.slice(-4)}_${currentData?.size
                             }.jpg`
                           )
                         }
@@ -353,8 +350,7 @@ export function ModalUpdateBlog({
                           onClick={() =>
                             downloadSingleImage(
                               currentData?.cover_image,
-                              `${currentData?._id?.slice(-4)}_${
-                                currentData?.size
+                              `${currentData?._id?.slice(-4)}_${currentData?.size
                               }.jpg`
                             )
                           }
@@ -459,26 +455,22 @@ export function ModalUpdateBlog({
                 <strong>Phương thức thanh toán:</strong>{" "}
                 <div
                   className={`
-                      ${
-                        currentData?.payment_method === "cash"
-                          ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "bank"
-                          ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "momo"
-                          ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "vnpay"
-                          ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
+                      ${currentData?.payment_method === "cash"
+                      ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
+                      : ""
+                    }
+                      ${currentData?.payment_method === "bank"
+                      ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
+                      : ""
+                    }
+                      ${currentData?.payment_method === "momo"
+                      ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
+                      : ""
+                    }
+                      ${currentData?.payment_method === "vnpay"
+                      ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
+                      : ""
+                    }
                        rounded-md py-1 text-center`}
                 >
                   {currentData?.payment_method === "cash" && (
@@ -580,31 +572,32 @@ export function ModalUpdateBlog({
             {currentData?.status === "cancelled" ? (
               <Button
                 className={`w-56 cursor-default hover:bg-[rgb(var(--primary-rgb))]
-                    ${
-                      data.status === "completed"
-                        ? "bg-green-700 text-white"
-                        : ""
-                    }
-                    ${
-                      data.status === "delivering"
-                        ? "bg-yellow-800 text-white"
-                        : ""
-                    }
-                    ${data.status === "waiting" ? "bg-blue-700 text-white" : ""}
-                    ${
-                      data.status === "pending"
-                        ? "bg-orange-600 text-white"
-                        : ""
-                    }
-                    ${
-                      data.status === "paid pending"
-                        ? "bg-yellow-400 text-white"
-                        : ""
-                    }
-                    ${data.status === "paid" ? "bg-pink-200 text-white" : ""}
-                    ${
-                      data.status === "cancelled" ? "bg-red-500 text-white" : ""
-                    }`}
+                   ${data.status === "completed"
+                    ? "bg-green-600 text-white"
+                    : ""
+                  }
+                        ${data.status === "delivering"
+                    ? "bg-blue-600 text-white"
+                    : ""
+                  }
+                        ${data.status === "waiting"
+                    ? "bg-yellow-600 text-white"
+                    : ""
+                  }
+                        ${data.status === "pending"
+                    ? "bg-yellow-600 text-white"
+                    : ""
+                  }
+                        ${data.status === "paid pending"
+                    ? "bg-gray-600 text-white"
+                    : ""
+                  }
+                        ${data.status === "paid" ? "bg-purple-600 text-white" : ""
+                  }
+                        ${data.status === "cancelled"
+                    ? "bg-red-600 text-white"
+                    : ""
+                  }`}
               >
                 {HELPER.renderStatus(data?.status)}
               </Button>
@@ -613,39 +606,32 @@ export function ModalUpdateBlog({
                 <DropdownMenuTrigger asChild>
                   <Button
                     className={`w-56 hover:bg-[rgb(var(--primary-rgb))]
-                        ${
-                          data.status === "completed"
-                            ? "bg-green-700 text-white"
-                            : ""
-                        }
-                        ${
-                          data.status === "delivering"
-                            ? "bg-yellow-800 text-white"
-                            : ""
-                        }
-                        ${
-                          data.status === "waiting"
-                            ? "bg-blue-700 text-white"
-                            : ""
-                        }
-                        ${
-                          data.status === "pending"
-                            ? "bg-orange-600 text-white"
-                            : ""
-                        }
-                        ${
-                          data.status === "paid pending"
-                            ? "bg-yellow-400 text-white"
-                            : ""
-                        }
-                        ${
-                          data.status === "paid" ? "bg-pink-200 text-white" : ""
-                        }
-                        ${
-                          data.status === "cancelled"
-                            ? "bg-red-500 text-white"
-                            : ""
-                        }`}
+                        ${data.status === "completed"
+                        ? "bg-green-600 text-white"
+                        : ""
+                      }
+                        ${data.status === "delivering"
+                        ? "bg-blue-600 text-white"
+                        : ""
+                      }
+                        ${data.status === "waiting"
+                        ? "bg-yellow-600 text-white"
+                        : ""
+                      }
+                        ${data.status === "pending"
+                        ? "bg-yellow-600 text-white"
+                        : ""
+                      }
+                        ${data.status === "paid pending"
+                        ? "bg-gray-600 text-white"
+                        : ""
+                      }
+                        ${data.status === "paid" ? "bg-purple-600 text-white" : ""
+                      }
+                        ${data.status === "cancelled"
+                        ? "bg-red-600 text-white"
+                        : ""
+                      }`}
                   >
                     {HELPER.renderStatus(data?.status)}
                   </Button>
@@ -658,7 +644,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("waiting")}
                     disabled={
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 1
                     }
                   >
@@ -670,11 +656,11 @@ export function ModalUpdateBlog({
                     disabled={
                       isCashPayment ||
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 2
                     }
                   >
-                    2. Đang chờ thanh toán
+                    2. Chờ thanh toán
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     className="cursor-pointer"
@@ -682,7 +668,7 @@ export function ModalUpdateBlog({
                     disabled={
                       isCashPayment ||
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 3
                     }
                   >
@@ -693,7 +679,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("pending")}
                     disabled={
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 4 ||
                       (statusOrder[
                         currentData?.status as keyof typeof statusOrder
@@ -701,35 +687,35 @@ export function ModalUpdateBlog({
                         currentData?.status !== "waiting")
                     }
                   >
-                    4. Đang chuẩn bị đơn hàng
+                    4. Chuẩn bị đơn
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     className="cursor-pointer"
                     onClick={() => handleUpdateStatus("delivering")}
                     disabled={
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 5
                     }
                   >
-                    5. Đang giao hàng
+                    5. Vận chuyển
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     className="cursor-pointer"
                     onClick={() => handleUpdateStatus("completed")}
                     disabled={
                       statusOrder[
-                        currentData?.status as keyof typeof statusOrder
+                      currentData?.status as keyof typeof statusOrder
                       ] > 6
                     }
                   >
-                    6. Đã hoàn tất
+                    6. Hoàn thành
                   </DropdownMenuCheckboxItem>
                   <DropdownMenuCheckboxItem
                     className="cursor-pointer"
                     onClick={() => handleUpdateStatus("cancelled")}
                   >
-                    7. Đã hủy đơn hàng
+                    7. Đã hủy đơn
                   </DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
