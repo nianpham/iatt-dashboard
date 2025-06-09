@@ -215,8 +215,9 @@ export function ModalUpdateBlog({
         async (imageUrl: string, index: number) => {
           const blob = await downloadImage(imageUrl);
           if (blob) {
-            const filename = `${currentData?._id?.slice(-4)}_page_${index + 1
-              }.jpg`;
+            const filename = `${currentData?._id?.slice(-4)}_page_${
+              index + 1
+            }.jpg`;
             zip.file(filename, blob);
           }
         }
@@ -275,19 +276,20 @@ export function ModalUpdateBlog({
           </DialogTitle>
           <DialogDescription>
             <span className="!text-[16px]">
-              Mã đơn hàng: #{currentData?._id?.slice(-4)}
+              Mã đơn hàng: #{currentData?._id}
             </span>
           </DialogDescription>
         </DialogHeader>
         <div className="w-full grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-6">
             <div
-              className={`flex flex-col ${currentData?.order_type === "frame" ||
+              className={`flex flex-col ${
+                currentData?.order_type === "frame" ||
                 (currentData?.order_type === "album" &&
                   currentData?.album_cover === "bia-da")
-                ? "gap-4"
-                : "gap-0"
-                }`}
+                  ? "gap-4"
+                  : "gap-0"
+              }`}
             >
               <div className="flex items-start">
                 {currentData?.order_type === "frame" && (
@@ -313,7 +315,8 @@ export function ModalUpdateBlog({
                         onClick={() =>
                           downloadSingleImage(
                             currentData?.image,
-                            `${currentData?._id?.slice(-4)}_${currentData?.size
+                            `${currentData?._id?.slice(-4)}_${
+                              currentData?.size
                             }.jpg`
                           )
                         }
@@ -350,7 +353,8 @@ export function ModalUpdateBlog({
                           onClick={() =>
                             downloadSingleImage(
                               currentData?.cover_image,
-                              `${currentData?._id?.slice(-4)}_${currentData?.size
+                              `${currentData?._id?.slice(-4)}_${
+                                currentData?.size
                               }.jpg`
                             )
                           }
@@ -425,10 +429,10 @@ export function ModalUpdateBlog({
                     <strong>Loại bìa:</strong>{" "}
                     {HELPER.renderAlbumCover(currentData?.album_cover)}
                   </span>
-                  <span>
+                  {/* <span>
                     <strong>Loại ruột:</strong>{" "}
                     {HELPER.renderAlbumCore(currentData?.album_core)}
-                  </span>
+                  </span> */}
                 </>
               )}
             </div>
@@ -453,24 +457,28 @@ export function ModalUpdateBlog({
             <div className="flex flex-col gap-2">
               <span className="flex flex-col items-start gap-2">
                 <strong>Phương thức thanh toán:</strong>{" "}
-                <div
+                {/* <div
                   className={`
-                      ${currentData?.payment_method === "cash"
-                      ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
-                      : ""
-                    }
-                      ${currentData?.payment_method === "bank"
-                      ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
-                      : ""
-                    }
-                      ${currentData?.payment_method === "momo"
-                      ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
-                      : ""
-                    }
-                      ${currentData?.payment_method === "vnpay"
-                      ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
-                      : ""
-                    }
+                      ${
+                        currentData?.payment_method === "cash"
+                          ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "bank"
+                          ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "momo"
+                          ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "vnpay"
+                          ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
+                          : ""
+                      }
                        rounded-md py-1 text-center`}
                 >
                   {currentData?.payment_method === "cash" && (
@@ -521,6 +529,79 @@ export function ModalUpdateBlog({
                       <div>VNPay</div>
                     </div>
                   )}
+                </div> */}
+                <div
+                  className={`
+                      ${
+                        currentData?.payment_method === "cash"
+                          ? "text-black text-sm lg:text-base"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "bank"
+                          ? "text-orange-600 text-sm lg:text-base"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "momo"
+                          ? "text-pink-500 text-sm lg:text-base"
+                          : ""
+                      }
+                      ${
+                        currentData?.payment_method === "vnpay"
+                          ? "text-blue-600 text-sm lg:text-base"
+                          : ""
+                      }
+                      lg:py-2 rounded-md py-0 text-center w-1/2 lg:w-[34.5%]`}
+                >
+                  {currentData?.payment_method === "cash" && (
+                    <div className="flex flex-row items-center justify-start gap-3">
+                      <Image
+                        src={IMAGES.COD}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-6 h-6 object-cover rounded-lg"
+                      />
+                      <div>Tiền mặt</div>
+                    </div>
+                  )}
+                  {/* {order?.payment_method === "bank" && (
+                  <div className="flex flex-row items-center justify-center gap-3">
+                    <Image
+                      src={IMAGES.BANK}
+                      alt="momo"
+                      width={1000}
+                      height={1000}
+                      className="w-6 h-6 object-cover rounded-lg"
+                    />
+                    <div>Chuyển khoản</div>
+                  </div>
+                )}
+                {order?.payment_method === "momo" && (
+                  <div className="flex flex-row items-center justify-center gap-3">
+                    <Image
+                      src={IMAGES.MOMO}
+                      alt="momo"
+                      width={1000}
+                      height={1000}
+                      className="w-6 h-6 object-cover rounded-lg"
+                    />
+                    <div>MOMO</div>
+                  </div>
+                )}
+                {order?.payment_method === "vnpay" && (
+                  <div className="flex flex-row items-center justify-center gap-3">
+                    <Image
+                      src={IMAGES.VNPAY}
+                      alt="momo"
+                      width={1000}
+                      height={1000}
+                      className="w-6 h-6 object-cover rounded-lg"
+                    />
+                    <div>VNPay</div>
+                  </div>
+                )} */}
                 </div>
               </span>
             </div>
@@ -572,32 +653,41 @@ export function ModalUpdateBlog({
             {currentData?.status === "cancelled" ? (
               <Button
                 className={`w-56 cursor-default hover:bg-[rgb(var(--primary-rgb))]
-                   ${data.status === "completed"
-                    ? "bg-green-600 text-white"
-                    : ""
-                  }
-                        ${data.status === "delivering"
-                    ? "bg-blue-600 text-white"
-                    : ""
-                  }
-                        ${data.status === "waiting"
-                    ? "bg-yellow-600 text-white"
-                    : ""
-                  }
-                        ${data.status === "pending"
-                    ? "bg-yellow-600 text-white"
-                    : ""
-                  }
-                        ${data.status === "paid pending"
-                    ? "bg-gray-600 text-white"
-                    : ""
-                  }
-                        ${data.status === "paid" ? "bg-purple-600 text-white" : ""
-                  }
-                        ${data.status === "cancelled"
-                    ? "bg-red-600 text-white"
-                    : ""
-                  }`}
+                   ${
+                     data.status === "completed"
+                       ? "bg-green-600 text-white"
+                       : ""
+                   }
+                        ${
+                          data.status === "delivering"
+                            ? "bg-blue-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "waiting"
+                            ? "bg-yellow-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "pending"
+                            ? "bg-yellow-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid pending"
+                            ? "bg-gray-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid"
+                            ? "bg-purple-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "cancelled"
+                            ? "bg-red-600 text-white"
+                            : ""
+                        }`}
               >
                 {HELPER.renderStatus(data?.status)}
               </Button>
@@ -606,32 +696,41 @@ export function ModalUpdateBlog({
                 <DropdownMenuTrigger asChild>
                   <Button
                     className={`w-56 hover:bg-[rgb(var(--primary-rgb))]
-                        ${data.status === "completed"
-                        ? "bg-green-600 text-white"
-                        : ""
-                      }
-                        ${data.status === "delivering"
-                        ? "bg-blue-600 text-white"
-                        : ""
-                      }
-                        ${data.status === "waiting"
-                        ? "bg-yellow-600 text-white"
-                        : ""
-                      }
-                        ${data.status === "pending"
-                        ? "bg-yellow-600 text-white"
-                        : ""
-                      }
-                        ${data.status === "paid pending"
-                        ? "bg-gray-600 text-white"
-                        : ""
-                      }
-                        ${data.status === "paid" ? "bg-purple-600 text-white" : ""
-                      }
-                        ${data.status === "cancelled"
-                        ? "bg-red-600 text-white"
-                        : ""
-                      }`}
+                        ${
+                          data.status === "completed"
+                            ? "bg-green-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "delivering"
+                            ? "bg-blue-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "waiting"
+                            ? "bg-yellow-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "pending"
+                            ? "bg-yellow-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid pending"
+                            ? "bg-gray-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "paid"
+                            ? "bg-purple-600 text-white"
+                            : ""
+                        }
+                        ${
+                          data.status === "cancelled"
+                            ? "bg-red-600 text-white"
+                            : ""
+                        }`}
                   >
                     {HELPER.renderStatus(data?.status)}
                   </Button>
@@ -644,7 +743,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("waiting")}
                     disabled={
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 1
                     }
                   >
@@ -656,7 +755,7 @@ export function ModalUpdateBlog({
                     disabled={
                       isCashPayment ||
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 2
                     }
                   >
@@ -668,7 +767,7 @@ export function ModalUpdateBlog({
                     disabled={
                       isCashPayment ||
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 3
                     }
                   >
@@ -679,7 +778,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("pending")}
                     disabled={
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 4 ||
                       (statusOrder[
                         currentData?.status as keyof typeof statusOrder
@@ -694,7 +793,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("delivering")}
                     disabled={
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 5
                     }
                   >
@@ -705,7 +804,7 @@ export function ModalUpdateBlog({
                     onClick={() => handleUpdateStatus("completed")}
                     disabled={
                       statusOrder[
-                      currentData?.status as keyof typeof statusOrder
+                        currentData?.status as keyof typeof statusOrder
                       ] > 6
                     }
                   >
