@@ -6,15 +6,18 @@ import { useEffect, useState } from "react";
 import { Loader } from "lucide-react";
 import { AccountService } from "@/services/account";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 export default function Customer() {
   const COUNT = 6;
 
+  const [originalData, setOriginalData] = useState([] as any);
   const [data, setData] = useState([] as any);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currenPage, setCurrenPage] = useState<any>(1 as any);
   const [currenData, setCurrenData] = useState<any>([] as any);
+  const [searchId, setSearchId] = useState<string>("");
 
   const selectPage = (pageSelected: any) => {
     setCurrenPage(pageSelected);
@@ -35,7 +38,29 @@ export default function Customer() {
     }
   };
 
+  const searchCustomerById = (id: string) => {
+    const trimmedId = id.trim();
+    setSearchId(trimmedId);
+
+    const filteredData = trimmedId
+      ? originalData.filter((customer: any) =>
+          customer._id.slice(-4).toLowerCase().includes(trimmedId.toLowerCase())
+        )
+      : originalData;
+
+    setData(filteredData);
+    setTotalPage(Math.ceil(filteredData.length / COUNT));
+    setCurrenPage(1);
+    setCurrenData(filteredData.slice(0, COUNT));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    searchCustomerById(value);
+  };
+
   const render = (data: any) => {
+    setOriginalData(data);
     setData(data);
     setTotalPage(Math.ceil(data.length / COUNT));
     setCurrenPage(1);
@@ -43,11 +68,13 @@ export default function Customer() {
   };
 
   const init = async () => {
+    setIsLoading(true);
     const res = await AccountService.getAll();
     if (res && res.data.length > 0) {
       render(res.data);
       setIsLoading(false);
     } else {
+      setOriginalData([]);
       setData([]);
       setIsLoading(false);
     }
@@ -62,7 +89,7 @@ export default function Customer() {
   return (
     <section className="p-4">
       <div className="relative overflow-hidden">
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-0">
           <div className="flex items-center flex-1">
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
@@ -70,6 +97,15 @@ export default function Customer() {
                 <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
+          </div>
+          <div className="w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Tìm kiếm theo mã KH..."
+              value={searchId}
+              onChange={handleSearchChange}
+              className="w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+            />
           </div>
         </div>
         <div className="h-[620px] flex flex-col justify-between">
@@ -90,10 +126,13 @@ export default function Customer() {
                   <thead className="text-md text-gray-700 uppercase bg-gray-50 border dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                       <th scope="col" className="w-60 px-4 py-3">
-                        Tên Khách Hàng
+                        Tên khách hàng
                       </th>
                       <th scope="col" className="!w-28 px-4 py-3">
                         Email
+                      </th>
+                      <th scope="col" className="!w-28 px-4 py-3">
+                        Mã KH
                       </th>
                       <th scope="col" className="w-60 px-4 py-3">
                         Địa chỉ
@@ -131,6 +170,11 @@ export default function Customer() {
                           <td className="!w-28 px-4 py-4">
                             <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                               {item?.email}
+                            </span>
+                          </td>
+                          <td className="!w-28 px-4 py-4">
+                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {item?._id.slice(-5)}
                             </span>
                           </td>
                           <td className="w-60 px-4 py-4">
