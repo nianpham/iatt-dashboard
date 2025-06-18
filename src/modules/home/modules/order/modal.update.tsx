@@ -83,7 +83,11 @@ export function ModalUpdateBlog({
       return true;
     }
 
-    if (status !== "cancelled" && newStatusValue !== currentStatusValue + 1) {
+    if (
+      status !== "cancelled" &&
+      newStatusValue !== currentStatusValue + 1 &&
+      !(currentData?.status === "paid" && status === "pending")
+    ) {
       toast({
         variant: "destructive",
         title: "Chỉ có thể chuyển sang trạng thái tiếp theo trong quy trình.",
@@ -91,7 +95,10 @@ export function ModalUpdateBlog({
       return false;
     }
 
-    if (currentStatusValue > newStatusValue) {
+    if (
+      currentStatusValue > newStatusValue &&
+      !(currentData?.status === "paid" && status === "pending")
+    ) {
       toast({
         variant: "destructive",
         title: "Không thể chuyển về trạng thái trước đó.",
@@ -320,7 +327,7 @@ export function ModalUpdateBlog({
                             }.jpg`
                           )
                         }
-                        className="text-[14px] line-clamp-2 bg-indigo-600 text-white px-6 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
+                        className="text-[14px] line-clamp-2 text-indigo-600 hover:underline font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300"
                       >
                         {!downloadLoading ? (
                           <div>Tải file ảnh</div>
@@ -457,79 +464,6 @@ export function ModalUpdateBlog({
             <div className="flex flex-col gap-2">
               <span className="flex flex-col items-start gap-2">
                 <strong>Phương thức thanh toán:</strong>{" "}
-                {/* <div
-                  className={`
-                      ${
-                        currentData?.payment_method === "cash"
-                          ? "bg-green-700 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "bank"
-                          ? "bg-orange-600 text-white text-sm lg:text-base px-2 w-1/2"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "momo"
-                          ? "bg-pink-500 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
-                      ${
-                        currentData?.payment_method === "vnpay"
-                          ? "bg-blue-600 text-white text-sm lg:text-base px-2 w-1/3"
-                          : ""
-                      }
-                       rounded-md py-1 text-center`}
-                >
-                  {currentData?.payment_method === "cash" && (
-                    <div className="flex flex-row items-center justify-center gap-3">
-                      <Image
-                        src={IMAGES.COD}
-                        alt="momo"
-                        width={1000}
-                        height={1000}
-                        className="w-5 h-5 object-cover rounded-lg"
-                      />
-                      <div>COD</div>
-                    </div>
-                  )}
-                  {currentData?.payment_method === "bank" && (
-                    <div className="flex flex-row items-center justify-center gap-3">
-                      <Image
-                        src={IMAGES.BANK}
-                        alt="momo"
-                        width={1000}
-                        height={1000}
-                        className="w-6 h-6 object-cover rounded-lg"
-                      />
-                      <div>Chuyển khoản</div>
-                    </div>
-                  )}
-                  {currentData?.payment_method === "momo" && (
-                    <div className="flex flex-row items-center justify-center gap-3">
-                      <Image
-                        src={IMAGES.MOMO}
-                        alt="momo"
-                        width={1000}
-                        height={1000}
-                        className="w-6 h-6 object-cover rounded-lg"
-                      />
-                      <div>MOMO</div>
-                    </div>
-                  )}
-                  {currentData?.payment_method === "vnpay" && (
-                    <div className="flex flex-row items-center justify-center gap-3">
-                      <Image
-                        src={IMAGES.VNPAY}
-                        alt="momo"
-                        width={1000}
-                        height={1000}
-                        className="w-6 h-6 object-cover rounded-lg"
-                      />
-                      <div>VNPay</div>
-                    </div>
-                  )}
-                </div> */}
                 <div
                   className={`
                       ${
@@ -539,7 +473,7 @@ export function ModalUpdateBlog({
                       }
                       ${
                         currentData?.payment_method === "bank"
-                          ? "text-orange-600 text-sm lg:text-base"
+                          ? "text-black text-sm lg:text-base"
                           : ""
                       }
                       ${
@@ -552,7 +486,7 @@ export function ModalUpdateBlog({
                           ? "text-blue-600 text-sm lg:text-base"
                           : ""
                       }
-                      lg:py-2 rounded-md py-0 text-center w-1/2 lg:w-[34.5%]`}
+                      lg:py-2 rounded-md py-0 text-center w-1/2 lg:w-[50%]`}
                 >
                   {currentData?.payment_method === "cash" && (
                     <div className="flex flex-row items-center justify-start gap-3">
@@ -566,19 +500,19 @@ export function ModalUpdateBlog({
                       <div>Tiền mặt</div>
                     </div>
                   )}
-                  {/* {order?.payment_method === "bank" && (
-                  <div className="flex flex-row items-center justify-center gap-3">
-                    <Image
-                      src={IMAGES.BANK}
-                      alt="momo"
-                      width={1000}
-                      height={1000}
-                      className="w-6 h-6 object-cover rounded-lg"
-                    />
-                    <div>Chuyển khoản</div>
-                  </div>
-                )}
-                {order?.payment_method === "momo" && (
+                  {currentData?.payment_method === "bank" && (
+                    <div className="flex flex-row items-center justify-start gap-3">
+                      <Image
+                        src={IMAGES.BANK}
+                        alt="momo"
+                        width={1000}
+                        height={1000}
+                        className="w-6 h-6 object-cover rounded-lg"
+                      />
+                      <div>Chuyển khoản</div>
+                    </div>
+                  )}
+                  {/*  {order?.payment_method === "momo" && (
                   <div className="flex flex-row items-center justify-center gap-3">
                     <Image
                       src={IMAGES.MOMO}
@@ -695,40 +629,40 @@ export function ModalUpdateBlog({
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    className={`w-56 hover:bg-[rgb(var(--primary-rgb))]
+                    className={`w-56 
                         ${
                           data.status === "completed"
-                            ? "bg-green-600 text-white"
+                            ? "bg-green-600 hover:bg-green-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "delivering"
-                            ? "bg-blue-600 text-white"
+                            ? "bg-blue-600 hover:bg-blue-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "waiting"
-                            ? "bg-yellow-600 text-white"
+                            ? "bg-yellow-600 hover:bg-yellow-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "pending"
-                            ? "bg-yellow-600 text-white"
+                            ? "bg-yellow-600 hover:bg-yellow-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "paid pending"
-                            ? "bg-gray-600 text-white"
+                            ? "bg-gray-600 hover:bg-gray-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "paid"
-                            ? "bg-purple-600 text-white"
+                            ? "bg-purple-600 hover:bg-purple-600 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
                           data.status === "cancelled"
-                            ? "bg-red-600 text-white"
+                            ? "bg-red-600 hover:bg-red-600 hover:opacity-85 text-white"
                             : ""
                         }`}
                   >
@@ -776,14 +710,19 @@ export function ModalUpdateBlog({
                   <DropdownMenuCheckboxItem
                     className="cursor-pointer"
                     onClick={() => handleUpdateStatus("pending")}
+                    // disabled={
+                    //   statusOrder[
+                    //     currentData?.status as keyof typeof statusOrder
+                    //   ] > 4 ||
+                    //   (statusOrder[
+                    //     currentData?.status as keyof typeof statusOrder
+                    //   ] < 4 &&
+                    //     currentData?.status !== "waiting")
+                    // }
                     disabled={
                       statusOrder[
                         currentData?.status as keyof typeof statusOrder
-                      ] > 4 ||
-                      (statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] < 4 &&
-                        currentData?.status !== "waiting")
+                      ] > 4
                     }
                   >
                     4. Chuẩn bị đơn
