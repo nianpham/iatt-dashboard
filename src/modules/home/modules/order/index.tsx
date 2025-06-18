@@ -249,10 +249,14 @@ export default function Order() {
                             </span>
                           </td>
                           <td className="w-40 px-4 py-2">
-                            <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?.payment_method === "cash"
-                                ? "Chưa thanh toán"
-                                : "Đang xử lý"}
+                            <span
+                              className={`text-[14px] ${
+                                item?.isPayed === true ? " text-green-600" : ""
+                              } line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300`}
+                            >
+                              {item?.isPayed === true
+                                ? "Đã thanh toán"
+                                : "Chưa thanh toán"}
                             </span>
                           </td>
                           <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
