@@ -135,17 +135,15 @@ export default function Order() {
                       <th scope="col" className="w-64 px-4 py-3">
                         Sản phẩm
                       </th>
-                      <th scope="col" className="w-40 text-center px-4 py-3">
-                        Loại đơn
-                      </th>
                       <th scope="col" className="w-40 px-4 py-3">
                         Khách hàng
                       </th>
-                      <th scope="col" className="w-40 px-4 py-3">
-                        Địa chỉ
-                      </th>
+
                       <th scope="col" className="w-32 px-4 py-3">
                         Trạng thái
+                      </th>
+                      <th scope="col" className="w-40 px-4 py-3">
+                        Thanh toán
                       </th>
                       <th scope="col" className="w-32 px-4 py-3">
                         Tổng
@@ -196,13 +194,6 @@ export default function Order() {
                                   })?.name}
                             </span>
                           </td>
-                          <td className="w-40 text-center px-4 py-2">
-                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?.order_type === "album"
-                                ? "Album"
-                                : "Khung ảnh"}
-                            </span>
-                          </td>
                           <td className="w-40 px-4 py-2">
                             <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                               {
@@ -211,11 +202,6 @@ export default function Order() {
                                     pro._id.toString() === item?.account_id
                                 )?.name
                               }
-                            </span>
-                          </td>
-                          <td className="w-40 px-4 py-2">
-                            <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?.address}
                             </span>
                           </td>
                           <td
@@ -260,6 +246,13 @@ export default function Order() {
                         }`}
                             >
                               {HELPER.renderStatus(item?.status)}
+                            </span>
+                          </td>
+                          <td className="w-40 px-4 py-2">
+                            <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {item?.payment_method === "cash"
+                                ? "Chưa thanh toán"
+                                : "Đang xử lý"}
                             </span>
                           </td>
                           <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">

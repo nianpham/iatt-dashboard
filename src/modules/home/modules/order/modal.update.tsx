@@ -108,6 +108,7 @@ export function ModalUpdateBlog({
 
     const body = {
       status: status,
+      isPayed: status === "completed" || status === "paid" ? true : false,
     };
 
     await OrderService.updateOrder(currentData?._id, body);
