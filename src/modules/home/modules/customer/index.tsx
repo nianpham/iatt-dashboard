@@ -40,8 +40,6 @@ export default function Customer() {
 
   const searchCustomerById = (id: string) => {
     const trimmedId = id.trim();
-    console.log("trimmedId", trimmedId);
-
     setSearchId(trimmedId);
 
     const filteredData = trimmedId
@@ -58,8 +56,6 @@ export default function Customer() {
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log("value", value);
-
     searchCustomerById(value);
   };
 

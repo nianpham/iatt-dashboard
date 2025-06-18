@@ -108,7 +108,10 @@ export function ModalUpdateBlog({
 
     const body = {
       status: status,
-      isPayed: status === "completed" || status === "paid" ? true : false,
+      isPayed:
+        status === "completed" || status === "paid" || data.isPayed === true
+          ? true
+          : false,
     };
 
     await OrderService.updateOrder(currentData?._id, body);

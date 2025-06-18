@@ -143,7 +143,7 @@ export default function Order() {
                         Trạng thái
                       </th>
                       <th scope="col" className="w-40 px-4 py-3">
-                        Thanh toán
+                        Thành tiền
                       </th>
                       <th scope="col" className="w-32 px-4 py-3">
                         Tổng
