@@ -138,7 +138,6 @@ export default function Order() {
                       <th scope="col" className="w-40 px-4 py-3">
                         Khách hàng
                       </th>
-
                       <th scope="col" className="w-32 px-4 py-3">
                         Trạng thái
                       </th>
@@ -226,7 +225,7 @@ export default function Order() {
                         }
                         ${
                           item.status === "pending"
-                            ? "bg-yellow-600 text-white"
+                            ? "bg-orange-500 text-white"
                             : ""
                         }
                         ${

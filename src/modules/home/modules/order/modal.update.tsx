@@ -73,6 +73,7 @@ export function ModalUpdateBlog({
     const currentStatusValue =
       statusOrder[currentData?.status as keyof typeof statusOrder];
     const newStatusValue = statusOrder[status as keyof typeof statusOrder];
+    const isBankPayment = currentData?.payment_method === "bank";
 
     if (currentData?.status === "waiting" && status === "pending") {
       const body = {
@@ -86,7 +87,12 @@ export function ModalUpdateBlog({
     if (
       status !== "cancelled" &&
       newStatusValue !== currentStatusValue + 1 &&
-      !(currentData?.status === "paid" && status === "pending")
+      !(currentData?.status === "paid" && status === "pending") &&
+      !(
+        isBankPayment &&
+        (status === "pending" || status === "delivering") &&
+        [2, 3].includes(currentStatusValue)
+      )
     ) {
       toast({
         variant: "destructive",
@@ -97,7 +103,12 @@ export function ModalUpdateBlog({
 
     if (
       currentStatusValue > newStatusValue &&
-      !(currentData?.status === "paid" && status === "pending")
+      !(currentData?.status === "paid" && status === "pending") &&
+      !(
+        isBankPayment &&
+        [2, 3].includes(currentStatusValue) &&
+        status === "pending"
+      )
     ) {
       toast({
         variant: "destructive",
@@ -651,7 +662,7 @@ export function ModalUpdateBlog({
                         }
                         ${
                           data.status === "pending"
-                            ? "bg-yellow-600 hover:bg-yellow-600 hover:opacity-85 text-white"
+                            ? "bg-orange-500 hover:bg-orange-500 hover:opacity-85 text-white"
                             : ""
                         }
                         ${
