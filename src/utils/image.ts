@@ -1,5 +1,5 @@
 export const IMAGES = {
-  LOGO: "https://res.cloudinary.com/farmcode/image/upload/v1735373246/iatt/choww7nrh44dhfxry1fz.png",
+  LOGO: "https://res.cloudinary.com/farmcode/image/upload/v1756651835/iatt/iaht-logo_xew784.png",
   NOT_FOUND: `https://i.pinimg.com/736x/11/1f/c5/111fc507a1005f62edbd683063c405a1.jpg`,
   MOMO: "https://res.cloudinary.com/farmcode/image/upload/v1741329899/iatt/momo-logo_si3tjj.png",
   VNPAY:

@@ -6,12 +6,13 @@ import { Button } from "@/components/ui/button";
 import { IMAGES } from "@/utils/image";
 import Cookies from "js-cookie";
 import { ROUTES } from "@/utils/route";
-import { Loader } from "lucide-react";
+import { Loader, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function LoginClient() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +32,7 @@ export default function LoginClient() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
-    if (username === "inanhtructuyen" && password === "Iatt@6789") {
+    if (username === "admin@inanhhathu.com" && password === "Iaht@123") {
       setTimeout(() => {
         Cookies.set("isLogin", "true", { expires: 7 });
         window.location.href = ROUTES.HOME;
@@ -52,8 +53,14 @@ export default function LoginClient() {
         <div className="w-1/2 p-8 flex flex-col">
           <div className="mb-4">
             <div className="flex justify-start items-center gap-4">
-              <Image src={IMAGES.LOGO} alt="Logo" width={40} height={40} />
-              <h1 className="text-2xl font-bold">In Ảnh Trực Tuyến</h1>
+              <Image
+                src={IMAGES.LOGO}
+                alt="Logo"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <h1 className="text-2xl font-bold">In Ảnh Hạ Thu</h1>
             </div>
           </div>
           <div className="mt-4">
@@ -83,11 +90,22 @@ export default function LoginClient() {
                 <div className="relative">
                   <input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     placeholder="Nhập mật khẩu"
                     className="w-full p-3 rounded-md border pr-10"
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    ) : (
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    )}
+                  </button>
                 </div>
               </div>
               <Button

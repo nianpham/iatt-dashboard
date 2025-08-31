@@ -9,7 +9,7 @@ const font = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "QUẢN TRỊ HỆ THỐNG",
-  description: "IN ẢNH TRỰC TUYẾN",
+  description: "IN ẢNH HẠ THU",
 };
 
 export default function RootLayout({
