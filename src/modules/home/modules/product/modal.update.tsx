@@ -117,6 +117,8 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   const [sizesAndPrices, setSizesAndPrices] = useState<
     { size: string; price: string }[]
   >([{ size: "", price: "" }]);
+  const [rating, setRating] = useState<string>("");
+  const [discount, setDiscount] = useState<string>("");
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -294,6 +296,68 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       return false;
     }
 
+    // Validate price: integer only and > 1000
+    const integerRegex = /^\d+$/;
+    if (
+      sizesAndPrices.some((sp) => {
+        const priceStr = `${sp.price}`.trim();
+        if (!integerRegex.test(priceStr)) return true;
+        const priceNum = Number(priceStr);
+        return priceNum <= 1000;
+      })
+    ) {
+      toast({
+        variant: "destructive",
+        title: "Giá phải là số nguyên và lớn hơn 1000.",
+      });
+      return false;
+    }
+
+    // Validate rating selected
+    if (!rating || !`${rating}`.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn đánh giá.",
+      });
+      return false;
+    }
+
+    // Validate discount: required, 0-100 inclusive, max 1 decimal place
+    if (!`${discount}`.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng nhập giảm giá sản phẩm.",
+      });
+      return false;
+    }
+
+    const discountNum = Number(discount);
+    if (!isFinite(discountNum) || isNaN(discountNum)) {
+      toast({
+        variant: "destructive",
+        title: "Giảm giá phải là số.",
+      });
+      return false;
+    }
+
+    if (discountNum < 0 || discountNum > 100) {
+      toast({
+        variant: "destructive",
+        title: "Giảm giá phải trong khoảng 0 đến 100.",
+      });
+      return false;
+    }
+
+    const hasTooManyDecimals =
+      `${discount}`.includes(".") && `${discount}`.split(".")[1].length > 1;
+    if (hasTooManyDecimals) {
+      toast({
+        variant: "destructive",
+        title: "Giảm giá chỉ được phép tối đa 1 chữ số thập phân.",
+      });
+      return false;
+    }
+
     return true;
   };
 
@@ -380,10 +444,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       })),
       category: category,
       color: color,
+      discount: discount,
+      rating: rating,
       thumbnail: mainPreview,
       images: secondaryPreviews,
     };
-    await ProductService.updateProduct(data?._id, body);
+
+    const response = await ProductService.updateProduct(data?._id, body);
+
     setIsLoading(false);
     window.location.href = "/?tab=product";
   };
@@ -408,6 +476,8 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       );
       setCategory(data?.category);
       setColor(data?.color);
+      setRating(data?.rating);
+      setDiscount(data?.discount);
       setDescription(data?.description);
       setIntroduction(data?.introduction);
       setMainPreview(data?.thumbnail);
@@ -636,9 +706,9 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   <button
                     type="button"
                     onClick={handleAddSizePrice}
-                    className="p-2 flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-full text-sm !text-[16px] text-center"
+                    className="p-1.5 flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-full text-sm !text-[16px] text-center"
                   >
-                    <Plus />
+                    <Plus size={20} />
                   </button>
                 </div>
               </div>
@@ -658,6 +728,42 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   styles={customStyles}
                   formatOptionLabel={formatOptionLabel}
                 />
+              </div>
+
+              <Label htmlFor="description" className="text-[14.5px]">
+                Discount (%)
+              </Label>
+              <div className="w-full grid items-center gap-4">
+                <input
+                  id="discount"
+                  type="number"
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  placeholder="Giảm giá sản phẩm"
+                  className="col-span-3 p-2 border border-[#CFCFCF] placeholder-custom rounded"
+                ></input>
+              </div>
+
+              <Label htmlFor="description" className="text-[14.5px] mt-2">
+                Đánh giá sản phẩm
+              </Label>
+              <div className="w-full grid items-center gap-4">
+                <select
+                  id="rating"
+                  value={rating}
+                  onChange={(e) => {
+                    setRating(e.target.value);
+                  }}
+                  className="col-span-3 p-2 border border-[#CFCFCF] rounded"
+                >
+                  <option value="">Chọn đánh giá</option>
+                  <option value="0">0 ⭐️</option>
+                  <option value="1">1 ⭐️</option>
+                  <option value="2">2 ⭐️</option>
+                  <option value="3">3 ⭐️</option>
+                  <option value="4">4 ⭐️</option>
+                  <option value="5">5 ⭐️</option>
+                </select>
               </div>
               <div className="w-full mt-2">
                 <ProductDescriptionEditor

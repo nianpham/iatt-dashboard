@@ -20,6 +20,7 @@ import Product from "./modules/product";
 import Order from "./modules/order";
 import Blog from "./modules/blog";
 import Customer from "./modules/customer";
+import Discount from "./modules/discount";
 
 export default function HomeClient() {
   const param = useSearchParams();
@@ -34,6 +35,8 @@ export default function HomeClient() {
         return <Blog />;
       case "customer":
         return <Customer />;
+      case "discount":
+        return <Discount />;
       default:
         return <Product />;
     }
@@ -49,6 +52,8 @@ export default function HomeClient() {
         return "Bài Viết";
       case "customer":
         return "Khách Hàng";
+      case "discount":
+        return "Mã giảm giá";
       default:
         return "Sản Phẩm";
     }

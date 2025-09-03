@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { ROUTES } from "@/utils/route";
 import { Loader, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { AccountService } from "@/services/account";
 
 export default function LoginClient() {
   const { toast } = useToast();
@@ -32,17 +33,32 @@ export default function LoginClient() {
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
-    if (username === "admin@inanhhathu.com" && password === "Iaht@123") {
-      setTimeout(() => {
+
+    try {
+      let data;
+      if (/^\d+$/.test(username)) {
+        data = await AccountService.loginAccountPhone(username, password);
+      } else {
+        data = await AccountService.loginAccountEmail(username, password);
+      }
+
+      if (data?.message === "SUCCESS") {
         Cookies.set("isLogin", "true", { expires: 7 });
         window.location.href = ROUTES.HOME;
         setIsLoading(false);
-      }, 2000);
-    } else {
+      } else {
+        setIsLoading(false);
+        toast({
+          variant: "destructive",
+          title: "Tài khoản hoặc mật khẩu chưa chính xác",
+        });
+      }
+    } catch (error) {
+      console.error("========= Error Login:", error);
       setIsLoading(false);
       toast({
         variant: "destructive",
-        title: "Tài khoản hoặc mật khẩu chưa chính xác",
+        title: "Email hoặc mật khẩu chưa chính xác",
       });
     }
   };
@@ -78,6 +94,12 @@ export default function LoginClient() {
                   placeholder="Nhập tên tài khoản"
                   className="w-full p-3 rounded-md border"
                   onChange={(e) => setUsername(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      handleSubmit();
+                    }
+                  }}
                 />
               </div>
               <div className="space-y-2">
@@ -94,6 +116,12 @@ export default function LoginClient() {
                     placeholder="Nhập mật khẩu"
                     className="w-full p-3 rounded-md border pr-10"
                     onChange={(e) => setPassword(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleSubmit();
+                      }
+                    }}
                   />
                   <button
                     type="button"

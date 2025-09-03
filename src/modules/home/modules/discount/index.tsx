@@ -1,32 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import Image from "next/image";
-import { ModalCreateBlog } from "./modal.create";
-import { ModalUpdateBlog } from "./modal.update";
 import { useEffect, useState } from "react";
-import { Loader } from "lucide-react";
-import { BlogService } from "@/services/blog";
+import { Info, Loader } from "lucide-react";
+import { DiscountService } from "@/services/discount";
 import { HELPER } from "@/utils/helper";
+import { ModalCreateDiscount } from "./modal.create";
+import { ModalUpdateDiscount } from "./modal.update";
 
-export interface Blog {
-  _id: string;
-  title: string;
-  content: string;
-  tag: string;
-  author: string;
-  thumbnail: string;
-  created_at: string;
-}
+export default function Discount() {
+  const COUNT = 6;
 
-export default function Blog() {
-  const COUNT = 5;
-
-  const [data, setData] = useState<Blog[]>([] as any);
+  const [originalData, setOriginalData] = useState([] as any);
+  const [data, setData] = useState([] as any);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currenPage, setCurrenPage] = useState<any>(1 as any);
   const [currenData, setCurrenData] = useState<any>([] as any);
+  const [searchId, setSearchId] = useState<string>("");
 
   const selectPage = (pageSelected: any) => {
     setCurrenPage(pageSelected);
@@ -47,22 +38,43 @@ export default function Blog() {
     }
   };
 
-  const init = async () => {
-    try {
-      const res = await BlogService.getAll();
+  const searchDiscountById = (id: string) => {
+    const trimmedId = id.trim();
+    setSearchId(trimmedId);
 
-      if (Array.isArray(res) && res.length > 0) {
-        setData(res);
-        setTotalPage(Math.ceil(res.length / COUNT));
-        setCurrenPage(1);
-        setCurrenData(res.slice(0, COUNT));
-        setIsLoading(false);
-      } else {
-        setData([]);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error("Error fetching blog data:", error);
+    const filteredData = trimmedId
+      ? originalData.filter((item: any) =>
+          item.code.toLowerCase().includes(trimmedId.toLowerCase())
+        )
+      : originalData;
+
+    setData(filteredData);
+    setTotalPage(Math.ceil(filteredData.length / COUNT));
+    setCurrenPage(1);
+    setCurrenData(filteredData.slice(0, COUNT));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    searchDiscountById(value);
+  };
+
+  const render = (data: any) => {
+    setOriginalData(data);
+    setData(data);
+    setTotalPage(Math.ceil(data.length / COUNT));
+    setCurrenPage(1);
+    setCurrenData(data.slice(0, COUNT));
+  };
+
+  const init = async () => {
+    setIsLoading(true);
+    const res = await DiscountService.getAll();
+    if (res && res.data.length > 0) {
+      render(res.data);
+      setIsLoading(false);
+    } else {
+      setOriginalData([]);
       setData([]);
       setIsLoading(false);
     }
@@ -77,20 +89,29 @@ export default function Blog() {
   return (
     <section className="p-4">
       <div className="relative overflow-hidden">
-        <div className="flex">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-0">
           <div className="flex items-center flex-1">
             <h5>
               <span className="text-gray-800 text-[20px] font-bold">
-                DANH SÁCH BÀI VIẾT{" "}
+                DANH SÁCH MÃ GIẢM GIÁ{" "}
                 <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
           </div>
+          <div className="w-full sm:w-64">
+            <input
+              type="text"
+              placeholder="Tìm kiếm mã giảm giá..."
+              value={searchId}
+              onChange={handleSearchChange}
+              className="w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+            />
+          </div>
           <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-            <ModalCreateBlog />
+            <ModalCreateDiscount />
           </div>
         </div>
-        <div className="h-[640px] flex flex-col justify-between">
+        <div className="h-[620px] flex flex-col justify-between">
           {isLoading ? (
             <div className="w-full flex justify-center items-center pt-72">
               <Loader className="animate-spin text-indigo-600" size={36} />
@@ -98,7 +119,7 @@ export default function Blog() {
           ) : currenData.length === 0 ? (
             <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
               <p className="text-gray-500 text-lg">
-                Không tìm thấy bài viết nào.
+                Không tìm thấy khách hàng nào.
               </p>
             </div>
           ) : (
@@ -107,23 +128,20 @@ export default function Blog() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-md text-gray-700 uppercase bg-gray-50 border dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" className="w-64 px-4 py-3">
-                        TIÊU ĐỀ
+                      <th scope="col" className="w-52 px-4 py-3">
+                        Tên mã giảm giá
                       </th>
-                      <th scope="col" className="w-32 px-4 py-3">
-                        TAG
+                      <th scope="col" className="!w-44 px-4 py-3">
+                        Code
                       </th>
-                      <th scope="col" className="w-80 px-4 py-3">
-                        NỘI DUNG
+                      <th scope="col" className="!w-44 px-4 py-3">
+                        Phần trăm giảm
                       </th>
-                      <th scope="col" className="w-32 px-4 py-3">
-                        TÁC GIẢ
-                      </th>
-                      <th scope="col" className="w-24 px-4 py-3">
-                        NGÀY
+                      <th scope="col" className="w-44 px-4 py-3">
+                        Ngày tạo
                       </th>
                       <th scope="col" className="w-24 px-4 py-3">
-                        CHI TIẾT
+                        Chi tiết
                       </th>
                     </tr>
                   </thead>
@@ -136,40 +154,28 @@ export default function Blog() {
                             item?.deleted_at ? "hidden" : ""
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          <td className="w-64 px-4 py-2 grid grid-cols-12 items-center">
-                            <Image
-                              src={item?.thumbnail}
-                              alt="img"
-                              className="w-20 h-20 mr-3 object-cover rounded-md col-span-5 border border-gray-300"
-                              width={100}
-                              height={0}
-                            />
-                            <span className="w-44 col-span-7 text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?.title}
-                            </span>
-                          </td>
-                          <td className="w-32 px-4 py-2">
-                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {HELPER.renderTag(item?.tag)}
-                            </span>
-                          </td>
-                          <td className="w-80 px-4 py-2">
+                          <td className="w-52 px-4 py-4 flex items-center">
                             <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: HELPER.sanitizeContent(item?.content),
-                                }}
-                              />
+                              {item?.name}
                             </span>
                           </td>
-                          <td className="w-32 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {item?.author}
+                          <td className="!w-44 px-4 py-4">
+                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {item?.code}
+                            </span>
+                          </td>
+                          <td className="!w-44 px-4 py-4">
+                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 px-11 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {item?.percent}%
+                            </span>
+                          </td>
+                          <td className="w-44 px-4 py-4">
+                            <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                              {HELPER.formatDateTime(item?.created_at)}
+                            </span>
                           </td>
                           <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {HELPER.formatDate(item?.created_at)}
-                          </td>
-                          <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            <ModalUpdateBlog data={item} />
+                            <ModalUpdateDiscount data={item} />
                           </td>
                         </tr>
                       );

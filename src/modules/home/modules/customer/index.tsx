@@ -7,6 +7,8 @@ import { Loader } from "lucide-react";
 import { AccountService } from "@/services/account";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ModalCreateCustomer } from "./modal.create";
+import { ModalUpdateCustomer } from "./modal.update";
 
 export default function Customer() {
   const COUNT = 6;
@@ -44,7 +46,7 @@ export default function Customer() {
 
     const filteredData = trimmedId
       ? originalData.filter((customer: any) =>
-          customer._id.toLowerCase().includes(trimmedId.toLowerCase())
+          customer.name.toLowerCase().includes(trimmedId.toLowerCase())
         )
       : originalData;
 
@@ -71,7 +73,10 @@ export default function Customer() {
     setIsLoading(true);
     const res = await AccountService.getAll();
     if (res && res.data.length > 0) {
-      render(res.data);
+      const filterCustomer = res.data.filter(
+        (item: any) => item.role === "personal"
+      );
+      render(filterCustomer);
       setIsLoading(false);
     } else {
       setOriginalData([]);
@@ -101,17 +106,20 @@ export default function Customer() {
           <div className="w-full sm:w-64">
             <input
               type="text"
-              placeholder="Tìm kiếm theo mã KH..."
+              placeholder="Tìm kiếm theo tên KH..."
               value={searchId}
               onChange={handleSearchChange}
               className="w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
             />
           </div>
+          <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+            <ModalCreateCustomer />
+          </div>
         </div>
         <div className="h-[620px] flex flex-col justify-between">
           {isLoading ? (
-            <div className="w-full flex justify-center items-center pt-60">
-              <Loader className="animate-spin" size={48} />
+            <div className="w-full flex justify-center items-center pt-72">
+              <Loader className="animate-spin text-indigo-600" size={36} />
             </div>
           ) : currenData.length === 0 ? (
             <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
@@ -131,18 +139,17 @@ export default function Customer() {
                       <th scope="col" className="!w-28 px-4 py-3">
                         Email
                       </th>
-                      <th scope="col" className="!w-28 px-4 py-3">
-                        Mã KH
-                      </th>
                       <th scope="col" className="w-60 px-4 py-3">
                         Địa chỉ
                       </th>
                       <th scope="col" className="w-32 px-4 py-3">
                         Số điện thoại
                       </th>
-
                       <th scope="col" className="w-24 px-4 py-3">
                         Đơn hàng
+                      </th>
+                      <th scope="col" className="w-24 px-4 py-3">
+                        Chi tiết
                       </th>
                     </tr>
                   </thead>
@@ -172,27 +179,32 @@ export default function Customer() {
                               {item?.email}
                             </span>
                           </td>
-                          <td className="!w-28 px-4 py-4">
-                            <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?._id.slice(-5)}
-                            </span>
-                          </td>
                           <td className="w-60 px-4 py-4">
                             <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                               {!item?.address ||
                               !item?.wardName ||
                               !item?.districtName ||
-                              !item?.provinceName
-                                ? "Chưa cập nhật."
-                                : `${item?.address}, ${item?.wardName}, ${item?.districtName}, ${item?.provinceName}`}
+                              !item?.provinceName ? (
+                                <div className="text-red-500">
+                                  Chưa cập nhật.
+                                </div>
+                              ) : (
+                                `${item?.address}, ${item?.wardName}, ${item?.districtName}, ${item?.provinceName}`
+                              )}
                             </span>
                           </td>
                           <td className="w-32 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {!item?.phone ? "Chưa cập nhật." : `${item?.phone}`}
+                            {!item?.phone ? (
+                              <div className="text-red-500">Chưa cập nhật.</div>
+                            ) : (
+                              `${item?.phone}`
+                            )}
                           </td>
-
                           <td className="w-24 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {item?.number_orders} đơn
+                          </td>
+                          <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <ModalUpdateCustomer data={item} />
                           </td>
                         </tr>
                       );

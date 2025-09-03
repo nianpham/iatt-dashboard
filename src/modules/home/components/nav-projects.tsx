@@ -33,11 +33,11 @@ export function NavProjects({
                 href={item.url}
                 className={`space-x-2 relative inline-flex items-center justify-start !py-5 mb-2 overflow-hidden text-sm font-medium text-gray-500 rounded-lg ${
                   (param.get("tab") || "product") === item.tab
-                    ? "bg-indigo-100 hover:bg-indigo-100 text-indigo-900 hover:text-indigo-900 font-semibold"
+                    ? "bg-indigo-100 hover:bg-[#E0E7FF] text-indigo-900 hover:text-[#302E81] font-semibold"
                     : ""
                 }`}
               >
-                {item.icon}
+                <div className="">{item.icon}</div>
                 <span className="text-[15px] relative transition-all ease-in duration-75 dark:bg-gray-900 rounded-md">
                   {item.name}
                 </span>

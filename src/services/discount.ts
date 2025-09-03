@@ -2,7 +2,7 @@ import { API } from "@/utils/api";
 
 const getAll = async () => {
   try {
-    const response = await fetch(API.GET_ALL_PRODUCTS, {
+    const response = await fetch(API.GET_ALL_DISCOUNTS, {
       method: "GET",
     });
     if (!response.ok) {
@@ -11,16 +11,32 @@ const getAll = async () => {
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.error("========= Error Get All Products:", error);
+    console.error("========= Error Get All Discounts:", error);
     return false;
   }
 };
 
-const createProduct = async (payload: any) => {
+const getDiscount = async (id: string) => {
+  try {
+    const response = await fetch(`${API.GET_DISCOUNT}/${id}`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Failed - Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error("========= Error Get All Discounts:", error);
+    return false;
+  }
+};
+
+const createDiscount = async (payload: any) => {
   try {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    const response = await fetch(API.CREATE_PRODUCT, {
+    const response = await fetch(API.CREATE_DISCOUNT, {
       method: "POST",
       headers: myHeaders,
       body: JSON.stringify(payload),
@@ -31,17 +47,17 @@ const createProduct = async (payload: any) => {
     }
     return true;
   } catch (error: any) {
-    console.error("========= Error Create Product:", error);
+    console.error("========= Error Create Discount:", error);
     return false;
   }
 };
 
-const updateProduct = async (id: any, payload: any) => {
+const updateDiscount = async (id: any, payload: any) => {
   try {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const response = await fetch(`${API.UPDATE_PRODUCT}/${id}`, {
+    const response = await fetch(`${API.UPDATE_DISCOUNT}/${id}`, {
       method: "PUT",
       headers: myHeaders,
       body: JSON.stringify(payload),
@@ -55,16 +71,16 @@ const updateProduct = async (id: any, payload: any) => {
     console.log("check update: success", response.status);
     return true;
   } catch (error: any) {
-    console.error("========= Error Update Product:", error);
+    console.error("========= Error Update Discount:", error);
     return false;
   }
 };
 
-const deleteProduct = async (id: any) => {
+const deleteDiscount = async (id: any) => {
   try {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    const response = await fetch(`${API.DELETE_PRODUCT}/${id}`, {
+    const response = await fetch(`${API.DELETE_DISCOUNT}/${id}`, {
       method: "DELETE",
       headers: myHeaders,
       redirect: "follow",
@@ -75,14 +91,15 @@ const deleteProduct = async (id: any) => {
     }
     return true;
   } catch (error: any) {
-    console.error("========= Error Delete Product:", error);
+    console.error("========= Error Delete Discount:", error);
     return false;
   }
 };
 
-export const ProductService = {
+export const DiscountService = {
   getAll,
-  createProduct,
-  updateProduct,
-  deleteProduct,
+  getDiscount,
+  createDiscount,
+  updateDiscount,
+  deleteDiscount,
 };

@@ -14,6 +14,24 @@ const formatDate = (isoDate: string) => {
   return `${day}/${month}/${year}`;
 };
 
+const formatDateTime = (isoDate: string) => {
+  const date = new Date(isoDate);
+
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour12: false,
+    timeZone: "Asia/Ho_Chi_Minh",
+  };
+
+  return new Intl.DateTimeFormat("vi-VN", options)
+    .format(date)
+    .replace(",", " -");
+};
+
 const sanitizeContent = (html: string) => {
   return html.replace(/<img[^>]*>/g, "");
 };
@@ -208,6 +226,7 @@ export const HELPER = {
   renderStatus,
   renderPayment,
   formatDate,
+  formatDateTime,
   truncateText,
   sanitizeContent,
   renderAlbumCover,

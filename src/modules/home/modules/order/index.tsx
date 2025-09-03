@@ -117,8 +117,8 @@ export default function Order() {
         </div>
         <div className="h-[640px] flex flex-col justify-between">
           {isLoading ? (
-            <div className="w-full flex justify-center items-center pt-60">
-              <Loader className="animate-spin" size={48} />
+            <div className="w-full flex justify-center items-center pt-72">
+              <Loader className="animate-spin text-indigo-600" size={36} />
             </div>
           ) : currenData.length === 0 ? (
             <div className="col-span-2 text-center w-full flex justify-center items-center py-4">
