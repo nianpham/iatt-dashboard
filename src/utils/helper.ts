@@ -15,21 +15,45 @@ const formatDate = (isoDate: string) => {
 };
 
 const formatDateTime = (isoDate: string) => {
-  const date = new Date(isoDate);
+  if (!isoDate) return "";
 
-  const options: Intl.DateTimeFormatOptions = {
+  let date = new Date(isoDate);
+
+  if (Number.isNaN(date.getTime())) {
+    const numeric = Number(isoDate);
+    if (!Number.isNaN(numeric)) {
+      const byNumber = new Date(numeric);
+      if (!Number.isNaN(byNumber.getTime())) {
+        date = byNumber;
+      }
+    }
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    const normalized = isoDate.replace(" ", "T");
+    const byNormalized = new Date(normalized);
+    if (!Number.isNaN(byNormalized.getTime())) {
+      date = byNormalized;
+    }
+  }
+
+  if (Number.isNaN(date.getTime())) return "";
+
+  const timeStr = new Intl.DateTimeFormat("vi-VN", {
     hour: "2-digit",
     minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Ho_Chi_Minh",
+  }).format(date);
+
+  const dateStr = new Intl.DateTimeFormat("vi-VN", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    hour12: false,
     timeZone: "Asia/Ho_Chi_Minh",
-  };
+  }).format(date);
 
-  return new Intl.DateTimeFormat("vi-VN", options)
-    .format(date)
-    .replace(",", " -");
+  return `${timeStr} - ${dateStr}`;
 };
 
 const sanitizeContent = (html: string) => {
@@ -217,6 +241,45 @@ const renderAlbumCore = (color: string) => {
   return result;
 };
 
+const upPrice = (money: string) => {
+  const number = Number(money);
+  if (isNaN(number)) {
+    return "Invalid number";
+  }
+  return (number + 50000).toString();
+};
+
+const calculateTotalNumber = (money: string, ship: any, voucher: any) => {
+  const number = Number(money);
+  if (ship || voucher) {
+    const money = Number(ship);
+    const discount = (number + money) * (Number(voucher) / 100);
+    const result = number + money - discount;
+    return result;
+  }
+  if (isNaN(number)) {
+    return "Invalid number";
+  }
+  return number;
+};
+
+const calculateTotal = (money: string, ship: any, voucher: any) => {
+  const number = Number(money);
+  if (ship || voucher) {
+    const money = Number(ship);
+    const discount = (number + money) * (Number(voucher) / 100);
+    const result = number + money - discount;
+    return result.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  }
+  if (isNaN(number)) {
+    return "Invalid number";
+  }
+  return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+};
+
 export const HELPER = {
   formatVND,
   renderCategory,
@@ -231,4 +294,7 @@ export const HELPER = {
   sanitizeContent,
   renderAlbumCover,
   renderAlbumCore,
+  upPrice,
+  calculateTotalNumber,
+  calculateTotal,
 };

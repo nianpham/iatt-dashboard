@@ -9,6 +9,7 @@ import { ModalUpdateBlog } from "./modal.update";
 import { HELPER } from "@/utils/helper";
 import { AccountService } from "@/services/account";
 import { ProductService } from "@/services/product";
+import { ModalCustomer } from "./modal.customer";
 
 export default function Order() {
   const COUNT = 5;
@@ -113,6 +114,9 @@ export default function Order() {
                 <span className="text-indigo-600">({data?.length})</span>
               </span>
             </h5>
+          </div>
+          <div>
+            <ModalCustomer />
           </div>
         </div>
         <div className="h-[640px] flex flex-col justify-between">

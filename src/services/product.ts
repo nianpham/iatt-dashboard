@@ -80,9 +80,32 @@ const deleteProduct = async (id: any) => {
   }
 };
 
+const getProductById = async (id: string) => {
+  try {
+    const response = await fetch(`${API.GET_PRODUCT}/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Login failed - Status: ${response.status}`);
+      throw new Error(`Get Product Failed - Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("========= Error Get product:", error);
+    throw error;
+  }
+};
+
 export const ProductService = {
   getAll,
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductById,
 };

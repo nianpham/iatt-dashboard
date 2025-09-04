@@ -7,6 +7,7 @@ export const API = {
   LOGIN_PHONE: `${BASE_URL}/inanhtructuyen/auth/login-phone-admin`,
   // PRODUCT
   GET_ALL_PRODUCTS: `${BASE_URL}/inanhtructuyen/product/`,
+  GET_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
   CREATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product/`,
   UPDATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
   DELETE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
@@ -21,14 +22,17 @@ export const API = {
   CREATE_CLIENT_ACCOUNTS: `${BASE_URL}/inanhtructuyen/account`,
   UPDATE_CLIENT_ACCOUNTS: `${BASE_URL}/inanhtructuyen/account/update`,
   DELETE_CLIENT_ACCOUNTS: `${BASE_URL}/inanhtructuyen/account`,
+  GET_ACCOUNT_BY_ID: `${BASE_URL}/inanhtructuyen/account`,
   // ORDER
   GET_ALL_ORDERS: `${BASE_URL}/inanhtructuyen/order/`,
   UPDATE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
   DOWNLOAD_IMAGE: `${BASE_URL}/inanhtructuyen/download`,
+  CREATE: `${BASE_URL}/inanhtructuyen/order/`,
   // DISCOUNT
   GET_ALL_DISCOUNTS: `${BASE_URL}/inanhtructuyen/discount`,
   GET_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount`,
   CREATE_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount`,
   UPDATE_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount`,
   DELETE_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount`,
+  CHECK_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount-check`,
 };

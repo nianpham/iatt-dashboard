@@ -149,6 +149,28 @@ const deleteAccount = async (id: any) => {
   }
 };
 
+const getAccountById = async (id: string) => {
+  try {
+    const response = await fetch(`${API.GET_ACCOUNT_BY_ID}/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`Login failed - Status: ${response.status}`);
+      throw new Error(`Get Account Failed - Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("========= Error Get Account:", error);
+    throw error;
+  }
+};
+
 export const AccountService = {
   getAll,
   getClientAccount,
@@ -157,4 +179,5 @@ export const AccountService = {
   deleteAccount,
   loginAccountEmail,
   loginAccountPhone,
+  getAccountById,
 };

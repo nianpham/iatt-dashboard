@@ -298,7 +298,7 @@ export function ModalUpdateBlog({
           </DialogTitle>
           <DialogDescription>
             <span className="!text-[16px]">
-              Mã đơn hàng: #{currentData?._id}
+              Mã đơn hàng: #{currentData?._id.slice(-5)}
             </span>
           </DialogDescription>
         </DialogHeader>
@@ -458,24 +458,7 @@ export function ModalUpdateBlog({
                 </>
               )}
             </div>
-            <div className="flex flex-col gap-2">
-              <span>
-                <strong>Ngày tạo đơn hàng:</strong>{" "}
-                {HELPER.formatDate(currentData?.created_at)}
-              </span>
-              <span>
-                {currentData?.status === "cancelled" ? (
-                  <strong>Đơn hàng đã bị hủy</strong>
-                ) : (
-                  <>
-                    <strong>Ngày hoàn tất đơn hàng:</strong>
-                    {!currentData?.date_completed
-                      ? " Đơn hàng đang được xử lí."
-                      : HELPER.formatDate(currentData?.date_completed)}
-                  </>
-                )}
-              </span>
-            </div>
+
             <div className="flex flex-col gap-2">
               <span className="flex flex-col items-start gap-2">
                 <strong>Phương thức thanh toán:</strong>{" "}
@@ -597,7 +580,28 @@ export function ModalUpdateBlog({
               </div>
             </div>
             <div>
-              <strong>Địa chỉ giao hàng:</strong> {currentData?.address}
+              <strong>Địa chỉ giao hàng:</strong>
+              {currentData?.address}, {currentData?.wardName || ""},{" "}
+              {currentData?.districtName || ""},{" "}
+              {currentData?.provinceName || ""}
+            </div>
+            <div className="flex flex-col gap-2">
+              <span>
+                <strong>Ngày tạo đơn hàng:</strong>{" "}
+                {HELPER.formatDateTime(currentData?.created_at)}
+              </span>
+              <span>
+                {currentData?.status === "cancelled" ? (
+                  <strong>Đơn hàng đã bị hủy</strong>
+                ) : (
+                  <>
+                    <strong>Ngày hoàn tất đơn hàng:</strong>
+                    {!currentData?.date_completed
+                      ? " Đơn hàng đang được xử lí."
+                      : HELPER?.formatDateTime(currentData?.date_completed)}
+                  </>
+                )}
+              </span>
             </div>
             {currentData?.status === "cancelled" ? (
               <Button
