@@ -74,7 +74,7 @@ export function ModalCustomer() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="flex items-center justify-center text-white bg-indigo-600 hover:opacity-80 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Tạo đơn hàng
         </button>

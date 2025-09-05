@@ -104,7 +104,7 @@ export default function Discount() {
               placeholder="Tìm kiếm mã giảm giá..."
               value={searchId}
               onChange={handleSearchChange}
-              className="w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+              className="!h-[40px] w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
             />
           </div>
           <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
@@ -192,7 +192,7 @@ export default function Discount() {
                     <button
                       onClick={prevPage}
                       disabled={currenPage === 1}
-                      className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -218,8 +218,8 @@ export default function Discount() {
                             href="#"
                             className={`${
                               item === currenPage
-                                ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
-                                : "bg-white"
+                                ? "bg-indigo-100 hover:bg-indigo-100 text-gray-700"
+                                : "bg-white hover:bg-indigo-50"
                             } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                           >
                             {item}
@@ -232,7 +232,7 @@ export default function Discount() {
                     <button
                       onClick={nextPage}
                       disabled={currenPage === totalPage}
-                      className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <span className="sr-only">Next</span>
                       <svg

@@ -237,7 +237,7 @@ export function ModalUpdateBlog({
         async (imageUrl: string, index: number) => {
           const blob = await downloadImage(imageUrl);
           if (blob) {
-            const filename = `${currentData?._id?.slice(-4)}_page_${
+            const filename = `${currentData?._id?.slice(-5)}_page_${
               index + 1
             }.jpg`;
             zip.file(filename, blob);
@@ -249,7 +249,7 @@ export function ModalUpdateBlog({
       const content = await zip.generateAsync({ type: "blob" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(content);
-      link.download = `${currentData?._id?.slice(-4)}_album.zip`;
+      link.download = `${currentData?._id?.slice(-5)}_album.zip`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

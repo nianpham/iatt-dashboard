@@ -706,7 +706,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   <button
                     type="button"
                     onClick={handleAddSizePrice}
-                    className="p-1.5 flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-full text-sm !text-[16px] text-center"
+                    className="p-1.5 flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-full text-sm !text-[16px] text-center"
                   >
                     <Plus size={20} />
                   </button>
@@ -807,7 +807,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}

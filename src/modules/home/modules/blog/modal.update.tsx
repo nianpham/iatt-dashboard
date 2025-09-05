@@ -211,7 +211,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
           <DialogDescription>
             <span className="!text-[16px]">
               Chỉnh sửa thông tin bài viết và nhấn{" "}
-              <strong className="text-orange-700">Cập nhật</strong> để lưu thông
+              <strong className="text-indigo-600">Cập nhật</strong> để lưu thông
               tin.
             </span>
           </DialogDescription>
@@ -290,7 +290,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
                 id="tag"
                 value={tag}
                 onChange={(e) => setTag(e.target.value)}
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               >
                 <option value="">Chọn tag</option>
                 {tagOpt.map((option) => (
@@ -307,15 +307,23 @@ export function ModalUpdateBlog({ data }: { data: any }) {
               Chọn tác giả
             </Label>
             <div className="w-full grid items-center gap-4">
-              <select
+              {/* <select
                 id="author"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               >
                 <option value="">Tác giả</option>
                 <option value="Phạm Thành">Phạm Thành</option>
-              </select>
+              </select> */}
+
+              <input
+                id="author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Nhập tác giả"
+                className="col-span-3 p-2 border rounded h-[40px]"
+              ></input>
             </div>
           </div>
         </div>
@@ -344,7 +352,7 @@ export function ModalUpdateBlog({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}

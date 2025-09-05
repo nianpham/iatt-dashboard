@@ -499,7 +499,7 @@ export function ModalCreateCustomer() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="flex items-center justify-center text-white bg-indigo-600 hover:opacity-80 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Thêm khách hàng
         </button>
@@ -515,7 +515,7 @@ export function ModalCreateCustomer() {
           <DialogDescription>
             <span className="!text-[16px]">
               Điền thông tin khách hàng và nhấn{" "}
-              <strong className="text-orange-700">Lưu</strong> để tạo khách hàng
+              <strong className="text-indigo-600">Lưu</strong> để tạo khách hàng
               mới.
             </span>
           </DialogDescription>
@@ -729,7 +729,7 @@ export function ModalCreateCustomer() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
             {isLoading && <Loader className="animate-spin" size={17} />}

@@ -16,6 +16,22 @@ const getAll = async () => {
   }
 };
 
+const getAllWithDeleted = async () => {
+  try {
+    const response = await fetch(API.GET_ALL_PRODUCTS_W_DELETED, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      throw new Error(`Failed - Status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error: any) {
+    console.error("========= Error Get All Products:", error);
+    return false;
+  }
+};
+
 const createProduct = async (payload: any) => {
   try {
     const myHeaders = new Headers();
@@ -104,6 +120,7 @@ const getProductById = async (id: string) => {
 
 export const ProductService = {
   getAll,
+  getAllWithDeleted,
   createProduct,
   updateProduct,
   deleteProduct,

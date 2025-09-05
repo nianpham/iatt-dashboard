@@ -130,12 +130,12 @@ export function ModalUpdateDiscount({ data }: { data: any }) {
       >
         <DialogHeader>
           <DialogTitle>
-            <span className="!text-[20px]">Chỉnh sửa bài viết</span>
+            <span className="!text-[20px]">Chỉnh sửa mã giảm giá</span>
           </DialogTitle>
           <DialogDescription>
             <span className="!text-[16px]">
-              Chỉnh sửa thông tin bài viết và nhấn{" "}
-              <strong className="text-orange-700">Cập nhật</strong> để lưu thông
+              Chỉnh sửa thông tin mã giảm giá và nhấn{" "}
+              <strong className="text-indigo-600">Cập nhật</strong> để lưu thông
               tin.
             </span>
           </DialogDescription>
@@ -151,7 +151,7 @@ export function ModalUpdateDiscount({ data }: { data: any }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Tên mã giảm giá"
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               ></input>
             </div>
 
@@ -164,7 +164,7 @@ export function ModalUpdateDiscount({ data }: { data: any }) {
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="Code giảm giá"
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               ></input>
             </div>
 
@@ -178,7 +178,7 @@ export function ModalUpdateDiscount({ data }: { data: any }) {
                 type="number"
                 onChange={(e) => setPercent(e.target.value)}
                 placeholder="Phần trăm giảm"
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               ></input>
             </div>
           </div>
@@ -208,7 +208,7 @@ export function ModalUpdateDiscount({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}

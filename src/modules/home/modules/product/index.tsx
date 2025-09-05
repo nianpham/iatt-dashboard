@@ -13,10 +13,12 @@ export default function Product() {
   const COUNT = 5;
 
   const [data, setData] = useState([] as any);
+  const [originalData, setOriginalData] = useState([] as any);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currenPage, setCurrenPage] = useState<any>(1 as any);
   const [currenData, setCurrenData] = useState<any>([] as any);
+  const [searchId, setSearchId] = useState<string>("");
 
   const selectPage = (pageSelected: any) => {
     setCurrenPage(pageSelected);
@@ -38,10 +40,32 @@ export default function Product() {
   };
 
   const render = (data: any) => {
+    setOriginalData(data);
     setData(data);
     setTotalPage(Math.ceil(data.length / COUNT));
     setCurrenPage(1);
     setCurrenData(data.slice(0, COUNT));
+  };
+
+  const searchCustomerById = (id: string) => {
+    const trimmedId = id.trim();
+    setSearchId(id);
+
+    const filteredData = trimmedId
+      ? originalData.filter((item: any) =>
+          item.name.toLowerCase().includes(trimmedId.toLowerCase())
+        )
+      : originalData;
+
+    setData(filteredData);
+    setTotalPage(Math.ceil(filteredData.length / COUNT));
+    setCurrenPage(1);
+    setCurrenData(filteredData.slice(0, COUNT));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    searchCustomerById(value);
   };
 
   const init = async () => {
@@ -73,8 +97,19 @@ export default function Product() {
               </span>
             </h5>
           </div>
-          <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
-            <ModalCreateProduct />
+          <div className="flex flex-row gap-4">
+            <div className="w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên SP..."
+                value={searchId}
+                onChange={handleSearchChange}
+                className="h-[40px] w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+              />
+            </div>
+            <div className="flex flex-col flex-shrink-0 space-y-3 md:flex-row md:items-center lg:justify-end md:space-y-0 md:space-x-3">
+              <ModalCreateProduct />
+            </div>
           </div>
         </div>
         <div className="h-[640px] flex flex-col justify-between">
@@ -189,7 +224,7 @@ export default function Product() {
                     <button
                       onClick={prevPage}
                       disabled={currenPage === 1}
-                      className="cursor-pointer flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="cursor-pointer flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -215,8 +250,8 @@ export default function Product() {
                             href="#"
                             className={`${
                               item === currenPage
-                                ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
-                                : "bg-white"
+                                ? "bg-indigo-100 hover:bg-indigo-100 text-gray-700"
+                                : "bg-white hover:bg-indigo-50"
                             } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                           >
                             {item}
@@ -229,7 +264,7 @@ export default function Product() {
                     <button
                       onClick={nextPage}
                       disabled={currenPage === totalPage}
-                      className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                      className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                     >
                       <span className="sr-only">Next</span>
                       <svg

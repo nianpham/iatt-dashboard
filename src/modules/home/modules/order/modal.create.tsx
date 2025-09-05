@@ -1142,7 +1142,7 @@ export function ModalCreateOrder({
           <DialogDescription>
             <span className="!text-[16px]">
               Điền đầy đủ thông tin và nhấn{" "}
-              <strong className="text-orange-700">Lưu</strong> để tạo đơn hàng
+              <strong className="text-indigo-600">Lưu</strong> để tạo đơn hàng
               mới.
             </span>
           </DialogDescription>
@@ -1836,7 +1836,7 @@ export function ModalCreateOrder({
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
             {isLoading && <Loader className="animate-spin" size={17} />}

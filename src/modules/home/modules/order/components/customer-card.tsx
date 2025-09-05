@@ -52,7 +52,7 @@ export interface FormData extends UserData {
 
 const CustomerCard: React.FC<{ customer: UserData }> = ({ customer }) => {
   return (
-    <div className="cursor-pointer group relative bg-white overflow-hidden flex flex-row gap-5 transition-all duration-300 hover:bg-gray-100 px-4 py-2">
+    <div className="cursor-pointer group relative bg-white overflow-hidden flex flex-row gap-5 transition-all duration-300 hover:bg-gray-100 rounded-lg px-4 py-2">
       {/* Product Image Container */}
       <div className="relative overflow-hidden flex items-center justify-center">
         <div className="w-24 h-24 flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 rounded-full">

@@ -191,7 +191,7 @@ export function ModalCreateBlog() {
       <DialogTrigger asChild>
         <button
           type="button"
-          className="flex items-center justify-center text-white bg-indigo-600 hover:bg-indigo-700  font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+          className="flex items-center justify-center text-white bg-indigo-600 hover:opacity-80 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
         >
           <Plus size={16} className="mr-2" /> Thêm bài viết
         </button>
@@ -207,7 +207,7 @@ export function ModalCreateBlog() {
           <DialogDescription>
             <span className="!text-[16px]">
               Điền thông tin bài viết và nhấn{" "}
-              <strong className="text-orange-700">Lưu</strong> để tạo bài viết
+              <strong className="text-indigo-600">Lưu</strong> để tạo bài viết
               mới.
             </span>
           </DialogDescription>
@@ -286,7 +286,7 @@ export function ModalCreateBlog() {
                 id="tag"
                 value={tag}
                 onChange={(e) => setTag(e.target.value)}
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               >
                 <option value="">Chọn tag</option>
                 {tagOpt.map((option) => (
@@ -300,18 +300,26 @@ export function ModalCreateBlog() {
               <BlogDescriptionEditor value={content} onChange={setContent} />
             </div>
             <Label htmlFor="description" className="text-[14.5px] mt-2">
-              Chọn tác giả
+              Tác giả
             </Label>
             <div className="w-full grid items-center gap-4">
-              <select
+              {/* <select
                 id="author"
                 value={author}
                 onChange={(e) => setAuthor(e.target.value)}
-                className="col-span-3 p-2 border rounded"
+                className="col-span-3 p-2 border rounded !h-[40px]"
               >
                 <option value="">Tác giả</option>
                 <option value="Phạm Thành">Phạm Thành</option>
-              </select>
+              </select> */}
+
+              <input
+                id="author"
+                value={author}
+                onChange={(e) => setAuthor(e.target.value)}
+                placeholder="Nhập tác giả"
+                className="col-span-3 p-2 border rounded h-[40px]"
+              ></input>
             </div>
           </div>
         </div>
@@ -328,7 +336,7 @@ export function ModalCreateBlog() {
           <button
             type="submit"
             onClick={handleSubmit}
-            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+            className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
           >
             Lưu
             {isLoading && <Loader className="animate-spin" size={17} />}

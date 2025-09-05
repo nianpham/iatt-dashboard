@@ -14,6 +14,7 @@ import { ModalCustomer } from "./modal.customer";
 export default function Order() {
   const COUNT = 5;
 
+  const [originalData, setOriginalData] = useState([] as any);
   const [products, setProducts] = useState([] as any);
   const [accounts, setAccounts] = useState([] as any);
   const [data, setData] = useState([] as any);
@@ -21,6 +22,7 @@ export default function Order() {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [currenPage, setCurrenPage] = useState<any>(1 as any);
   const [currenData, setCurrenData] = useState<any>([] as any);
+  const [searchId, setSearchId] = useState<string>("");
 
   const selectPage = (pageSelected: any) => {
     setCurrenPage(pageSelected);
@@ -52,15 +54,16 @@ export default function Order() {
     const res = await AccountService.getAll();
     if (res && res.data.length > 0) {
       setAccounts(res.data);
-      setIsLoading(false);
+      // Remove this line: setOriginalData(res.data);
+      // setIsLoading(false);
     }
   };
 
   const renderProduct = async () => {
-    const res = await ProductService.getAll();
+    const res = await ProductService.getAllWithDeleted();
     if (res && res.data.length > 0) {
       setProducts(res.data);
-      setIsLoading(false);
+      // setIsLoading(false);
     }
   };
 
@@ -71,23 +74,28 @@ export default function Order() {
         (order: { total: number | null | undefined }) =>
           order.total !== undefined && order.total !== null && order.total > 0
       );
-
       if (ordersWithTotal.length > 0) {
+        setOriginalData(ordersWithTotal);
         render(ordersWithTotal);
       } else {
         setData([]);
+        setOriginalData([]);
       }
-      setIsLoading(false);
+      // setIsLoading(false);
     } else {
       setData([]);
-      setIsLoading(false);
+      setOriginalData([]);
+      // setIsLoading(false);
     }
   };
 
   const init = async () => {
-    renderAccount();
-    renderProduct();
-    renderOrder();
+    setIsLoading(true);
+    try {
+      await Promise.all([renderAccount(), renderProduct(), renderOrder()]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -103,6 +111,36 @@ export default function Order() {
     products,
   ]);
 
+  const searchCustomerById = (id: string) => {
+    const trimmedId = id.trim();
+    setSearchId(id);
+
+    if (!trimmedId) {
+      setData(originalData);
+      setTotalPage(Math.ceil(originalData.length / COUNT));
+      setCurrenPage(1);
+      setCurrenData(originalData.slice(0, COUNT));
+      return;
+    }
+
+    const filteredData = originalData.filter((order: any) => {
+      const customer = accounts?.find(
+        (account: any) => account._id.toString() === order?.account_id
+      );
+      return customer?.name?.toLowerCase().includes(trimmedId.toLowerCase());
+    });
+
+    setData(filteredData);
+    setTotalPage(Math.ceil(filteredData.length / COUNT));
+    setCurrenPage(1);
+    setCurrenData(filteredData.slice(0, COUNT));
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    searchCustomerById(value);
+  };
+
   return (
     <section className="p-4">
       <div className="relative overflow-hidden">
@@ -115,8 +153,19 @@ export default function Order() {
               </span>
             </h5>
           </div>
-          <div>
-            <ModalCustomer />
+          <div className="flex flex-row gap-4">
+            <div className="w-full sm:w-64">
+              <input
+                type="text"
+                placeholder="Tìm kiếm theo tên KH..."
+                value={searchId}
+                onChange={handleSearchChange}
+                className="h-[40px] w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
+              />
+            </div>
+            <div>
+              <ModalCustomer />
+            </div>
           </div>
         </div>
         <div className="h-[640px] flex flex-col justify-between">
@@ -292,7 +341,7 @@ export default function Order() {
                       <button
                         onClick={prevPage}
                         disabled={currenPage === 1}
-                        className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       >
                         <span className="sr-only">Previous</span>
                         <svg
@@ -318,8 +367,8 @@ export default function Order() {
                               href="#"
                               className={`${
                                 item === currenPage
-                                  ? "bg-indigo-50 hover:bg-indigo-100 text-gray-700"
-                                  : "bg-white"
+                                  ? "bg-indigo-100 hover:bg-indigo-100 text-gray-700"
+                                  : "bg-white hover:bg-indigo-50"
                               } flex items-center justify-center px-3 py-2 text-sm leading-tight text-gray-500 border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700`}
                             >
                               {item}
@@ -332,7 +381,7 @@ export default function Order() {
                       <button
                         onClick={nextPage}
                         disabled={currenPage === totalPage}
-                        className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-indigo-50 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                       >
                         <span className="sr-only">Next</span>
                         <svg

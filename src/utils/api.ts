@@ -7,6 +7,7 @@ export const API = {
   LOGIN_PHONE: `${BASE_URL}/inanhtructuyen/auth/login-phone-admin`,
   // PRODUCT
   GET_ALL_PRODUCTS: `${BASE_URL}/inanhtructuyen/product/`,
+  GET_ALL_PRODUCTS_W_DELETED: `${BASE_URL}/inanhtructuyen/product-with-deleted/`,
   GET_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,
   CREATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product/`,
   UPDATE_PRODUCT: `${BASE_URL}/inanhtructuyen/product`,

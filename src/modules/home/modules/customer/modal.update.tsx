@@ -537,7 +537,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
           <DialogDescription>
             <span className="!text-[16px]">
               Chỉnh sửa thông tin khách hàng và nhấn{" "}
-              <strong className="text-orange-700">Cập nhật</strong> để lưu thông
+              <strong className="text-indigo-600">Cập nhật</strong> để lưu thông
               tin.
             </span>
           </DialogDescription>
@@ -763,7 +763,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
             <button
               type="submit"
               onClick={handleSubmit}
-              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
+              className="flex flex-row justify-center items-center gap-2 text-white bg-indigo-600 hover:opacity-80 font-medium rounded-md text-sm !px-10 !text-[16px] py-2.5 text-center"
             >
               Cập nhật
               {isLoading && <Loader className="animate-spin" size={17} />}
