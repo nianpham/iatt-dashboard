@@ -1112,7 +1112,7 @@ export function ModalCreateOrder({
               className="w-full focus:outline-none focus:ring-0 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600"
             />
           </div>
-          <div className="grid grid-cols-2 gap-1 overflow-y-auto max-h-[60vh]">
+          <div className="grid grid-cols-2 gap-1 overflow-y-auto hide-scrollbar max-h-[60vh]">
             {customerData?.length > 0 ? (
               customerData.map((item: any) => (
                 <div
@@ -1147,7 +1147,7 @@ export function ModalCreateOrder({
             </span>
           </DialogDescription>
         </DialogHeader>
-        <div className="w-full mx-auto py-5 px-5 lg:px-0 overflow-y-auto max-h-[60vh]">
+        <div className="w-full mx-auto py-5 px-5 lg:px-0 overflow-y-auto hide-scrollbar max-h-[60vh]">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="hidden lg:grid w-full md:w-1/2">
               <div className="pl-1">
@@ -1457,7 +1457,7 @@ export function ModalCreateOrder({
                         <DialogTitle className="mb-3 text-[20px] px-2 font-medium">
                           Vui lòng chọn sản phẩm
                         </DialogTitle>
-                        <DialogDescription className="max-h-96 overflow-y-auto scroll-bar-style">
+                        <DialogDescription className="max-h-96 overflow-y-auto hide-scrollbar scroll-bar-style">
                           <div className="grid grid-cols-2 gap-3">
                             {products?.length > 0 ? (
                               products.map((item: any) => (
@@ -1550,7 +1550,7 @@ export function ModalCreateOrder({
                         </div>
                       </DialogTrigger>
                       <DialogContent
-                        className="sm:max-w-[1200px] max-h-[48rem] overflow-y-auto z-[70]"
+                        className="sm:max-w-[1200px] max-h-[48rem] overflow-y-auto hide-scrollbar z-[70]"
                         onOpenAutoFocus={(e) => e.preventDefault()}
                       >
                         <DialogHeader>
@@ -1748,7 +1748,7 @@ export function ModalCreateOrder({
                           <DialogTitle className="text-[20px]">
                             Vui lòng nhập mã giảm giá
                           </DialogTitle>
-                          <DialogDescription className="max-h-96 overflow-y-auto">
+                          <DialogDescription className="max-h-96 overflow-y-auto hide-scrollbar">
                             <div className="flex flex-col justify-center items-center gap-2 mt-1">
                               <input
                                 type="text"

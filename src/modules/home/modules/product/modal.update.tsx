@@ -519,7 +519,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
         </DialogHeader>
         <div className="w-full grid grid-cols-3 gap-8">
           <div className="col-span-1">
-            <div className="overflow-y-auto max-h-[70vh] scroll-bar-style">
+            <div className="overflow-y-auto hide-scrollbar max-h-[70vh] scroll-bar-style">
               <div className="mb-6">
                 <Label htmlFor="thumbnail" className="text-right !text-[16px]">
                   Hình chính
@@ -613,7 +613,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
             </div>
           </div>
           <div className="col-span-2">
-            <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto max-h-[70vh] pr-0 scroll-bar-style">
+            <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto hide-scrollbar max-h-[70vh] pr-0 scroll-bar-style">
               <Label htmlFor="description" className="text-[14.5px]">
                 Tên sản phẩm
               </Label>

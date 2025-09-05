@@ -573,7 +573,7 @@ export function ModalCreateCustomer() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col justify-start items-start gap-2 col-span-2 overflow-y-auto max-h-[65vh] px-2 pb-2">
+          <div className="flex flex-col justify-start items-start gap-2 col-span-2 overflow-y-auto hide-scrollbar max-h-[65vh] px-2 pb-2">
             <div className="w-full">
               <Label htmlFor="name" className="text-[16px]">
                 Họ và tên
