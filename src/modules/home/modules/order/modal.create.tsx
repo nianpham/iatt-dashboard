@@ -46,7 +46,6 @@ import {
   StickyNote,
   UserRound,
 } from "lucide-react";
-import Link from "next/link";
 import ProductCard from "./components/card";
 import Image from "next/image";
 import CustomerCard from "./components/customer-card";
@@ -205,7 +204,7 @@ export function ModalCreateOrder({
       );
       setSizeOptions(dynamicSizeOptions);
 
-      if (dynamicSizeOptions.length > 0 && !selectedSize) {
+      if (dynamicSizeOptions.length > 0) {
         setSelectedSize(dynamicSizeOptions[0].id);
         setConfirmSize(dynamicSizeOptions[0].id);
       }
@@ -264,12 +263,23 @@ export function ModalCreateOrder({
     (option: any) => option.size === selectedSize
   );
   const productPrice = selectedOption?.price || "0";
+  const discountProductPrice =
+    selectedProductData?.discount !== "0"
+      ? Number(productPrice) -
+        Number(selectedProductData?.discount) * Number(productPrice) * 0.01
+      : "none";
 
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
   const [discountPercent, setDiscountPercent] = useState(0);
   const discountPrice =
-    (Number(HELPER.calculateTotalNumber(productPrice, "0", 0)) *
+    (Number(
+      HELPER.calculateTotalNumber(
+        discountProductPrice !== "none" ? discountProductPrice : productPrice,
+        "0",
+        0
+      )
+    ) *
       discountPercent) /
     100;
 
@@ -1706,9 +1716,19 @@ export function ModalCreateOrder({
                 <div className="flex justify-between font-light">
                   <span>Giá sản phẩm</span>
                   {selectedProduct !== "Chon san pham" ? (
-                    <span>
-                      {selectedProduct && HELPER.formatVND(productPrice)}
-                    </span>
+                    <div className="flex flex-row gap-2 ">
+                      <span>
+                        {discountProductPrice !== "none" &&
+                          HELPER.formatVND(String(discountProductPrice))}
+                      </span>
+                      <span
+                        className={`${
+                          discountProductPrice !== "none" ? "line-through" : ""
+                        }`}
+                      >
+                        {selectedProduct && HELPER.formatVND(productPrice)}
+                      </span>
+                    </div>
                   ) : (
                     <span>Chọn sản phẩm</span>
                   )}
@@ -1800,8 +1820,16 @@ export function ModalCreateOrder({
                 <div className="flex justify-between font-bold text-xl pt-4">
                   <span>Tổng tiền</span>
                   <span>
-                    {selectedProduct &&
-                      HELPER.calculateTotal(productPrice, "0", discountPercent)}
+                    {selectedProduct !== "Chon san pham"
+                      ? selectedProduct &&
+                        HELPER.calculateTotal(
+                          discountProductPrice !== "none"
+                            ? discountProductPrice
+                            : productPrice,
+                          "0",
+                          discountPercent
+                        )
+                      : "0đ"}
                   </span>
                 </div>
               </div>

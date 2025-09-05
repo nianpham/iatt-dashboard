@@ -15,6 +15,8 @@ interface Product {
   category: string;
   color: string[];
   thumbnail: string;
+  discount: string;
+  rating: string;
   images: string[];
   sold: number;
   created_at: string;
@@ -23,7 +25,7 @@ interface Product {
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   return (
     <div className="cursor-pointer group relative bg-white overflow-hidden transition-all duration-300">
-      {Number(product._id.charAt(7)) % 2 !== 0 && (
+      {product.discount !== "0" && (
         <div className="absolute top-4 left-4 z-10">
           <span className="bg-amber-600 text-white text-xs font-semibold px-3 py-1 rounded">
             Khuyến mãi
@@ -64,14 +66,18 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             {product.name}
           </h3>
           <div className="flex items-center space-x-2">
-            <span className="text-[16px] lg:text-[16px] font-semibold text-gray-900 ">
-              {HELPER.formatVND(product.product_option[0].price)}
+            <span className="text-[16px] lg:text-[16px] font-semibold text-gray-900">
+              {HELPER.formatVND(
+                String(
+                  Number(product.product_option[0].price) -
+                    Number(product.discount) *
+                      Number(Number(product.product_option[0].price) * 0.01)
+                )
+              )}
             </span>
-            {Number(product._id.charAt(7)) % 2 !== 0 && (
+            {product.discount !== "0" && (
               <span className="text-[12px] lg:text-[12px] text-gray-500 line-through">
-                {HELPER.formatVND(
-                  HELPER.upPrice(product.product_option[0].price)
-                )}
+                {HELPER.formatVND(product.product_option[0].price)}
               </span>
             )}
           </div>
