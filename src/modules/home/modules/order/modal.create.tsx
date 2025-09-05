@@ -1163,7 +1163,7 @@ export function ModalCreateOrder({
               <div className="pl-1">
                 <div className="flex flex-row items-center gap-2 mb-3.5 relative z-20">
                   <UserRound className="w-5 h-5" />
-                  <h2 className="text-lg lg:text-xl font-medium z-20 relative">
+                  <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
                     Thông tin khách hàng
                   </h2>
                 </div>
@@ -1203,7 +1203,7 @@ export function ModalCreateOrder({
                 <div className="mt-6">
                   <div className="flex flex-row items-center gap-2 relative mb-3.5 z-20">
                     <MapPin className="w-5 h-5" />
-                    <h2 className="text-lg lg:text-xl font-medium z-20 relative">
+                    <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
                       Địa chỉ nhận hàng
                     </h2>
                   </div>
@@ -1379,10 +1379,10 @@ export function ModalCreateOrder({
                       </div>
                     </div>
                   </div> */}
-                  <div className="mt-6">
+                  <div className="mt-6 pl-1">
                     <div className="flex flex-row items-center gap-2 mb-3.5 relative z-20">
                       <StickyNote className="w-5 h-5" />
-                      <h2 className="text-lg lg:text-xl font-medium z-20 relative">
+                      <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
                         Thêm ghi chú cho đơn hàng
                       </h2>
                     </div>
@@ -1398,7 +1398,7 @@ export function ModalCreateOrder({
               <div>
                 <div className="flex flex-row gap-2 items-center mb-3.5 lg:mb-5 relative z-20">
                   <Frame className="w-5 h-5" />
-                  <h2 className="text-lg lg:text-xl font-medium z-20 relative">
+                  <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
                     Thông tin khung ảnh
                   </h2>
                 </div>
