@@ -591,9 +591,10 @@ export function ModalCreateOrder({
       setIsLoading(true);
 
       let finalFile = uploadedFile;
-      if (uploadedFile) {
-        setUploadedFile(uploadedFile);
-        const newImageUrl = URL.createObjectURL(uploadedFile);
+      if (uploadedFile && !hasCropped && confirmSize) {
+        finalFile = await autoCropImage(uploadedFile, confirmSize);
+        setUploadedFile(finalFile);
+        const newImageUrl = URL.createObjectURL(finalFile);
         setCurrentImage(newImageUrl);
         setOriginalImage(newImageUrl);
       }
@@ -639,7 +640,7 @@ export function ModalCreateOrder({
         discount_code: promoCode || "",
         discount_price: discountPercent || 0,
         total: HELPER.calculateTotalNumber(
-          discountProductPrice !== "none" ? discountProductPrice : productPrice,
+          selectedOption?.price || "0",
           "0",
           discountPercent
         ),
@@ -999,7 +1000,114 @@ export function ModalCreateOrder({
     }
   };
 
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [initialAspectRatio, setInitialAspectRatio] = useState<number>(2 / 1);
+
+  useEffect(() => {
+    if (sizeOptions.length > 0) {
+      const defaultSize = sizeOptions[0];
+      const aspectRatio =
+        defaultSize.dimensions.width / defaultSize.dimensions.height;
+      setInitialAspectRatio(aspectRatio);
+    }
+  }, [sizeOptions]);
+
+  const onCropComplete = useCallback(
+    async (croppedArea: any, croppedAreaPixels: any) => {
+      if (!originalImage && !uploadedFile) return;
+
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const image = new window.Image();
+
+        image.src = originalImage || URL.createObjectURL(uploadedFile!);
+
+        if (image.src.startsWith("http")) {
+          image.crossOrigin = "anonymous";
+        }
+
+        await new Promise((resolve, reject) => {
+          image.onload = resolve;
+          image.onerror = () => reject(new Error("Failed to load image"));
+        });
+
+        canvas.width = croppedAreaPixels.width;
+        canvas.height = croppedAreaPixels.height;
+
+        if (!ctx) throw new Error("Canvas context not available");
+
+        ctx.drawImage(
+          image,
+          croppedAreaPixels.x,
+          croppedAreaPixels.y,
+          croppedAreaPixels.width,
+          croppedAreaPixels.height,
+          0,
+          0,
+          croppedAreaPixels.width,
+          croppedAreaPixels.height
+        );
+
+        const croppedImageUrl = canvas.toDataURL("image/jpeg");
+        setCroppedImage(croppedImageUrl);
+        setHasCropped(true);
+      } catch (error) {
+        console.error("Error cropping image:", error);
+        toast({
+          title: "Lỗi",
+          description: "Không thể xử lý hình ảnh ",
+          variant: "destructive",
+        });
+      }
+    },
+    [uploadedFile, originalImage]
+  );
+
+  const handleCropSave = () => {
+    if (croppedImage) {
+      setCurrentImage(croppedImage);
+      const blob = dataURLtoBlob(croppedImage);
+      const file = new File([blob], uploadedFile?.name || "cropped-image.jpg", {
+        type: "image/jpeg",
+      });
+      setUploadedFile(file);
+      setHasCropped(true);
+    }
+    setConfirmColor(selectedColor);
+    setConfirmSize(selectedSize);
+    setIsLoading(false);
+  };
+
+  const handleCheckChange = () => {
+    if (confirmSize === "" && confirmColor === "") {
+      setSelectedSize("");
+      setSelectedColor("");
+    }
+    setIsLoading(false);
+  };
+
+  const dataURLtoBlob = (dataURL: string) => {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)?.[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
+
+  const getAspectRatio = (sizeId: string) => {
+    const sizeOption = sizeOptions.find((option) => option.id === sizeId);
+    if (sizeOption) {
+      return sizeOption.dimensions.width / sizeOption.dimensions.height;
+    }
+    return initialAspectRatio;
+  };
 
   return (
     <Dialog open={orderDialogOpen} onOpenChange={setOrderDialogOpen}>
@@ -1051,56 +1159,163 @@ export function ModalCreateOrder({
         </DialogHeader>
         <div className="w-full mx-auto py-5 px-5 lg:px-0 overflow-y-auto hide-scrollbar max-h-[60vh]">
           <div className="flex flex-col md:flex-row gap-8">
-            <div className="w-full md:w-1/2">
-              <div className="pl-1 mb-5">
+            <div className="hidden lg:grid w-full md:w-1/2">
+              <div className="pl-1">
                 <div className="flex flex-row items-center gap-2 mb-3.5 relative z-20">
                   <UserRound className="w-5 h-5" />
                   <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
                     Thông tin khách hàng
                   </h2>
                 </div>
-                <div className="flex items-center mb-3">
-                  <Image
-                    src={
-                      formData.avatar ||
-                      "https://cdn-icons-png.flaticon.com/128/4333/4333609.png"
-                    }
-                    alt="img"
-                    className="w-auto h-14 mr-3 rounded-full"
-                    width={100}
-                    height={0}
+                <div className="mb-4">
+                  <Label
+                    htmlFor="name"
+                    className="text-black text-[16px] font-light"
+                  >
+                    Họ và tên:
+                  </Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    placeholder="Nhập họ và tên"
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 pr-16 border border-gray-200 rounded-md mt-1 focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none text-[16px] h-[40px]"
                   />
-                  <div className="flex flex-col">
-                    <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                      <strong>{formData.name}</strong>
-                    </span>
-                    <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-600 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                      {formData.email}
-                    </span>
-                  </div>
                 </div>
-                <div className="text-base">
-                  <strong>Địa chỉ giao hàng: </strong>
-                  {formData.address},{" "}
-                  {provinces.find(
-                    (province) => formData?.province === province.code
-                  )?.name || ""}
-                  ,{" "}
-                  {districts.find(
-                    (district) => formData?.district === district.code
-                  )?.name || ""}
-                  ,{" "}
-                  {wards.find((ward) => formData?.ward === ward.code)?.name ||
-                    ""}
+                <div className="mb-0">
+                  <Label
+                    htmlFor="phone"
+                    className="text-black text-[16px] font-light"
+                  >
+                    Số điện thoại:
+                  </Label>
+                  <Input
+                    type="phone"
+                    name="phone"
+                    placeholder="Nhập số điện thoại"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 pr-16 border border-gray-200 rounded-md mt-1 focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none text-[16px] h-[40px]"
+                  />
+                </div>
+                <div className="mt-6">
+                  <div className="flex flex-row items-center gap-2 relative mb-3.5 z-20">
+                    <MapPin className="w-5 h-5" />
+                    <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
+                      Địa chỉ nhận hàng
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="flex flex-col gap-2">
+                      <Label
+                        htmlFor="province"
+                        className="text-black text-[16px] font-light"
+                      >
+                        Tỉnh/Thành phố:
+                      </Label>
+                      <Select
+                        value={
+                          formData.province ? String(formData.province) : ""
+                        }
+                        onValueChange={handleProvinceChange}
+                        disabled={loading}
+                      >
+                        <SelectTrigger className="text-[16px] focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none h-[40px]">
+                          <SelectValue placeholder="Chọn Tỉnh/Thành phố" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {provinces.map((province) => (
+                            <SelectItem
+                              key={province.code}
+                              value={String(province.code)}
+                            >
+                              {province.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <Label
+                        htmlFor="district"
+                        className="text-black text-[16px] font-light"
+                      >
+                        Quận/Huyện:
+                      </Label>
+                      <Select
+                        value={
+                          formData.district ? String(formData.district) : ""
+                        }
+                        onValueChange={handleDistrictChange}
+                        disabled={!formData.province || loading}
+                      >
+                        <SelectTrigger className="text-[16px] focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none h-[40px]">
+                          <SelectValue placeholder="Chọn Quận/Huyện" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {districts.map((district) => (
+                            <SelectItem
+                              key={district.code}
+                              value={String(district.code)}
+                            >
+                              {district.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2 mb-3">
+                    <Label
+                      htmlFor="ward"
+                      className="text-black text-[16px] font-light"
+                    >
+                      Phường/Xã:
+                    </Label>
+                    <Select
+                      value={formData.ward ? String(formData.ward) : ""}
+                      onValueChange={handleWardChange}
+                      disabled={!formData.district || loading}
+                    >
+                      <SelectTrigger className="text-[16px] focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none h-[40px]">
+                        <SelectValue placeholder="Chọn Phường/Xã" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {wards.map((ward) => (
+                          <SelectItem key={ward.code} value={String(ward.code)}>
+                            {ward.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="mb-0">
+                    <Label
+                      htmlFor="address"
+                      className="text-black text-[16px] font-light"
+                    >
+                      Số nhà, tên đường:
+                    </Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      placeholder="Ví dụ: 123 Đường ABC"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      className="mt-2 text-[16px] focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none h-[40px]"
+                    />
+                  </div>
                 </div>
               </div>
 
               {selectedProduct !== "Chon san pham" && (
                 <>
-                  <div className="mt-0 mb-5">
+                  {/* <div className="mt-6">
                     <div className="flex flex-row items-center gap-2 mb-3.5 relative z-20">
                       <CreditCard className="w-5 h-5" />
-                      <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
+                      <h2 className="text-lg lg:text-xl font-medium z-20 relative">
                         Tùy chọn thanh toán
                       </h2>
                     </div>
@@ -1128,11 +1343,13 @@ export function ModalCreateOrder({
                         </div>
                         <div
                           className={`cursor-pointer w-4 h-4 rounded-full mr-2 ${
-                            selectedPayment === "cash" ? "bg-indigo-600" : ""
+                            selectedPayment === "cash"
+                              ? "bg-indigo-600"
+                              : ""
                           }`}
                         ></div>
                       </div>
-                      {/* <div
+                      <div
                         onClick={() => setSelectedPayment("bank")}
                         className={`cursor-pointer p-4 flex justify-between items-center rounded-md mt-3
                       ${
@@ -1154,13 +1371,15 @@ export function ModalCreateOrder({
                         </div>
                         <div
                           className={`cursor-pointer w-4 h-4 rounded-full mr-2 ${
-                            selectedPayment === "bank" ? "bg-indigo-600" : ""
+                            selectedPayment === "bank"
+                              ? "bg-indigo-600"
+                              : ""
                           }`}
                         ></div>
-                      </div> */}
+                      </div>
                     </div>
-                  </div>
-                  <div className="mt-0 pl-1">
+                  </div> */}
+                  <div className="mt-6 pl-1">
                     <div className="flex flex-row items-center gap-2 mb-3.5 relative z-20">
                       <StickyNote className="w-5 h-5" />
                       <h2 className="text-lg lg:text-[18px] font-medium z-20 relative">
@@ -1287,7 +1506,7 @@ export function ModalCreateOrder({
                         />
                       </div>
                     ) : (
-                      <div className="grid grid-cols-2 gap-4 w-full">
+                      <>
                         <div
                           className={`mt-1 lg:mt-0 relative w-full h-64 flex items-center justify-center overflow-hidden rounded-md bg-gray-50`}
                           style={getImageContainerStyle()}
@@ -1303,9 +1522,9 @@ export function ModalCreateOrder({
                             alt="Selected product image"
                             width={1000}
                             height={1000}
-                            className={`object-cover w-full !h-64 ${
+                            className={`object-contain w-full !h-64 ${
                               selectedProduct !== "Chon san pham"
-                                ? "border-4"
+                                ? "border-8"
                                 : ""
                             } ${
                               selectedColor === "white"
@@ -1325,61 +1544,172 @@ export function ModalCreateOrder({
                             }}
                           />
                         </div>
-                        <div className="flex flex-col gap-0 w-full lg:w-full pr-1">
-                          <div>
-                            <h2 className="text-[18px] font-medium mb-2">
-                              Kích thước khung ảnh:
-                            </h2>
-                            <Select
-                              value={selectedSize}
-                              onValueChange={setSelectedSize}
-                            >
-                              <SelectTrigger className="w-full flex justify-between items-center focus:border-none focus:!ring-2 focus:!ring-indigo-600 outline-none">
-                                <SelectValue placeholder="Chọn kích thước" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {sizeOptions.map((size) => (
-                                  <SelectItem key={size.id} value={size.id}>
-                                    {size.label}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          <div>
-                            <h2 className="text-[18px] font-medium mb-2 mt-3">
-                              Màu sắc khung viền:
-                            </h2>
-                            {productsData?.color?.length <= 0 ? (
-                              <div className="mb-6">Không có</div>
-                            ) : (
-                              <div className="flex gap-4 mb-6">
-                                {colorOptions
-                                  .filter((color) =>
-                                    productsData.color?.includes(color.id)
-                                  )
-                                  .map((color) => (
-                                    <button
-                                      key={color.id}
-                                      type="button"
-                                      className={cn(
-                                        "w-8 h-8 rounded-full transition-all border-2",
-                                        color.bgColor,
-                                        color.borderColor,
-                                        selectedColor === color.id
-                                          ? "ring-2 ring-offset-2 ring-indigo-600"
-                                          : ""
-                                      )}
-                                      onClick={() => setSelectedColor(color.id)}
-                                    />
-                                  ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                      </>
                     )}
                   </div>
+                  {currentImage && selectedProduct !== "Chon san pham" && (
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <div
+                          className="flex justify-center items-center mt-5 lg:mt-5"
+                          onClick={handleCheckChange}
+                        >
+                          <div className="flex flex-row justify-center items-center gap-4 w-full py-2 px-7 lg:py-0 text-indigo-600 hover:underline text-center rounded-md font-medium transition cursor-pointer">
+                            Tùy chọn kích thước, màu sắc
+                          </div>
+                        </div>
+                      </DialogTrigger>
+                      <DialogContent
+                        className="sm:max-w-[1200px] max-h-[48rem] overflow-y-auto hide-scrollbar z-[70]"
+                        onOpenAutoFocus={(e) => e.preventDefault()}
+                      >
+                        <DialogHeader>
+                          <DialogTitle>
+                            <span className="!text-[20px]">
+                              Tùy chọn hình ảnh
+                            </span>
+                          </DialogTitle>
+                          <DialogDescription>
+                            <span className="!text-[16px]">
+                              Chọn kích thước, màu sắc và nhấn{" "}
+                              <strong className="text-indigo-600">Lưu</strong>{" "}
+                              để tùy chọn hình ảnh.
+                            </span>
+                          </DialogDescription>
+                        </DialogHeader>
+                        {!currentImage.startsWith("http") && !uploadedFile ? (
+                          <div className="flex flex-col justify-center items-center gap-3">
+                            <div className="w-full h-full flex justify-center text-gray-500 font-semibold items-center">
+                              Vui lòng chọn hình ảnh để tùy chỉnh!
+                            </div>
+                            <DialogClose>
+                              <div className="text-black bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500">
+                                Quay về
+                              </div>
+                            </DialogClose>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex flex-col lg:flex-row justify-center items-start gap-4 min-h-[500px]">
+                              <div className="relative w-full h-full">
+                                <Cropper
+                                  image={
+                                    originalImage ||
+                                    (uploadedFile
+                                      ? URL.createObjectURL(uploadedFile)
+                                      : IMAGES.LOGO)
+                                  }
+                                  crop={crop}
+                                  zoom={zoom}
+                                  aspect={getAspectRatio(selectedSize)}
+                                  onCropChange={setCrop}
+                                  onCropComplete={onCropComplete}
+                                  onZoomChange={setZoom}
+                                />
+                              </div>
+                              <div className="flex flex-col gap-0 w-full lg:w-1/2">
+                                <div>
+                                  <h2 className="text-[18px] font-medium mb-2">
+                                    Kích thước khung ảnh:
+                                  </h2>
+                                  <div className="grid grid-cols-4 gap-4 mb-4">
+                                    {sizeOptions.map((size) => (
+                                      <button
+                                        key={size.id}
+                                        className={`border w-20 px-0 py-2 rounded-md ${
+                                          selectedSize === size.id
+                                            ? "border-yellow-500 bg-yellow-50"
+                                            : "border-gray-300"
+                                        }`}
+                                        onClick={() => setSelectedSize(size.id)}
+                                      >
+                                        {size.label}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div>
+                                  <h2 className="text-[18px] font-medium mb-2">
+                                    Màu sắc khung viền:
+                                  </h2>
+                                  {productsData?.color?.length < 0 ? (
+                                    <div className="mb-6">Không có</div>
+                                  ) : (
+                                    <div className="flex gap-4 mb-6">
+                                      {colorOptions
+                                        .filter((color) =>
+                                          productsData.color?.includes(color.id)
+                                        )
+                                        .map((color) => (
+                                          <button
+                                            key={color.id}
+                                            type="button"
+                                            className={cn(
+                                              "w-8 h-8 rounded-full transition-all border-2",
+                                              color.bgColor,
+                                              color.borderColor,
+                                              selectedColor === color.id
+                                                ? "ring-2 ring-offset-2 ring-indigo-600"
+                                                : ""
+                                            )}
+                                            onClick={() =>
+                                              setSelectedColor(color.id)
+                                            }
+                                          />
+                                        ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <DialogFooter>
+                              <DialogClose asChild>
+                                <Button
+                                  type="button"
+                                  variant="secondary"
+                                  className="!px-10 !text-[16px]"
+                                >
+                                  Huỷ
+                                </Button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <Button
+                                  type="button"
+                                  onClick={handleCropSave}
+                                  className="!px-10 !text-[16px] !mb-3 lg:!mb-0 !bg-indigo-600 hover:!bg-indigo-600 hover:opacity-80 !text-white"
+                                  disabled={isLoading}
+                                >
+                                  Lưu
+                                  {isLoading && (
+                                    <svg
+                                      className="animate-spin ml-2 h-5 w-5"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <circle
+                                        className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        strokeWidth="4"
+                                      />
+                                      <path
+                                        className="opacity-75"
+                                        fill="currentColor"
+                                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                                      />
+                                    </svg>
+                                  )}
+                                </Button>
+                              </DialogClose>
+                            </DialogFooter>
+                          </>
+                        )}
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </div>
               </div>
               <div className="border-t pt-4 space-y-2">
