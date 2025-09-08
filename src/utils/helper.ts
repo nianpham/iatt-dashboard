@@ -64,13 +64,16 @@ const renderCategory = (category: string) => {
   let result = "";
   switch (category) {
     case "Plastic":
-      result = "Ép Plastic";
+      result = "In ảnh rời";
+      break;
+    case "Plastic-Frame":
+      result = "In ảnh có khung viền";
       break;
     case "Frame":
-      result = "Khung Ảnh";
+      result = "Khung lẻ";
       break;
     case "Album":
-      result = "Album";
+      result = "Album/Photobook";
       break;
     default:
       break;

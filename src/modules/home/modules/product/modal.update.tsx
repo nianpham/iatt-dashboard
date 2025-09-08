@@ -639,9 +639,10 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                   className="col-span-3 p-2 border border-[#CFCFCF] rounded placeholder-custom focus:border-gray-500"
                 >
                   <option value="">Chọn danh mục</option>
-                  <option value="Plastic">Plastic</option>
-                  <option value="Frame">Khung ảnh</option>
-                  <option value="Album">Album</option>
+                  <option value="Plastic">In ảnh rời</option>
+                  <option value="Plastic-Frame">In ảnh có khung viền</option>
+                  <option value="Frame">Khung lẻ</option>
+                  <option value="Album">Album/Photobook</option>
                 </select>
               </div>
               <div className="flex flex-col gap-4 w-full">
