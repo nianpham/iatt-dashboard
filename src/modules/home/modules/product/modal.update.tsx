@@ -119,6 +119,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   >([{ size: "", price: "" }]);
   const [rating, setRating] = useState<string>("");
   const [discount, setDiscount] = useState<string>("");
+  const [active, setActive] = useState<boolean>(false);
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -448,6 +449,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       rating: rating,
       thumbnail: mainPreview,
       images: secondaryPreviews,
+      active: active,
     };
 
     const response = await ProductService.updateProduct(data?._id, body);
@@ -482,6 +484,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       setIntroduction(data?.introduction);
       setMainPreview(data?.thumbnail);
       setSecondaryPreviews(data?.images);
+      setActive(data?.active);
     }
   };
 
@@ -614,6 +617,18 @@ export function ModalUpdateProduct({ data }: { data: any }) {
           </div>
           <div className="col-span-2">
             <div className="flex flex-col justify-start items-start gap-2 overflow-y-auto hide-scrollbar max-h-[70vh] pr-0 scroll-bar-style">
+              <div className="mb-3 flex flex-col gap-3 items-center">
+                <Label htmlFor="active" className="text-[16px] mt-2">
+                  Trạng thái
+                </Label>
+                <input
+                  type="checkbox"
+                  id="active"
+                  className="switch ml-0"
+                  checked={active}
+                  onChange={(e) => setActive(e.target.checked)}
+                />
+              </div>
               <Label htmlFor="description" className="text-[14.5px]">
                 Tên sản phẩm
               </Label>

@@ -28,6 +28,7 @@ import Image from "next/image";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AccountService } from "@/services/account";
 import { IMAGES } from "@/utils/image";
+import "@/styles/hide-scroll.css";
 
 export interface Province {
   code: number;
@@ -74,6 +75,7 @@ export interface FormData extends UserData {
   ward: number;
   district: number;
   province: number;
+  active: boolean;
 }
 
 export function ModalUpdateCustomer({ data }: { data: any }) {
@@ -105,6 +107,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
     ward: data.ward || 0,
     district: data.district || 0,
     province: data.province || 0,
+    active: data.active || false,
   });
 
   React.useEffect(() => {
@@ -507,6 +510,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
         ward: Number(data.ward) || 0,
         district: Number(data.district) || 0,
         province: Number(data.province) || 0,
+        active: data.active || false,
       });
       setMainPreview(data.avatar);
     }
@@ -734,6 +738,20 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                 onChange={handleInputChange}
                 className="mt-2 focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none h-[40px]"
                 style={{ fontSize: "16px" }}
+              />
+            </div>
+            <div className="mb-3 flex flex-col gap-3 items-center">
+              <Label htmlFor="active" className="text-[16px] mt-2">
+                Trạng thái
+              </Label>
+              <input
+                type="checkbox"
+                id="active"
+                className="switch ml-0"
+                checked={formData.active}
+                onChange={(e) =>
+                  setFormData({ ...formData, active: e.target.checked })
+                }
               />
             </div>
           </div>

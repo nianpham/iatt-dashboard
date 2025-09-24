@@ -144,6 +144,9 @@ export default function Product() {
                       <th scope="col" className="w-24 px-4 py-3">
                         Đã bán
                       </th>
+                      <th scope="col" className="w-24 py-3">
+                        Trạng thái
+                      </th>
                       <th scope="col" className="w-24 px-4 py-3">
                         Chi tiết
                       </th>
@@ -205,6 +208,17 @@ export default function Product() {
                           </td>
                           <td className="w-24 text-[14px] px-8 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {item?.sold}
+                          </td>
+                          <td className="w-24 text-[14px] px-9 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {item?.active ? (
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              </div>
+                            )}
                           </td>
                           <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             <ModalUpdateProduct data={item} />

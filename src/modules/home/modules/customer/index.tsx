@@ -133,7 +133,7 @@ export default function Customer() {
                 <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                   <thead className="text-md text-gray-700 uppercase bg-gray-50 border dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                      <th scope="col" className="w-60 px-4 py-3">
+                      <th scope="col" className="w-52 px-4 py-3">
                         Tên khách hàng
                       </th>
                       <th scope="col" className="!w-28 px-4 py-3">
@@ -147,6 +147,9 @@ export default function Customer() {
                       </th>
                       <th scope="col" className="w-24 px-4 py-3">
                         Đơn hàng
+                      </th>
+                      <th scope="col" className="w-24 py-3">
+                        Trạng thái
                       </th>
                       <th scope="col" className="w-24 px-4 py-3">
                         Chi tiết
@@ -162,7 +165,7 @@ export default function Customer() {
                             item?.deleted_at ? "hidden" : ""
                           } border-b border-l border-r dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700`}
                         >
-                          <td className="w-60 px-4 py-4 flex items-center">
+                          <td className="w-52 px-4 py-4 flex items-center">
                             <Image
                               src={item?.avatar}
                               alt="img"
@@ -176,7 +179,7 @@ export default function Customer() {
                           </td>
                           <td className="!w-28 px-4 py-4">
                             <span className="text-[14px] bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                              {item?.email}
+                              {item?.email ? item?.email : "Chưa cập nhật."}
                             </span>
                           </td>
                           <td className="w-60 px-4 py-4">
@@ -200,8 +203,19 @@ export default function Customer() {
                               `${item?.phone}`
                             )}
                           </td>
-                          <td className="w-24 text-[14px] px-4 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          <td className="w-24 text-[14px] px-8 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {item?.number_orders} đơn
+                          </td>
+                          <td className="w-24 text-[14px] px-9 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {item?.active ? (
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              </div>
+                            )}
                           </td>
                           <td className="w-24 text-[14px] px-4 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             <ModalUpdateCustomer data={item} />

@@ -29,6 +29,7 @@ export const API = {
   UPDATE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
   DOWNLOAD_IMAGE: `${BASE_URL}/inanhtructuyen/download`,
   CREATE: `${BASE_URL}/inanhtructuyen/order/`,
+  DELETE_ORDER: `${BASE_URL}/inanhtructuyen/order`,
   // DISCOUNT
   GET_ALL_DISCOUNTS: `${BASE_URL}/inanhtructuyen/discount`,
   GET_DISCOUNT: `${BASE_URL}/inanhtructuyen/discount`,

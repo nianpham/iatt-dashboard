@@ -103,10 +103,31 @@ const createOrder = async (payload: any) => {
   }
 };
 
+const deleteOrder = async (id: any) => {
+  try {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    const response = await fetch(`${API.DELETE_ORDER}/${id}`, {
+      method: "DELETE",
+      headers: myHeaders,
+      redirect: "follow",
+      body: JSON.stringify({}),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed - Status: ${response.status}`);
+    }
+    return true;
+  } catch (error: any) {
+    console.error("========= Error Delete Order:", error);
+    return false;
+  }
+};
+
 export const OrderService = {
   getAll,
   updateOrder,
   downloadImage,
   checkDiscount,
   createOrder,
+  deleteOrder,
 };

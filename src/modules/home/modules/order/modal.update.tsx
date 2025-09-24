@@ -23,7 +23,7 @@ import {
 import { HELPER } from "@/utils/helper";
 import { OrderService } from "@/services/order";
 import { useToast } from "@/hooks/use-toast";
-import { Info, Loader } from "lucide-react";
+import { Info, Loader, Trash2 } from "lucide-react";
 import { IMAGES } from "@/utils/image";
 import JSZip from "jszip";
 
@@ -42,6 +42,8 @@ export function ModalUpdateBlog({
   const [downloadLoadingAlbum, setDownloadLoadingAlbum] = useState(false);
 
   const [currentData, setCurrentData] = useState<any>(null as any);
+
+  const [isLoadingForDelete, setIsLoadingForDelete] = useState<boolean>(false);
 
   const statusOrder = {
     waiting: 1,
@@ -275,6 +277,13 @@ export function ModalUpdateBlog({
       setCurrentData(data);
     }
   }, [data]);
+
+  const handleDelete = async () => {
+    setIsLoadingForDelete(true);
+    await OrderService.deleteOrder(data?._id);
+    setIsLoadingForDelete(false);
+    window.location.href = "/?tab=order";
+  };
 
   return (
     <Dialog>
@@ -777,6 +786,19 @@ export function ModalUpdateBlog({
                 </DropdownMenuContent>
               </DropdownMenu>
             )}
+            <div className="flex justify-end">
+              <Button
+                onClick={handleDelete}
+                type="submit"
+                className="!px-8 !text-[16px] text-red-600 bg-white border-2 border-red-600 hover:bg-red-600 hover:text-white w-1/3 "
+              >
+                <Trash2 />
+                Xoá
+                {isLoadingForDelete && (
+                  <Loader className="animate-spin" size={48} />
+                )}
+              </Button>
+            </div>
           </div>
         </div>
       </DialogContent>

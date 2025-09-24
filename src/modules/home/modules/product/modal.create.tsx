@@ -422,6 +422,7 @@ export function ModalCreateProduct() {
       discount: discount,
       thumbnail: uploadMainImage[0]?.url || "",
       images: uploadSecondaryImages?.map((image: any) => image.url),
+      active: true,
     };
 
     const response = await ProductService.createProduct(body);

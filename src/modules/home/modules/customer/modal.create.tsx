@@ -74,6 +74,7 @@ export interface FormData extends UserData {
   ward: number;
   district: number;
   province: number;
+  active: boolean;
 }
 
 export function ModalCreateCustomer() {
@@ -95,6 +96,9 @@ export function ModalCreateCustomer() {
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [loading, setLoading] = useState(false);
+  const [provinceSearchTerm, setProvinceSearchTerm] = useState("");
+  const [districtSearchTerm, setDistrictSearchTerm] = useState("");
+  const [wardSearchTerm, setWardSearchTerm] = useState("");
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -104,6 +108,7 @@ export function ModalCreateCustomer() {
     ward: 0,
     district: 0,
     province: 0,
+    active: true,
   });
 
   React.useEffect(() => {
@@ -305,6 +310,22 @@ export function ModalCreateCustomer() {
       ...prev,
       [name]: value,
     }));
+  };
+
+  const handleProvinceSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setProvinceSearchTerm(e.target.value);
+  };
+
+  const handleDistrictSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDistrictSearchTerm(e.target.value);
+  };
+
+  const handleWardSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWardSearchTerm(e.target.value);
   };
 
   const handleMainImageChange = (
@@ -644,14 +665,29 @@ export function ModalCreateCustomer() {
                   <SelectValue placeholder="Chọn Tỉnh/Thành phố" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {provinces.map((province) => (
-                    <SelectItem
-                      key={province.code}
-                      value={String(province.code)}
-                    >
-                      {province.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm tỉnh/thành phố..."
+                      value={provinceSearchTerm}
+                      onChange={handleProvinceSearchChange}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
+                    />
+                  </div>
+                  {provinces
+                    .filter((province) =>
+                      province.name
+                        .toLowerCase()
+                        .includes(provinceSearchTerm.toLowerCase())
+                    )
+                    .map((province) => (
+                      <SelectItem
+                        className="!pl-3"
+                        key={province.code}
+                        value={String(province.code)}
+                      >
+                        {province.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -668,14 +704,29 @@ export function ModalCreateCustomer() {
                   <SelectValue placeholder="Chọn Quận/Huyện" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {districts.map((district) => (
-                    <SelectItem
-                      key={district.code}
-                      value={String(district.code)}
-                    >
-                      {district.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm quận/huyện..."
+                      value={districtSearchTerm}
+                      onChange={handleDistrictSearchChange}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
+                    />
+                  </div>
+                  {districts
+                    .filter((district) =>
+                      district.name
+                        .toLowerCase()
+                        .includes(districtSearchTerm.toLowerCase())
+                    )
+                    .map((district) => (
+                      <SelectItem
+                        className="!pl-3"
+                        key={district.code}
+                        value={String(district.code)}
+                      >
+                        {district.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -692,11 +743,29 @@ export function ModalCreateCustomer() {
                   <SelectValue placeholder="Chọn Phường/Xã" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {wards.map((ward) => (
-                    <SelectItem key={ward.code} value={String(ward.code)}>
-                      {ward.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm phường/xã..."
+                      value={wardSearchTerm}
+                      onChange={handleWardSearchChange}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
+                    />
+                  </div>
+                  {wards
+                    .filter((ward) =>
+                      ward.name
+                        .toLowerCase()
+                        .includes(wardSearchTerm.toLowerCase())
+                    )
+                    .map((ward) => (
+                      <SelectItem
+                        className="!pl-3"
+                        key={ward.code}
+                        value={String(ward.code)}
+                      >
+                        {ward.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
