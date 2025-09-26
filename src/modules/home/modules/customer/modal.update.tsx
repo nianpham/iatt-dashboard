@@ -98,6 +98,9 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
   const [districts, setDistricts] = useState<District[]>([]);
   const [wards, setWards] = useState<Ward[]>([]);
   const [loading, setLoading] = useState(false);
+  const [provinceSearchTerm, setProvinceSearchTerm] = useState("");
+  const [districtSearchTerm, setDistrictSearchTerm] = useState("");
+  const [wardSearchTerm, setWardSearchTerm] = useState("");
   const [formData, setFormData] = useState<FormData>({
     name: data.name || "",
     email: data.email || "",
@@ -446,6 +449,26 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
     return new File([u8arr], "image.png", { type: mime });
   };
 
+  const handleProvinceSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setProvinceSearchTerm(e.target.value);
+  };
+
+  const handleDistrictSearchChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDistrictSearchTerm(e.target.value);
+  };
+
+  const handleWardSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setWardSearchTerm(e.target.value);
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   const handleSubmit = async () => {
     if (!validateForm()) return;
     setIsLoading(true);
@@ -661,6 +684,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
               <Label htmlFor="province" className="text-[16px]">
                 Tỉnh/Thành phố
               </Label>
+
               <Select
                 value={formData.province ? String(formData.province) : ""}
                 onValueChange={handleProvinceChange}
@@ -670,14 +694,29 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                   <SelectValue placeholder="Chọn Tỉnh/Thành phố" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {provinces.map((province) => (
-                    <SelectItem
-                      key={province.code}
-                      value={String(province.code)}
-                    >
-                      {province.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm tỉnh/thành phố..."
+                      value={provinceSearchTerm}
+                      onChange={handleProvinceSearchChange}
+                      onKeyDown={handleSearchKeyDown}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-[rgb(var(--fifteenth-rgb))] outline-none"
+                    />
+                  </div>
+                  {provinces
+                    .filter((province) =>
+                      province.name
+                        .toLowerCase()
+                        .includes(provinceSearchTerm.toLowerCase())
+                    )
+                    .map((province) => (
+                      <SelectItem
+                        key={province.code}
+                        value={String(province.code)}
+                      >
+                        {province.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -694,14 +733,29 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                   <SelectValue placeholder="Chọn Quận/Huyện" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {districts.map((district) => (
-                    <SelectItem
-                      key={district.code}
-                      value={String(district.code)}
-                    >
-                      {district.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm quận/huyện..."
+                      value={districtSearchTerm}
+                      onChange={handleDistrictSearchChange}
+                      onKeyDown={handleSearchKeyDown}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-[rgb(var(--fifteenth-rgb))] outline-none"
+                    />
+                  </div>
+                  {districts
+                    .filter((district) =>
+                      district.name
+                        .toLowerCase()
+                        .includes(districtSearchTerm.toLowerCase())
+                    )
+                    .map((district) => (
+                      <SelectItem
+                        key={district.code}
+                        value={String(district.code)}
+                      >
+                        {district.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -718,11 +772,26 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                   <SelectValue placeholder="Chọn Phường/Xã" />
                 </SelectTrigger>
                 <SelectContent className="z-[80]">
-                  {wards.map((ward) => (
-                    <SelectItem key={ward.code} value={String(ward.code)}>
-                      {ward.name}
-                    </SelectItem>
-                  ))}
+                  <div className="p-2">
+                    <Input
+                      placeholder="Tìm kiếm phường/xã..."
+                      value={wardSearchTerm}
+                      onChange={handleWardSearchChange}
+                      onKeyDown={handleSearchKeyDown}
+                      className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-[rgb(var(--fifteenth-rgb))] outline-none"
+                    />
+                  </div>
+                  {wards
+                    .filter((ward) =>
+                      ward.name
+                        .toLowerCase()
+                        .includes(wardSearchTerm.toLowerCase())
+                    )
+                    .map((ward) => (
+                      <SelectItem key={ward.code} value={String(ward.code)}>
+                        {ward.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>

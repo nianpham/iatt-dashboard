@@ -328,6 +328,10 @@ export function ModalCreateCustomer() {
     setWardSearchTerm(e.target.value);
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.stopPropagation();
+  };
+
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -670,6 +674,7 @@ export function ModalCreateCustomer() {
                       placeholder="Tìm kiếm tỉnh/thành phố..."
                       value={provinceSearchTerm}
                       onChange={handleProvinceSearchChange}
+                      onKeyDown={handleSearchKeyDown}
                       className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
                     />
                   </div>
@@ -681,7 +686,6 @@ export function ModalCreateCustomer() {
                     )
                     .map((province) => (
                       <SelectItem
-                        className="!pl-3"
                         key={province.code}
                         value={String(province.code)}
                       >
@@ -709,6 +713,7 @@ export function ModalCreateCustomer() {
                       placeholder="Tìm kiếm quận/huyện..."
                       value={districtSearchTerm}
                       onChange={handleDistrictSearchChange}
+                      onKeyDown={handleSearchKeyDown}
                       className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
                     />
                   </div>
@@ -720,7 +725,6 @@ export function ModalCreateCustomer() {
                     )
                     .map((district) => (
                       <SelectItem
-                        className="!pl-3"
                         key={district.code}
                         value={String(district.code)}
                       >
@@ -748,6 +752,7 @@ export function ModalCreateCustomer() {
                       placeholder="Tìm kiếm phường/xã..."
                       value={wardSearchTerm}
                       onChange={handleWardSearchChange}
+                      onKeyDown={handleSearchKeyDown}
                       className="h-8 text-base focus:border-none focus:!ring-2 focus:!ring-indigo-700 outline-none"
                     />
                   </div>
@@ -758,11 +763,7 @@ export function ModalCreateCustomer() {
                         .includes(wardSearchTerm.toLowerCase())
                     )
                     .map((ward) => (
-                      <SelectItem
-                        className="!pl-3"
-                        key={ward.code}
-                        value={String(ward.code)}
-                      >
+                      <SelectItem key={ward.code} value={String(ward.code)}>
                         {ward.name}
                       </SelectItem>
                     ))}

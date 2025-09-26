@@ -101,15 +101,16 @@ export function ModalUpdateProduct({ data }: { data: any }) {
 
   const mainImageInputRef = useRef<HTMLInputElement>(null);
   const secondaryImageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingForDelete, setIsLoadingForDelete] = useState<boolean>(false);
 
   const [mainPreview, setMainPreview] = useState<string | null>(null);
   const [secondaryPreviews, setSecondaryPreviews] = useState<string[]>([]);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const [name, setName] = useState<string>("");
-
   const [description, setDescription] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -120,6 +121,92 @@ export function ModalUpdateProduct({ data }: { data: any }) {
   const [rating, setRating] = useState<string>("");
   const [discount, setDiscount] = useState<string>("");
   const [active, setActive] = useState<boolean>(false);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isVideoRemoved, setIsVideoRemoved] = useState<boolean>(false);
+
+  const handleVideoFile = useCallback(
+    (file: File) => {
+      if (file.size > 50 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File quá lớn",
+          description: "Vui lòng chọn file nhỏ hơn 50MB.",
+        });
+        return;
+      }
+
+      if (!file.type.includes("mp4")) {
+        toast({
+          variant: "destructive",
+          title: "Định dạng không hợp lệ",
+          description: "Vui lòng chọn file video MP4.",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setVideoPreview(reader.result as string);
+          setVideoFile(file);
+          setIsVideoRemoved(false);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Lỗi",
+            description: "Không thể đọc file video.",
+          });
+        }
+      };
+      reader.onerror = () => {
+        toast({
+          variant: "destructive",
+          title: "Lỗi",
+          description: "Đã xảy ra lỗi khi đọc file.",
+        });
+      };
+      reader.readAsDataURL(file);
+    },
+    [toast]
+  );
+
+  const handleRemoveVideo = () => {
+    setVideoPreview(null);
+    setVideoFile(null);
+    setIsVideoRemoved(true);
+    if (videoInputRef.current) {
+      videoInputRef.current.value = "";
+    }
+  };
+
+  const handleVideoDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      handleVideoFile(file);
+    }
+  };
+
+  const handleVideoDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleVideoDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    handleVideoFile(file);
+  };
+
+  const handleUpdateVideo = () => {
+    videoInputRef.current?.click();
+  };
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -275,15 +362,6 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       return false;
     }
 
-    // const sizes = sizesAndPrices.map((sp) => sp.size.trim().toLowerCase());
-    // const uniqueSizes = new Set(sizes);
-    // if (uniqueSizes.size !== sizes.length) {
-    //   toast({
-    //     variant: "destructive",
-    //     title: "Kích cỡ không được trùng lặp.",
-    //   });
-    //   return false;
-    // }
     const sizeRegex = /^\d+x\d+$/;
     if (
       sizesAndPrices.some(
@@ -355,6 +433,14 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       toast({
         variant: "destructive",
         title: "Giảm giá chỉ được phép tối đa 1 chữ số thập phân.",
+      });
+      return false;
+    }
+
+    if (!videoFile && !data?.video) {
+      toast({
+        variant: "destructive",
+        title: "Vui lòng chọn video.",
       });
       return false;
     }
@@ -434,11 +520,21 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       handleImageUpload
     );
 
+    let videoUrl = data?.video;
+
+    if (isVideoRemoved) {
+      videoUrl = "";
+    } else if (videoFile) {
+      const uploadVideo: any = await UploadService.uploadToCloudinaryVideo([
+        videoFile,
+      ]);
+      videoUrl = uploadVideo[0]?.url || "";
+    }
+
     const body = {
       name: name,
       description: updatedDescription,
       introduction: updatedIntroduction,
-      // price: price,
       product_option: sizesAndPrices.map((sp) => ({
         size: sp.size,
         price: sp.price,
@@ -450,6 +546,7 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       thumbnail: mainPreview,
       images: secondaryPreviews,
       active: active,
+      video: videoUrl,
     };
 
     const response = await ProductService.updateProduct(data?._id, body);
@@ -485,6 +582,8 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       setMainPreview(data?.thumbnail);
       setSecondaryPreviews(data?.images);
       setActive(data?.active);
+      setVideoPreview(data?.video);
+      setIsVideoRemoved(false);
     }
   };
 
@@ -612,6 +711,68 @@ export function ModalUpdateProduct({ data }: { data: any }) {
                     </button>
                   </div>
                 ))}
+              </div>
+
+              <div className="my-6">
+                <Label htmlFor="video" className="text-right !text-[16px]">
+                  Video
+                </Label>
+                <div className="mt-2">
+                  {!videoPreview && (
+                    <div
+                      onClick={handleUpdateVideo}
+                      onDrop={handleVideoDrop}
+                      onDragOver={handleVideoDragOver}
+                      onDragLeave={handleVideoDragLeave}
+                      className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed ${
+                        isDragging
+                          ? "border-orange-500 bg-orange-50"
+                          : "border-gray-300"
+                      } bg-white px-5 py-16 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <span>+ Tải video lên</span>
+                        <span className="text-xs text-gray-500">
+                          hoặc kéo thả file MP4 vào đây
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    ref={videoInputRef}
+                    onChange={handleVideoChange}
+                    accept="video/mp4"
+                    className="hidden"
+                  />
+                  {videoPreview && (
+                    <div className="mt-2 relative">
+                      <video
+                        className="h-full w-full rounded-lg object-contain object-center"
+                        controls
+                        autoPlay={false}
+                        muted
+                        onError={() => {
+                          toast({
+                            variant: "destructive",
+                            title: "Lỗi",
+                            description: "Không thể tải video để xem trước.",
+                          });
+                        }}
+                      >
+                        <source src={videoPreview} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <button
+                        onClick={handleRemoveVideo}
+                        className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
+                        title="Xóa video"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

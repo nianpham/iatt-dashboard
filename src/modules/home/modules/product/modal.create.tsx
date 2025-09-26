@@ -90,14 +90,15 @@ export function ModalCreateProduct() {
 
   const mainImageInputRef = useRef<HTMLInputElement>(null);
   const secondaryImageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [mainPreview, setMainPreview] = useState<string | null>(null);
   const [secondaryPreviews, setSecondaryPreviews] = useState<string[]>([]);
+  const [videoPreview, setVideoPreview] = useState<string | null>(null);
 
   const [name, setName] = useState<string>("");
-  // const [price, setPrice] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
   const [category, setCategory] = useState<string>("");
@@ -107,6 +108,90 @@ export function ModalCreateProduct() {
   >([{ size: "", price: "" }]);
   const [rating, setRating] = useState<string>("");
   const [discount, setDiscount] = useState<string>("");
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  // Handler cho video file
+  const handleVideoFile = useCallback(
+    (file: File) => {
+      if (file.size > 50 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File quá lớn",
+          description: "Vui lòng chọn file nhỏ hơn 50MB.",
+        });
+        return;
+      }
+
+      if (!file.type.includes("mp4")) {
+        toast({
+          variant: "destructive",
+          title: "Định dạng không hợp lệ",
+          description: "Vui lòng chọn file video MP4.",
+        });
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result) {
+          setVideoPreview(reader.result as string);
+          setVideoFile(file);
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Lỗi",
+            description: "Không thể đọc file video.",
+          });
+        }
+      };
+      reader.onerror = () => {
+        toast({
+          variant: "destructive",
+          title: "Lỗi",
+          description: "Đã xảy ra lỗi khi đọc file.",
+        });
+      };
+      reader.readAsDataURL(file);
+    },
+    [toast]
+  );
+
+  const handleRemoveVideo = () => {
+    setVideoPreview(null);
+    setVideoFile(null);
+    if (videoInputRef.current) {
+      videoInputRef.current.value = "";
+    }
+  };
+
+  const handleVideoDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+    const file = event.dataTransfer.files?.[0];
+    if (file) {
+      handleVideoFile(file);
+    }
+  };
+
+  const handleVideoDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleVideoDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleVideoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    handleVideoFile(file);
+  };
+
+  const handleUpdateVideo = () => {
+    videoInputRef.current?.click();
+  };
 
   const handleMainImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -135,10 +220,6 @@ export function ModalCreateProduct() {
     if (!files || files.length === 0) return;
     const newPreviews: string[] = [];
     Array.from(files).forEach((file) => {
-      // if (file.size > 5 * 1024 * 1024) {
-      //     alert(`File ${file.name} quá lớn. Vui lòng chọn file nhỏ hơn 5MB.`);
-      //     return;
-      // }
       if (!file.type.startsWith("image/")) {
         alert(`File ${file.name} không phải là hình ảnh.`);
         return;
@@ -329,7 +410,6 @@ export function ModalCreateProduct() {
       });
       return false;
     }
-
     return true;
   };
 
@@ -411,6 +491,10 @@ export function ModalCreateProduct() {
     const uploadSecondaryImages: any = await UploadService.uploadToCloudinary(
       secondaryPreviews
     );
+
+    const uploadVideo: any = await UploadService.uploadToCloudinaryVideo([
+      videoFile,
+    ]);
     const body = {
       name: name,
       description: updatedDescription,
@@ -423,6 +507,7 @@ export function ModalCreateProduct() {
       thumbnail: uploadMainImage[0]?.url || "",
       images: uploadSecondaryImages?.map((image: any) => image.url),
       active: true,
+      video: uploadVideo[0]?.url || "",
     };
 
     const response = await ProductService.createProduct(body);
@@ -549,6 +634,68 @@ export function ModalCreateProduct() {
                     </button>
                   </div>
                 ))}
+              </div>
+
+              <div className="my-6">
+                <Label htmlFor="video" className="text-right !text-[16px]">
+                  Video
+                </Label>
+                <div className="mt-2">
+                  {!videoPreview && (
+                    <div
+                      onClick={handleUpdateVideo}
+                      onDrop={handleVideoDrop}
+                      onDragOver={handleVideoDragOver}
+                      onDragLeave={handleVideoDragLeave}
+                      className={`flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed ${
+                        isDragging
+                          ? "border-orange-500 bg-orange-50"
+                          : "border-gray-300"
+                      } bg-white px-5 py-16 text-sm font-medium text-gray-900 hover:bg-gray-50 hover:text-primary-700 cursor-pointer`}
+                    >
+                      <div className="flex flex-col items-center">
+                        <span>+ Tải video lên</span>
+                        <span className="text-xs text-gray-500">
+                          hoặc kéo thả file MP4 vào đây
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    ref={videoInputRef}
+                    onChange={handleVideoChange}
+                    accept="video/mp4"
+                    className="hidden"
+                  />
+                  {videoPreview && (
+                    <div className="mt-2 relative">
+                      <video
+                        className="h-full w-full rounded-lg object-contain object-center"
+                        controls
+                        autoPlay={false}
+                        muted
+                        onError={() => {
+                          toast({
+                            variant: "destructive",
+                            title: "Lỗi",
+                            description: "Không thể tải video để xem trước.",
+                          });
+                        }}
+                      >
+                        <source src={videoPreview} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                      <button
+                        onClick={handleRemoveVideo}
+                        className="absolute top-2 right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
+                        title="Xóa video"
+                      >
+                        <X size={16} />
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
