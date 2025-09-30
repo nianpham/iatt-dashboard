@@ -553,68 +553,70 @@ export function ModalUpdateBlog({
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center">
-              <Image
-                src={
-                  accounts?.find(
-                    (pro: any) => pro._id.toString() === currentData?.account_id
-                  )?.avatar ||
-                  "https://cdn-icons-png.flaticon.com/128/4333/4333609.png"
-                }
-                alt="img"
-                className="w-auto h-12 mr-3 rounded-full"
-                width={100}
-                height={0}
-              />
-              <div className="flex flex-col">
-                <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  <strong>
+          <div className="flex flex-col justify-between gap-6">
+            <div className="flex flex-col gap-6">
+              <div className="flex items-center">
+                <Image
+                  src={
+                    accounts?.find(
+                      (pro: any) =>
+                        pro._id.toString() === currentData?.account_id
+                    )?.avatar ||
+                    "https://cdn-icons-png.flaticon.com/128/4333/4333609.png"
+                  }
+                  alt="img"
+                  className="w-auto h-12 mr-3 rounded-full"
+                  width={100}
+                  height={0}
+                />
+                <div className="flex flex-col">
+                  <span className="text-[16px] line-clamp-2 bg-primary-100 text-gray-900 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
+                    <strong>
+                      {
+                        accounts?.find(
+                          (pro: any) =>
+                            pro._id.toString() === currentData?.account_id
+                        )?.name
+                      }
+                    </strong>
+                  </span>
+                  <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-600 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
                     {
                       accounts?.find(
                         (pro: any) =>
                           pro._id.toString() === currentData?.account_id
-                      )?.name
+                      )?.email
                     }
-                  </strong>
+                  </span>
+                </div>
+              </div>
+              <div>
+                <strong>Địa chỉ giao hàng:</strong>
+                {currentData?.address}, {currentData?.wardName || ""},{" "}
+                {currentData?.districtName || ""},{" "}
+                {currentData?.provinceName || ""}
+              </div>
+              <div className="flex flex-col gap-2">
+                <span>
+                  <strong>Ngày tạo đơn hàng:</strong>{" "}
+                  {HELPER.formatDateTime(currentData?.created_at)}
                 </span>
-                <span className="text-[14px] line-clamp-2 bg-primary-100 text-gray-600 font-medium py-0.5 rounded dark:bg-primary-900 dark:text-primary-300">
-                  {
-                    accounts?.find(
-                      (pro: any) =>
-                        pro._id.toString() === currentData?.account_id
-                    )?.email
-                  }
+                <span>
+                  {currentData?.status === "cancelled" ? (
+                    <strong>Đơn hàng đã bị hủy</strong>
+                  ) : (
+                    <>
+                      <strong>Ngày hoàn tất đơn hàng:</strong>
+                      {!currentData?.date_completed
+                        ? " Đơn hàng đang được xử lí."
+                        : HELPER?.formatDateTime(currentData?.date_completed)}
+                    </>
+                  )}
                 </span>
               </div>
-            </div>
-            <div>
-              <strong>Địa chỉ giao hàng:</strong>
-              {currentData?.address}, {currentData?.wardName || ""},{" "}
-              {currentData?.districtName || ""},{" "}
-              {currentData?.provinceName || ""}
-            </div>
-            <div className="flex flex-col gap-2">
-              <span>
-                <strong>Ngày tạo đơn hàng:</strong>{" "}
-                {HELPER.formatDateTime(currentData?.created_at)}
-              </span>
-              <span>
-                {currentData?.status === "cancelled" ? (
-                  <strong>Đơn hàng đã bị hủy</strong>
-                ) : (
-                  <>
-                    <strong>Ngày hoàn tất đơn hàng:</strong>
-                    {!currentData?.date_completed
-                      ? " Đơn hàng đang được xử lí."
-                      : HELPER?.formatDateTime(currentData?.date_completed)}
-                  </>
-                )}
-              </span>
-            </div>
-            {currentData?.status === "cancelled" ? (
-              <Button
-                className={`w-56 cursor-default hover:bg-[rgb(var(--primary-rgb))]
+              {currentData?.status === "cancelled" ? (
+                <Button
+                  className={`w-56 cursor-default hover:bg-[rgb(var(--primary-rgb))]
                    ${
                      data.status === "completed"
                        ? "bg-green-600 text-white"
@@ -650,14 +652,14 @@ export function ModalUpdateBlog({
                             ? "bg-red-600 text-white"
                             : ""
                         }`}
-              >
-                {HELPER.renderStatus(data?.status)}
-              </Button>
-            ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    className={`w-56 
+                >
+                  {HELPER.renderStatus(data?.status)}
+                </Button>
+              ) : (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      className={`w-56 
                         ${
                           data.status === "completed"
                             ? "bg-green-600 hover:bg-green-600 hover:opacity-85 text-white"
@@ -693,99 +695,100 @@ export function ModalUpdateBlog({
                             ? "bg-red-600 hover:bg-red-600 hover:opacity-85 text-white"
                             : ""
                         }`}
-                  >
-                    {HELPER.renderStatus(data?.status)}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>Trạng thái</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("waiting")}
-                    disabled={
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 1
-                    }
-                  >
-                    1. Đợi phản hồi
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("paid pending")}
-                    disabled={
-                      isCashPayment ||
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 2
-                    }
-                  >
-                    2. Chờ thanh toán
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("paid")}
-                    disabled={
-                      isCashPayment ||
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 3
-                    }
-                  >
-                    3. Đã thanh toán
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("pending")}
-                    // disabled={
-                    //   statusOrder[
-                    //     currentData?.status as keyof typeof statusOrder
-                    //   ] > 4 ||
-                    //   (statusOrder[
-                    //     currentData?.status as keyof typeof statusOrder
-                    //   ] < 4 &&
-                    //     currentData?.status !== "waiting")
-                    // }
-                    disabled={
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 4
-                    }
-                  >
-                    4. Chuẩn bị đơn
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("delivering")}
-                    disabled={
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 5
-                    }
-                  >
-                    5. Vận chuyển
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("completed")}
-                    disabled={
-                      statusOrder[
-                        currentData?.status as keyof typeof statusOrder
-                      ] > 6
-                    }
-                  >
-                    6. Hoàn thành
-                  </DropdownMenuCheckboxItem>
-                  <DropdownMenuCheckboxItem
-                    className="cursor-pointer"
-                    onClick={() => handleUpdateStatus("cancelled")}
-                  >
-                    7. Đã hủy đơn
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
+                    >
+                      {HELPER.renderStatus(data?.status)}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56">
+                    <DropdownMenuLabel>Trạng thái</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("waiting")}
+                      disabled={
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 1
+                      }
+                    >
+                      1. Đợi phản hồi
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("paid pending")}
+                      disabled={
+                        isCashPayment ||
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 2
+                      }
+                    >
+                      2. Chờ thanh toán
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("paid")}
+                      disabled={
+                        isCashPayment ||
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 3
+                      }
+                    >
+                      3. Đã thanh toán
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("pending")}
+                      // disabled={
+                      //   statusOrder[
+                      //     currentData?.status as keyof typeof statusOrder
+                      //   ] > 4 ||
+                      //   (statusOrder[
+                      //     currentData?.status as keyof typeof statusOrder
+                      //   ] < 4 &&
+                      //     currentData?.status !== "waiting")
+                      // }
+                      disabled={
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 4
+                      }
+                    >
+                      4. Chuẩn bị đơn
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("delivering")}
+                      disabled={
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 5
+                      }
+                    >
+                      5. Vận chuyển
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("completed")}
+                      disabled={
+                        statusOrder[
+                          currentData?.status as keyof typeof statusOrder
+                        ] > 6
+                      }
+                    >
+                      6. Hoàn thành
+                    </DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem
+                      className="cursor-pointer"
+                      onClick={() => handleUpdateStatus("cancelled")}
+                    >
+                      7. Đã hủy đơn
+                    </DropdownMenuCheckboxItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+            </div>
             <div className="flex justify-end">
               <Button
                 onClick={handleDelete}
