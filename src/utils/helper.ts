@@ -283,6 +283,37 @@ const calculateTotal = (money: string, ship: any, voucher: any) => {
   return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 };
 
+const formatProvinceName = (name: string) => {
+  if (name.startsWith("Tỉnh ")) {
+    return name.substring(5);
+  }
+  return name;
+};
+
+const getNameForSorting = (name: string) => {
+  const prefixes = [
+    "Thành phố ",
+    "Tỉnh ",
+    "Quận ",
+    "Huyện ",
+    "Thị xã ",
+    "Phường ",
+    "Xã ",
+    "Thị trấn ",
+  ];
+
+  for (const prefix of prefixes) {
+    if (name.startsWith(prefix)) {
+      return name.substring(prefix.length);
+    }
+  }
+  return name;
+};
+
+const formatLocationName = (name: string) => {
+  return getNameForSorting(name);
+};
+
 export const HELPER = {
   formatVND,
   renderCategory,
@@ -300,4 +331,7 @@ export const HELPER = {
   upPrice,
   calculateTotalNumber,
   calculateTotal,
+  formatLocationName,
+  formatProvinceName,
+  getNameForSorting,
 };

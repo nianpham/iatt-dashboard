@@ -29,6 +29,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { AccountService } from "@/services/account";
 import { IMAGES } from "@/utils/image";
 import "@/styles/hide-scroll.css";
+import { HELPER } from "@/utils/helper";
 
 export interface Province {
   code: number;
@@ -696,7 +697,7 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                 <SelectContent className="z-[80]">
                   <div className="p-2">
                     <Input
-                      placeholder="Tìm kiếm tỉnh/thành phố..."
+                      placeholder="Tìm kiếm thành phố..."
                       value={provinceSearchTerm}
                       onChange={handleProvinceSearchChange}
                       onKeyDown={handleSearchKeyDown}
@@ -709,12 +710,13 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                         .toLowerCase()
                         .includes(provinceSearchTerm.toLowerCase())
                     )
+                    .sort((a, b) => a.name.localeCompare(b.name, "vi-VN"))
                     .map((province) => (
                       <SelectItem
                         key={province.code}
                         value={String(province.code)}
                       >
-                        {province.name}
+                        {HELPER.formatProvinceName(province.name)}
                       </SelectItem>
                     ))}
                 </SelectContent>
@@ -747,6 +749,12 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                       district.name
                         .toLowerCase()
                         .includes(districtSearchTerm.toLowerCase())
+                    )
+                    .sort((a, b) =>
+                      HELPER.getNameForSorting(a.name).localeCompare(
+                        HELPER.getNameForSorting(b.name),
+                        "vi-VN"
+                      )
                     )
                     .map((district) => (
                       <SelectItem
@@ -786,6 +794,12 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
                       ward.name
                         .toLowerCase()
                         .includes(wardSearchTerm.toLowerCase())
+                    )
+                    .sort((a, b) =>
+                      HELPER.getNameForSorting(a.name).localeCompare(
+                        HELPER.getNameForSorting(b.name),
+                        "vi-VN"
+                      )
                     )
                     .map((ward) => (
                       <SelectItem key={ward.code} value={String(ward.code)}>
