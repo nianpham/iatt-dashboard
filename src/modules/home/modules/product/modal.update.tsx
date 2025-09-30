@@ -437,13 +437,13 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       return false;
     }
 
-    if (!videoFile && !data?.video) {
-      toast({
-        variant: "destructive",
-        title: "Vui lòng chọn video.",
-      });
-      return false;
-    }
+    // if (!videoFile && !data?.video) {
+    //   toast({
+    //     variant: "destructive",
+    //     title: "Vui lòng chọn video.",
+    //   });
+    //   return false;
+    // }
 
     return true;
   };
