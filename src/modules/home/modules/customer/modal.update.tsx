@@ -494,6 +494,9 @@ export function ModalUpdateCustomer({ data }: { data: any }) {
       wardName: selectedWard?.name || "",
     };
 
+    // console.log("formattedData: ", JSON.stringify(formattedData));
+    // console.log("data: ", data._id);
+
     const response = await AccountService.updateClientAccount(
       data._id,
       formattedData

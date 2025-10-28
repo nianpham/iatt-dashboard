@@ -531,6 +531,44 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       videoUrl = uploadVideo[0]?.url || "";
     }
 
+    // Upload mainPreview if it's a base64 data URL
+    let thumbnailUrl = mainPreview || "";
+    if (thumbnailUrl && thumbnailUrl.startsWith("data:")) {
+      try {
+        const mainFile = base64ToFile(thumbnailUrl);
+        const uploaded = await UploadService.uploadToCloudinary([mainFile]);
+        thumbnailUrl =
+          (uploaded &&
+            Array.isArray(uploaded) &&
+            (uploaded[0]?.secure_url || uploaded[0]?.url)) ||
+          "";
+      } catch (err) {
+        console.error("Upload thumbnail failed:", err);
+      }
+    }
+
+    // Upload any secondaryPreviews that are base64 data URLs
+    const resolvedSecondaryPreviews = await Promise.all(
+      (secondaryPreviews || []).map(async (preview) => {
+        try {
+          if (preview && preview.startsWith("data:")) {
+            const file = base64ToFile(preview);
+            const uploaded = await UploadService.uploadToCloudinary([file]);
+            return (
+              (uploaded &&
+                Array.isArray(uploaded) &&
+                (uploaded[0]?.secure_url || uploaded[0]?.url)) ||
+              ""
+            );
+          }
+          return preview;
+        } catch (err) {
+          console.error("Upload secondary image failed:", err);
+          return "";
+        }
+      })
+    );
+
     const body = {
       name: name,
       description: updatedDescription,
@@ -543,11 +581,13 @@ export function ModalUpdateProduct({ data }: { data: any }) {
       color: color,
       discount: discount,
       rating: rating,
-      thumbnail: mainPreview,
-      images: secondaryPreviews,
+      thumbnail: thumbnailUrl,
+      images: resolvedSecondaryPreviews,
       active: active,
       video: videoUrl,
     };
+
+    console.log("CHECK BODY: ", body);
 
     const response = await ProductService.updateProduct(data?._id, body);
 
